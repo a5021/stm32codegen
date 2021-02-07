@@ -4,7 +4,7 @@ import re
 import sys
 
 try:
-    from cmsis import read_cmsis_header_file
+    from stm32cmsis import read_cmsis_header_file
 except ImportError:
     print('Could not import CMSIS library')
     # print('pip install cmsis')
@@ -353,6 +353,48 @@ def get_dupe_list(dev_list):
     return to_be_del
 
 
+def is_hex(num_str):
+    try:
+        int(num_str, 16)
+        return True
+    except ValueError:
+        return False
+
+
+def strip_suffix(periph_name):
+    pn = periph_name
+    while True:
+        if pn[-1] in '0123456789':
+            pn = pn[:-1]
+        else:
+            break
+    return pn
+
+
+def find_peripheral_by_name(periph_name, periph_list):
+    for xc in periph_list:
+        if periph_name == xc[1]:
+            return xc[1], xc[0], xc[2][:-1]
+    return ""
+
+    #pn = strip_suffix(periph_name)
+
+
+def find_peripheral_type(periph_name, periph_list):
+    pn = strip_suffix(periph_name)
+
+    for xf in periph_list:
+        if xf[1] == pn:
+            return xf[2][:-1]
+    return ""
+
+
+def get_register_set(periph_name, periph_dic):
+    pn = strip_suffix(periph_name)
+
+    return periph_dic[pn + '_TypeDef']
+
+
 if __name__ == '__main__':
 
     import argparse
@@ -431,6 +473,9 @@ if __name__ == '__main__':
     
     peripheral = [p_list[x] for x in range(len(p_list)) if x not in get_dupe_list(p_list)]
 
+    # print(peripheral)
+    # exit()
+
     g = list(get_type_list(s_data))
     # for x in g:
     #     print(x)
@@ -447,6 +492,22 @@ if __name__ == '__main__':
             print(' ', x)
 
     print()
+    # print(peripheral[6][2][:-1])
+
+    if args.peripheral:
+        # p_name = strip_suffix(args.peripheral[0][0])
+        # print(register_dic[p_name + '_TypeDef'])
+        # for x in get_register_set(args.peripheral[0][0], register_dic):
+        #     print(x[0])
+        p = args.peripheral[0][0]
+        z = find_peripheral_by_name(p, peripheral)
+        if is_hex(z[1]):
+            print(p, '=', z[2], '@', z[1])
+
+    exit()
+
+    for x in register_dic[peripheral[6][2][:-1]]:
+        print(x)
     exit()
 
     defined_type = [z[0] for z in g]
