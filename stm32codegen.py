@@ -485,6 +485,7 @@ if __name__ == '__main__':
     for x in g:
         register_dic[x[0]] = x[2]
 
+    '''
     for key, value in register_dic.items():
         print(key)
         for x in value:
@@ -492,6 +493,8 @@ if __name__ == '__main__':
             print(' ', x)
 
     print()
+    '''
+
     # print(peripheral[6][2][:-1])
 
     if args.peripheral:
@@ -502,7 +505,9 @@ if __name__ == '__main__':
         p = args.peripheral[0][0]
         z = find_peripheral_by_name(p, peripheral)
         if is_hex(z[1]):
-            print(p, '=', z[2], '@', z[1])
+            print(p, '=', z[2], '@', z[1] + ':')
+            for x in register_dic[z[2]]:
+                print(' ', x)
 
     exit()
 
