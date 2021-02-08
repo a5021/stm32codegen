@@ -11,7 +11,29 @@ except ImportError:
     sys.exit(1)
 
 max_field_len = [0, 0, 0]
+
+# all definitions from header file in the following format:
+#  'MACRO_NAME',      'VALUE',                'COMMENT',                  'EXTRA_VALUE'
+# ['RCC_CR_HSERDY', '(1 << 17)', 'External High Speed clock ready flag',  '0x00020000']
 macro_definition = []
+
+# typedef list for all peripherals like 'TIM_TypeDef', 'USART_TypeDef' etc.
+defined_type = []
+
+# complete list of all peripherals in the following format:
+# 'HEX_ADDRESS',   'NAME',     'TYPEDEF',         'COMMENT'
+# ['0x40000000',   'TIM2',   'TIM_TypeDef*',  'Timer peripheral']
+peripheral = []
+
+# peripheral registers dictionary: { "TypeDef" : [['REGISTER NAME', 'LENGTH', 'COMMENT' ],[...], ... }
+# {'I2C_TypeDef': [['CR1', '4', ''], ['CR2', '4', ''], ['OAR1', '4', ''], ['OAR2', '4', ''], ['DR', '4', '']...]...}
+#
+register_dic = {}
+
+#
+#
+uniq_type = set()
+uniq_addr = set()
 
 reg_init = 'indirect'
 undef_req = 'no'
@@ -23,8 +45,27 @@ def get_cmsis_header_file(hdr_name):
     if not txt:
         return ""
 
-    global macro_definition
+    global macro_definition, peripheral, uniq_type, uniq_addr, defined_type
     macro_definition = parse_macro_def(txt)
+
+    typedef_list = []
+    for xg in macro_definition:
+        if 'TypeDef*' in xg[2] and 'IS_' != xg[0][:3]:
+            uniq_type.add(xg[2][:-1])
+            uniq_addr.add(xg[1])
+            typedef_list.append([xg[1], xg[0], xg[2], xg[3]])
+
+    p_list = sorted(typedef_list)
+
+    peripheral = [p_list[xg] for xg in range(len(p_list)) if xg not in get_dupe_list(p_list)]
+
+    temp_list = list(get_type_list(txt)) 
+
+    for xg in temp_list:
+        register_dic[xg[0]] = xg[2]
+
+    defined_type = [zg[0] for zg in temp_list]
+
     return txt, hf_name
 
 
@@ -371,28 +412,28 @@ def strip_suffix(periph_name):
     return pn
 
 
-def find_peripheral_by_name(periph_name, periph_list):
-    for xc in periph_list:
-        if periph_name == xc[1]:
+def find_peripheral_by_name(periph_name):
+    pn = periph_name.strip()
+    for xc in peripheral:
+        if pn == xc[1]:
             return xc[1], xc[0], xc[2][:-1]
     return ""
 
     #pn = strip_suffix(periph_name)
 
 
-def find_peripheral_type(periph_name, periph_list):
+def find_peripheral_type(periph_name):
     pn = strip_suffix(periph_name)
 
-    for xf in periph_list:
+    for xf in peripheral:
         if xf[1] == pn:
             return xf[2][:-1]
     return ""
 
 
-def get_register_set(periph_name, periph_dic):
+def get_register_set(periph_name):
     pn = strip_suffix(periph_name)
-
-    return periph_dic[pn + '_TypeDef']
+    return register_dic[pn + '_TypeDef']
 
 
 if __name__ == '__main__':
@@ -408,10 +449,14 @@ if __name__ == '__main__':
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('-i', '--ident', type=int, default=2)
-    parser.add_argument('-m', '--module', action='append', nargs='+')
-    parser.add_argument('-f', '--function',  action='append', nargs='+')
-    parser.add_argument('-p', '--peripheral', action='append', nargs='+')
-    parser.add_argument('-r', '--register', action='append', nargs='+')
+    parser.add_argument('-m', '--module', nargs='+')
+    parser.add_argument('-f', '--function', nargs='+')
+    parser.add_argument('-p', '--peripheral', nargs='+')
+    parser.add_argument('-r', '--register', nargs='+')
+    # parser.add_argument('-m', '--module', action='append', nargs='+')
+    # parser.add_argument('-f', '--function',  action='append', nargs='+')
+    # parser.add_argument('-p', '--peripheral', action='append', nargs='+')
+    # parser.add_argument('-r', '--register', action='append', nargs='+')
 
     args = parser.parse_args()
 
@@ -455,35 +500,10 @@ if __name__ == '__main__':
         with open(hdr_file_name, 'bw') as f:
             f.write(bytes(s_data, 'utf-8'))
 
-    # macro_def = parse_macro_def(s_data)
-
-    typedef_list = []
-    uniq_type = set()
-    uniq_addr = set()
-    for x in macro_definition:
-        if 'TypeDef*' in x[2] and 'IS_' != x[0][:3]:
-            uniq_type.add(x[2][:-1])
-            uniq_addr.add(x[1])
-            typedef_list.append([x[1], x[0], x[2], x[3]])
-
-    p_list = sorted(typedef_list)
-    
-    # print(p_list)
-    # exit()
-    
-    peripheral = [p_list[x] for x in range(len(p_list)) if x not in get_dupe_list(p_list)]
 
     # print(peripheral)
     # exit()
 
-    g = list(get_type_list(s_data))
-    # for x in g:
-    #     print(x)
-    # exit()
-
-    register_dic = {}
-    for x in g:
-        register_dic[x[0]] = x[2]
 
     '''
     for key, value in register_dic.items():
@@ -502,20 +522,16 @@ if __name__ == '__main__':
         # print(register_dic[p_name + '_TypeDef'])
         # for x in get_register_set(args.peripheral[0][0], register_dic):
         #     print(x[0])
-        p = args.peripheral[0][0]
-        z = find_peripheral_by_name(p, peripheral)
-        if is_hex(z[1]):
+        p = args.peripheral[0]
+        z = find_peripheral_by_name(p)
+        if not z:
+            z = get_register_set(p)
+            print(z)
+        elif is_hex(z[1]):
             print(p, '=', z[2], '@', z[1] + ':')
             for x in register_dic[z[2]]:
                 print(' ', x)
 
-    exit()
-
-    for x in register_dic[peripheral[6][2][:-1]]:
-        print(x)
-    exit()
-
-    defined_type = [z[0] for z in g]
 
     '''
     for z in g:
@@ -547,19 +563,19 @@ if __name__ == '__main__':
     per = reg = []
 
     if args.register:
-        if 'ALL' == args.register[0].upper():
+        if 'ALL' == args.register[0][0].upper():
             reg = []
         else:
             reg = args.register
 
     if args.peripheral:
-        if 'ALL' == args.peripheral[0].upper():
+        if 'ALL' == args.peripheral[0][0].upper():
             per = [x[1] for x in peripheral]
         else:
             per = args.peripheral
 
     # print(per)
-    print(g)
+    # print(g)
     exit()
 
     x_reg = [x + '->' + y for x in per for y in reg]
