@@ -73,8 +73,8 @@ def get_peripheral_description(src):
     m = re.findall(r'Peripheral_registers_structures(.*?)Peripheral_memory_map', src, re.MULTILINE | re.DOTALL)
     n = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
     for ix in n:
-        p = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
-        yield ix[1], p[0] if p else ""
+        pg = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
+        yield ix[1], pg[0] if pg else ""
 
 
 def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
@@ -419,7 +419,7 @@ def find_peripheral_by_name(periph_name):
             return xc[1], xc[0], xc[2][:-1]
     return ""
 
-    #pn = strip_suffix(periph_name)
+    # pn = strip_suffix(periph_name)
 
 
 def find_peripheral_type(periph_name):
@@ -500,10 +500,8 @@ if __name__ == '__main__':
         with open(hdr_file_name, 'bw') as f:
             f.write(bytes(s_data, 'utf-8'))
 
-
     # print(peripheral)
     # exit()
-
 
     '''
     for key, value in register_dic.items():
@@ -529,11 +527,11 @@ if __name__ == '__main__':
             print(z)
         elif is_hex(z[1]):
             # print(p, '=', z[2], '@', z[1] + ':')
-            offset = 0;
+            offset = 0
             for x in register_dic[z[2]]:
-                print(' ', (p + '->' + x[0]).ljust(25) + '/* ' + x[2] + '  (' + hex(int(z[1], 16) + offset) + ') */')
+                print(' ', (p + '->' + x[0] + ' = ' + p + '_' + x[0] + ';').ljust(30) +
+                      f'/* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
                 offset += int(x[1])
-
 
     '''
     for z in g:
