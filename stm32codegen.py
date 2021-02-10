@@ -528,9 +528,11 @@ if __name__ == '__main__':
             z = get_register_set(p)
             print(z)
         elif is_hex(z[1]):
-            print(p, '=', z[2], '@', z[1] + ':')
+            # print(p, '=', z[2], '@', z[1] + ':')
+            offset = 0;
             for x in register_dic[z[2]]:
-                print(' ', x)
+                print(' ', (p + '->' + x[0]).ljust(25) + '/* ' + x[2] + '  (' + hex(int(z[1], 16) + offset) + ') */')
+                offset += int(x[1])
 
 
     '''
