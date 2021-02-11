@@ -436,6 +436,23 @@ def get_register_set(periph_name):
     return register_dic[pn + '_TypeDef']
 
 
+def get_reg_name_and_offset(reg_name):
+    if '[' in reg_name[0] and ']' in reg_name[0]:
+        left_bracket = reg_name[0].find('[')
+        right_bracket = reg_name[0].find(']')
+        if right_bracket != -1 and left_bracket != -1:
+            arr_size = reg_name[0][left_bracket + 1:right_bracket]
+            if arr_size:
+                try:
+                    a1 = int(arr_size)
+                    for ndx in range(a1):
+                        yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', reg_name[1]
+                except ValueError:
+                    pass
+    else:
+        yield reg_name[0], reg_name[1]
+
+
 if __name__ == '__main__':
 
     import argparse
@@ -529,9 +546,11 @@ if __name__ == '__main__':
             # print(p, '=', z[2], '@', z[1] + ':')
             offset = 0
             for x in register_dic[z[2]]:
-                print(' ', (p + '->' + x[0] + ' = ' + p + '_' + x[0] + ';').ljust(30) +
-                      f'/* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
-                offset += int(x[1])
+                for name, offs in get_reg_name_and_offset(x):
+                    if 'RESERVED' not in name.upper():
+                        print(' ', (p + '->' + name + ' = ' + p + '_' + name.replace('[', '_').strip(']')
+                                    + ';').ljust(35) + f'/* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
+                    offset += int(offs)
 
     '''
     for z in g:
