@@ -436,7 +436,18 @@ def get_register_set(periph_name):
     return register_dic[pn + '_TypeDef']
 
 
-def get_reg_name_and_offset(reg_name):
+def get_register_size(struct_name):
+    reg_size = 0
+    if not struct_name.isdigit():
+        for xr in register_dic[struct_name]:
+            reg_size += get_register_size(xr[1])
+    else:
+        reg_size = int(struct_name)
+
+    return reg_size
+
+
+def get_register_property(reg_name):
     if '[' in reg_name[0] and ']' in reg_name[0]:
         left_bracket = reg_name[0].find('[')
         right_bracket = reg_name[0].find(']')
@@ -445,9 +456,9 @@ def get_reg_name_and_offset(reg_name):
             if arr_size:
                 if all([sg.isdigit() for sg in arr_size]):
                     for ndx in range(int(arr_size)):
-                        yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', reg_name[1]
+                        yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', get_register_size(reg_name[1])
     else:
-        yield reg_name[0], reg_name[1]
+        yield reg_name[0], get_register_size(reg_name[1])
 
 
 if __name__ == '__main__':
@@ -543,12 +554,13 @@ if __name__ == '__main__':
             # print(p, '=', z[2], '@', z[1] + ':')
             offset = 0
             for x in register_dic[z[2]]:
-                for name, offs in get_reg_name_and_offset(x):
+                for name, offs in get_register_property(x):
                     if 'RESERVED' not in name.upper():
                         print(' ', (p + '->' + name + ' = ' + p + '_' + name.replace('[', '_').strip(']')
                                     + ';').ljust(55) + f' /* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
-                    if all([dg.isdigit() for dg in offs]):
-                        offset += int(offs)
+                    # if all([dg.isdigit() for dg in offs]):
+
+                    offset += int(offs)
 
     '''
     for z in g:
