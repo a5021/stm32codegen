@@ -443,12 +443,9 @@ def get_reg_name_and_offset(reg_name):
         if right_bracket != -1 and left_bracket != -1:
             arr_size = reg_name[0][left_bracket + 1:right_bracket]
             if arr_size:
-                try:
-                    a1 = int(arr_size)
-                    for ndx in range(a1):
+                if all([sg.isdigit() for sg in arr_size]):
+                    for ndx in range(int(arr_size)):
                         yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', reg_name[1]
-                except ValueError:
-                    pass
     else:
         yield reg_name[0], reg_name[1]
 
@@ -549,8 +546,9 @@ if __name__ == '__main__':
                 for name, offs in get_reg_name_and_offset(x):
                     if 'RESERVED' not in name.upper():
                         print(' ', (p + '->' + name + ' = ' + p + '_' + name.replace('[', '_').strip(']')
-                                    + ';').ljust(35) + f'/* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
-                    offset += int(offs)
+                                    + ';').ljust(55) + f' /* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
+                    if all([dg.isdigit() for dg in offs]):
+                        offset += int(offs)
 
     '''
     for z in g:
