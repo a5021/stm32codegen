@@ -20,7 +20,7 @@ macro_definition = []
 # typedef list for all peripherals like 'TIM_TypeDef', 'USART_TypeDef' etc.
 defined_type = []
 
-# complete list of all peripherals in the following format:
+# complete list of all peripherals in the format of:
 # 'HEX_ADDRESS',   'NAME',     'TYPEDEF',         'COMMENT'
 # ['0x40000000',   'TIM2',   'TIM_TypeDef*',  'Timer peripheral']
 peripheral = []
@@ -30,8 +30,6 @@ peripheral = []
 #
 register_dic = {}
 
-#
-#
 uniq_type = set()
 uniq_addr = set()
 
@@ -353,7 +351,14 @@ def get_type_list(src):
             w = gs.split()
 
             p_size = get_reg_size(gs)
-            p_name = w[2][:-1] if gs.startswith('__IO') or gs.startswith('__I') or gs.startswith('__O') \
+
+            name_ndx = 0
+
+            for gz in range(len(w)):        # find word index of register name
+                if w[gz].endswith(';'):
+                    name_ndx = gz
+
+            p_name = w[name_ndx][:-1] if gs.startswith('__IO') or gs.startswith('__I') or gs.startswith('__O') \
                 else w[1][:-1] if p_size != 'X' else w[1][:-1]
 
             if p_size == 'X':
@@ -403,6 +408,7 @@ def is_hex(num_str):
 
 
 def strip_suffix(periph_name):
+    """ Strip number from peripheral name. Example: 'TIM10' ==> 'TIM' """
     pn = periph_name
     while True:
         if pn[-1] in '0123456789':
@@ -412,23 +418,26 @@ def strip_suffix(periph_name):
     return pn
 
 
-def find_peripheral_by_name(periph_name):
+def find_peripheral(periph_name):
+    """ return address and typedef name of the peripheral. Example: ('TIM3', '0x40000400', 'TIM_TypeDef') """
     pn = periph_name.strip()
     for xc in peripheral:
         if pn == xc[1]:
             return xc[1], xc[0], xc[2][:-1]
+
     return ""
 
-    # pn = strip_suffix(periph_name)
 
-
+'''
 def find_peripheral_type(periph_name):
     pn = strip_suffix(periph_name)
 
     for xf in peripheral:
         if xf[1] == pn:
             return xf[2][:-1]
+
     return ""
+'''
 
 
 def get_register_set(periph_name):
@@ -459,6 +468,16 @@ def get_register_property(reg_name):
                         yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', get_register_size(reg_name[1])
     else:
         yield reg_name[0], get_register_size(reg_name[1])
+
+
+def get_register_list(peripheral_property):
+    register_address = 0
+    for xa in register_dic[peripheral_property[2]]:
+        for reg_name, reg_offs in get_register_property(xa):
+            if 'RESERVED' not in reg_name.upper():
+                yield [reg_name, xa[2],  f'0x{int(peripheral_property[1], 16) + register_address:X}']
+
+            register_address += int(reg_offs)
 
 
 if __name__ == '__main__':
@@ -546,21 +565,25 @@ if __name__ == '__main__':
         # for x in get_register_set(args.peripheral[0][0], register_dic):
         #     print(x[0])
         p = args.peripheral[0]
-        z = find_peripheral_by_name(p)
-        if not z:
+        periph = find_peripheral(p)  #
+        if not periph:
             z = get_register_set(p)
             print(z)
-        elif is_hex(z[1]):
+        elif is_hex(periph[1]):
+            for x in get_register_list(periph):
+                print(x)
             # print(p, '=', z[2], '@', z[1] + ':')
+            '''
             offset = 0
-            for x in register_dic[z[2]]:
+            for x in register_dic[periph[2]]:
                 for name, offs in get_register_property(x):
                     if 'RESERVED' not in name.upper():
                         print(' ', (p + '->' + name + ' = ' + p + '_' + name.replace('[', '_').strip(']')
-                                    + ';').ljust(55) + f' /* {x[2]}  (0x{int(z[1], 16) + offset:X}) */')
+                                    + ';').ljust(55) + f' /* {x[2]}  (0x{int(periph[1], 16) + offset:X}) */')
                     # if all([dg.isdigit() for dg in offs]):
 
                     offset += int(offs)
+            '''
 
     '''
     for z in g:
