@@ -41,7 +41,7 @@ ident = 2 * ' '
 def get_cmsis_header_file(hdr_name):
     txt, hf_name = read_cmsis_header_file(hdr_name)
     if not txt:
-        return ""
+        return "", ""
 
     global macro_definition, peripheral, uniq_type, uniq_addr, defined_type
     macro_definition = parse_macro_def(txt)
@@ -235,8 +235,12 @@ def get_init_block(src, target):
 
         r_name = lx.upper().split('->')
 
-        while r_name[0][-1] in '0123456789':
-            r_name[0] = r_name[0][:-1]
+        r_name[0] = strip_suffix(r_name[0])
+
+        if 'AFR[0]' == r_name[1]:
+            r_name[1] = 'AFRL'
+        elif 'AFR[1]' == r_name[1]:
+            r_name[1] = 'AFRH'
 
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
 
@@ -257,7 +261,7 @@ def is_direct_init_mode():
     return reg_init.upper() == 'DIRECT'
 
 
-def compose_reg_init(reg_name, bit_def):
+def compose_reg_init(reg_name, bit_def, comment=''):
     out_str = ''
     for lx in bit_def:
         cn = '|  /* '
@@ -278,7 +282,7 @@ def compose_reg_init(reg_name, bit_def):
             out_str = ident + reg_name + ' = 0000;'
 
     else:
-        rg_name = reg_name.replace("->", "_")
+        rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
         if out_str != '':
             out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                       + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
@@ -305,24 +309,12 @@ def make_init_module(module_name, module_body):
            + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
 
 
-def compose_init_block(src, reg_set):
+def compose_init_block(src, reg_set, comment=''):
     fx = list(get_init_block(src, reg_set))
     out_str = ''
     for lx in range(len(fx)):
         out_str += compose_reg_init(reg_set[lx], fx[lx]) + '\n' * 2
-    '''
-    if fn != "":
-        out_str = make_init_func(fn, out_str)
-        # out_str = f'\n__STATIC_INLINE void init_{fn.lower()}(void) {{\n\n{out_str}}}'
 
-    if mn != "":
-        out_str = make_init_module(mn, out_str)
-
-        # uname = mn.upper()
-        # out_str = f'#ifndef __{uname}_H__\n#define __{uname}_H__\n\n' \
-        #     + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + out_str + '\n\n#ifdef __cplusplus\n  }\n' \
-        #     + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
-    '''
     return out_str
 
 
@@ -408,10 +400,10 @@ def is_hex(num_str):
 
 
 def strip_suffix(periph_name):
-    """ Strip number from peripheral name. Example: 'TIM10' ==> 'TIM' """
+    """ Strip number from peripheral name. Example: 'TIM10' ==> 'TIM' or 'GPIOC' ==> 'GPIO' """
     pn = periph_name
     while True:
-        if pn[-1] in '0123456789':
+        if pn[-1] in '0123456789' or pn[:-1] == 'GPIO':
             pn = pn[:-1]
         else:
             break
@@ -422,10 +414,8 @@ def find_peripheral(periph_name):
     """ return address and typedef name of the peripheral. Example: ('TIM3', '0x40000400', 'TIM_TypeDef') """
     pn = periph_name.strip()
     for xc in peripheral:
-        if pn == xc[1]:
-            return xc[1], xc[0], xc[2][:-1]
-
-    return ""
+        if pn in xc[1]:
+            yield xc[1], xc[0], xc[2][:-1]
 
 
 '''
@@ -442,7 +432,10 @@ def find_peripheral_type(periph_name):
 
 def get_register_set(periph_name):
     pn = strip_suffix(periph_name)
-    return register_dic[pn + '_TypeDef']
+    dict_key = pn + '_TypeDef'
+    if dict_key in register_dic:
+        return register_dic[dict_key]
+    return []
 
 
 def get_register_size(struct_name):
@@ -457,15 +450,12 @@ def get_register_size(struct_name):
 
 
 def get_register_property(reg_name):
-    if '[' in reg_name[0] and ']' in reg_name[0]:
-        left_bracket = reg_name[0].find('[')
-        right_bracket = reg_name[0].find(']')
-        if right_bracket != -1 and left_bracket != -1:
-            arr_size = reg_name[0][left_bracket + 1:right_bracket]
-            if arr_size:
-                if all([sg.isdigit() for sg in arr_size]):
-                    for ndx in range(int(arr_size)):
-                        yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', get_register_size(reg_name[1])
+    left_bracket = reg_name[0].find('[')
+    right_bracket = reg_name[0].find(']')
+    arr_size = reg_name[0][left_bracket + 1:right_bracket]
+    if all([sg.isdigit() for sg in arr_size]):
+        for ndx in range(int(arr_size)):
+            yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', get_register_size(reg_name[1])
     else:
         yield reg_name[0], get_register_size(reg_name[1])
 
@@ -478,6 +468,12 @@ def get_register_list(peripheral_property):
                 yield [reg_name, xa[2],  f'0x{int(peripheral_property[1], 16) + register_address:X}']
 
             register_address += int(reg_offs)
+
+
+def get_peripheral_register_list(periph_name):
+    for pe in find_peripheral(periph_name):  #
+        if is_hex(pe[1]):
+            yield pe[0], get_register_list(pe)
 
 
 if __name__ == '__main__':
@@ -504,16 +500,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if len(args.function) != len(args.module) != len(args.peripheral) != len(args.register):
-        print("unbalanced list!")
-        exit()
-    else:
-        print(args.peripheral)
-
-    # print(args)
-    # print(sys.argv)
-    # exit()
-
     if args.direct:
         reg_init = 'direct'
 
@@ -533,11 +519,12 @@ if __name__ == '__main__':
     # s_data = get_cmsis_header_file("l496zg")
     # s_data = get_cmsis_header_file("g474re")
 
-    s_data, hdr_file_name = get_cmsis_header_file(args.cpu)
     print(args)
 
+    s_data, hdr_file_name = get_cmsis_header_file(args.cpu)
+
     if not s_data:
-        print("unable to fetch the file requested!")
+        print(f'unable to get data for "{args.cpu}"')
         exit()
 
     if args.save_header_file:
@@ -560,37 +547,19 @@ if __name__ == '__main__':
     # print(peripheral[6][2][:-1])
 
     if args.peripheral:
-        # p_name = strip_suffix(args.peripheral[0][0])
-        # print(register_dic[p_name + '_TypeDef'])
-        # for x in get_register_set(args.peripheral[0][0], register_dic):
-        #     print(x[0])
-        p = args.peripheral[0]
-        periph = find_peripheral(p)  #
-        if not periph:
-            z = get_register_set(p)
-            print(z)
-        elif is_hex(periph[1]):
-            for x in get_register_list(periph):
-                print(x)
-            # print(p, '=', z[2], '@', z[1] + ':')
-            '''
-            offset = 0
-            for x in register_dic[periph[2]]:
-                for name, offs in get_register_property(x):
-                    if 'RESERVED' not in name.upper():
-                        print(' ', (p + '->' + name + ' = ' + p + '_' + name.replace('[', '_').strip(']')
-                                    + ';').ljust(55) + f' /* {x[2]}  (0x{int(periph[1], 16) + offset:X}) */')
-                    # if all([dg.isdigit() for dg in offs]):
-
-                    offset += int(offs)
-            '''
+        for p in args.peripheral:
+            for name, lst in get_peripheral_register_list(p):
+                # print(name, ':')
+                for xp in lst:
+                    print(compose_init_block(s_data, [name + '->' + xp[0]]))
+                    # print(xp)
 
     '''
     for z in g:
         defined_type.append()
     '''
 
-    if args == 2:
+    if len(sys.argv) == 2 and args.cpu != '':
         for x in peripheral:
             print(x[1].ljust(15), x[0], x[2][:-1], '"' + x[3] + '"')
 
