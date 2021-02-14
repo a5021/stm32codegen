@@ -249,6 +249,7 @@ def get_reg_set(reg_str, macro_def_list):
 
             if gx[0][-2] == '_' and gx[0][-1] in '0123456789':  # if string ends with _1 or _2 or _3 etc.
                 gx[2] = '  ' + gx[2].strip()
+
             yield gx
 
 
@@ -268,6 +269,9 @@ def get_init_block(src, target):
             r_name[1] = 'AFRL'
         elif 'AFR[1]' == r_name[1]:
             r_name[1] = 'AFRH'
+
+        if args.cpu[0] == '3' and r_name[1] == 'OSPEEDR':
+            r_name[1] = 'OSPEEDER'
 
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
 
