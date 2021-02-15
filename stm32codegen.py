@@ -534,7 +534,10 @@ if __name__ == '__main__':
     if args.direct:
         reg_init = 'direct'
 
-    if args.cpu[0] == 'f':
+    if args.cpu[0:5].upper() == 'STM32':
+        args.cpu = args.cpu[5:]
+
+    if args.cpu[0].upper() == 'F':
         args.cpu = args.cpu[1:]
 
     print('Parameters passed', len(sys.argv))
