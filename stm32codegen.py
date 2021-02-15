@@ -225,11 +225,11 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_AFRL_AFRL' in gx[0] or '_AFRH_AFRH' in gx[0]:
                     continue
 
-            if args.cpu[:2] != 'h7':
+            if args.cpu[:2] != 'h7' and args.cpu[0:2] != 'L0':
                 if '_MODER_MODE' in gx[0] and gx[0][15] in '0123456789':
                     continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3':
+            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0':
                 if '_OTYPER_OT_' in gx[0]:
                     continue
 
@@ -243,7 +243,7 @@ def get_reg_set(reg_str, macro_def_list):
             if '_ODR_ODR_' in gx[0]:
                 continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3':
+            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0':
                 if '_BSRR_BS_' in gx[0] or '_BSRR_BR_' in gx[0]:
                     continue
 
@@ -270,7 +270,7 @@ def get_init_block(src, target):
         elif 'AFR[1]' == r_name[1]:
             r_name[1] = 'AFRH'
 
-        if args.cpu[0] == '3' and r_name[1] == 'OSPEEDR':
+        if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
 
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
@@ -534,11 +534,23 @@ if __name__ == '__main__':
     if args.direct:
         reg_init = 'direct'
 
-    if args.cpu[0:5].upper() == 'STM32':
-        args.cpu = args.cpu[5:]
+    cpu_name = args.cpu.upper()
 
-    if args.cpu[0].upper() == 'F':
-        args.cpu = args.cpu[1:]
+    if cpu_name[0:5] == 'STM32':
+        cpu_name = cpu_name[5:]
+
+    if cpu_name[0] == 'F':
+        cpu_name = cpu_name[1:]
+
+    if cpu_name[0] == 'L' or cpu_name[0] == 'H' or cpu_name[0] == 'G':
+        cpu_name = cpu_name[:6]
+    elif cpu_name[0] in '1234567890':
+        cpu_name = cpu_name[:5]
+    else:
+        print(f'wrong parameter passed: {args.cpu}')
+        exit()
+
+    args.cpu = cpu_name
 
     print('Parameters passed', len(sys.argv))
 
