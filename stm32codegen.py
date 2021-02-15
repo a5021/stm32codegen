@@ -229,21 +229,21 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_MODER_MODE' in gx[0] and gx[0][15] in '0123456789':
                     continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0':
+            if args.cpu[:1] != '0' and args.cpu[:1] != '3' and args.cpu[:2] != 'L0' and args.cpu[:2] != 'L1':
                 if '_OTYPER_OT_' in gx[0]:
                     continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[:1] != '7':
+            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[:1] != '7' and args.cpu[:2] != 'L1':
                 if '_PUPDR_PUPDR' in gx[0]:
                     continue
 
-            if '_IDR_IDR_' in gx[0]:
+            if '_IDR_IDR_' in gx[0] and args.cpu[:2] != 'L1':
                 continue
 
-            if '_ODR_ODR_' in gx[0]:
+            if '_ODR_ODR_' in gx[0] and args.cpu[:2] != 'L1':
                 continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0':
+            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0' and args.cpu[:2] != 'L1':
                 if '_BSRR_BS_' in gx[0] or '_BSRR_BR_' in gx[0]:
                     continue
 
@@ -270,7 +270,7 @@ def get_init_block(src, target):
         elif 'AFR[1]' == r_name[1]:
             r_name[1] = 'AFRH'
 
-        if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0') and r_name[1] == 'OSPEEDR':
+        if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
 
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
