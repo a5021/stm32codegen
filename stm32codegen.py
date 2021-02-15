@@ -34,7 +34,7 @@ uniq_type = set()
 uniq_addr = set()
 
 reg_init = 'indirect'
-undef_req = 'no'
+undef_req = 'yes'
 ident = 2 * ' '
 
 
@@ -292,14 +292,20 @@ def is_direct_init_mode():
     return reg_init.upper() == 'DIRECT'
 
 
-def compose_reg_init(reg_name, bit_def, comment=''):
+def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
     out_str = ''
     for lx in bit_def:
         cn = '|  /* '
         if lx == bit_def[-1]:
             cn = ' ' + cn[1:]
-        out_str += ident * 2 + '0 * ' + lx[0].ljust(max_field_len[0] + 1) + cn + lx[1].ljust(max_field_len[1] + 2) \
-            + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+
+        if lx[0] in set_bit_list:
+            enable_disable = '1'
+        else:
+            enable_disable = '0'
+
+        out_str += ident * 2 + enable_disable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + \
+            lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if is_direct_init_mode():
             out_str += '\n'
@@ -340,11 +346,11 @@ def make_init_module(module_name, module_body):
            + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
 
 
-def compose_init_block(src, reg_set, comment=''):
+def compose_init_block(src, reg_set, set_bit_list, comment=''):
     fx = list(get_init_block(src, reg_set))
     out_str = ''
     for lx in range(len(fx)):
-        out_str += compose_reg_init(reg_set[lx], fx[lx]) + '\n' * 2
+        out_str += compose_reg_init(reg_set[lx], fx[lx], set_bit_list) + '\n' * 2
 
     return out_str
 
@@ -524,6 +530,8 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--function', nargs='+')
     parser.add_argument('-p', '--peripheral', nargs='+')
     parser.add_argument('-r', '--register', nargs='+')
+    parser.add_argument('-b', '--set-bit', nargs='+')
+    parser.add_argument('-v', '--verbose', action="store_true", default=False)
     # parser.add_argument('-m', '--module', action='append', nargs='+')
     # parser.add_argument('-f', '--function',  action='append', nargs='+')
     # parser.add_argument('-p', '--peripheral', action='append', nargs='+')
@@ -552,14 +560,13 @@ if __name__ == '__main__':
 
     args.cpu = cpu_name
 
-    print('Parameters passed', len(sys.argv))
+    if args.no_undef:
+        undef_req = 'no'
 
-    # print(len(args))
+    if args.verbose:
+        print('Parameters passed', len(sys.argv))
+        print(args)
 
-    '''
-    with open(CMSIS_header_file, 'r') as f:
-        s_data = f.read()
-    '''
 
     # s_data = read_cmsis_header_file("205rc")
     # s_data = read_cmsis_header_file("429ig")
@@ -567,8 +574,6 @@ if __name__ == '__main__':
     # s_data = read_cmsis_header_file("303c8")
     # s_data = get_cmsis_header_file("l496zg")
     # s_data = get_cmsis_header_file("g474re")
-
-    print(args)
 
     s_data, hdr_file_name = get_cmsis_header_file(args.cpu)
 
@@ -579,9 +584,6 @@ if __name__ == '__main__':
     if args.save_header_file:
         with open(hdr_file_name, 'bw') as f:
             f.write(bytes(s_data, 'utf-8'))
-
-    # print(peripheral)
-    # exit()
 
     '''
     for key, value in register_dic.items():
@@ -600,7 +602,7 @@ if __name__ == '__main__':
             for name, lst in get_peripheral_register_list(p):
                 # print(name, ':')
                 for xp in lst:
-                    print(compose_init_block(s_data, [name + '->' + xp[0]]))
+                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit))
                     # print(xp)
 
     '''
