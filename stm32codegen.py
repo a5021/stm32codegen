@@ -221,11 +221,11 @@ def get_reg_set(reg_str, macro_def_list):
             if gx[0][-4] == '_' and gx[0][-3:] in {'Pos', 'Msk'}:
                 continue
 
-            if args.cpu[0:1] != '3':
+            if args.cpu[:1] != '3' and args.cpu[:1] != '7':
                 if '_AFRL_AFRL' in gx[0] or '_AFRH_AFRH' in gx[0]:
                     continue
 
-            if args.cpu[:2] != 'h7' and args.cpu[0:2] != 'L0':
+            if args.cpu[:2] != 'h7' and args.cpu[:2] != 'L0':
                 if '_MODER_MODE' in gx[0] and gx[0][15] in '0123456789':
                     continue
 
@@ -233,7 +233,7 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_OTYPER_OT_' in gx[0]:
                     continue
 
-            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3':
+            if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[:1] != '7':
                 if '_PUPDR_PUPDR' in gx[0]:
                     continue
 
