@@ -292,8 +292,9 @@ def is_direct_init_mode():
     return reg_init.upper() == 'DIRECT'
 
 
-def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
+def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
+    cm = ''
     for lx in bit_def:
         cn = '|  /* '
         if lx == bit_def[-1]:
@@ -304,8 +305,9 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
         else:
             bitfield_enable = '0'
 
-        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + \
-            lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+        cm = lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+
+        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + cm
 
         if is_direct_init_mode():
             out_str += '\n'
@@ -313,13 +315,18 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
             out_str += '\\\n'
 
     if comment:
-        cmnt = f'  /* {comment} */'
+        cmnt = comment[0]
+        addr = comment[1]
+        while '  ' in cmnt:
+            cmnt = cmnt.replace('  ', ' ')
+
+        cmnt = ('/* ' + addr + ': ' + cmnt).ljust(len(cm)) + ' */'
     else:
         cmnt = ''
 
     if is_direct_init_mode():
         if out_str != '':
-            out_str = ident + reg_name + ' = (' + cmnt + '\n' + out_str + ident + ');'
+            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + cmnt + '\n' + out_str + ident + ');'
         else:
             out_str = ident + reg_name + ' = 0000;'
 
@@ -353,7 +360,7 @@ def make_init_module(module_name, module_body):
            + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
 
 
-def compose_init_block(src, reg_set, set_bit_list, comment=''):
+def compose_init_block(src, reg_set, set_bit_list, comment=('', "")):
     fx = list(get_init_block(src, reg_set))
     out_str = ''
     for lx in range(len(fx)):
@@ -604,15 +611,11 @@ if __name__ == '__main__':
     print()
     '''
 
-    # print(peripheral[6][2][:-1])
-
     if args.peripheral:
         for p in args.peripheral:
-            for name, lst in get_peripheral_register_list(p):
-                # print(name, ':')
+            for name, lst, in get_peripheral_register_list(p):
                 for xp in lst:
-                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, xp[1]))
-                    # print(xp)
+                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
 
     '''
     for z in g:
@@ -660,7 +663,7 @@ if __name__ == '__main__':
     exit()
 
     x_reg = [x + '->' + y for x in per for y in reg]
-    s = compose_init_block(s_data, x_reg)
+    s = compose_init_block(s_data, x_reg, args.set_bit)
 
     if args.function:
         s = make_init_func(args.function, s)
