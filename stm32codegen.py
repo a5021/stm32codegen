@@ -299,12 +299,12 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
         if lx == bit_def[-1]:
             cn = ' ' + cn[1:]
 
-        if lx[0] in set_bit_list:
-            enable_disable = '1'
+        if set_bit_list and [0] in set_bit_list:
+            bitfield_enable = '1'
         else:
-            enable_disable = '0'
+            bitfield_enable = '0'
 
-        out_str += ident * 2 + enable_disable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + \
+        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + \
             lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if is_direct_init_mode():
@@ -312,9 +312,14 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
         else:
             out_str += '\\\n'
 
+    if comment:
+        cmnt = f'  /* {comment} */'
+    else:
+        cmnt = ''
+
     if is_direct_init_mode():
         if out_str != '':
-            out_str = ident + reg_name + ' = (\n' + out_str + ident + ');'
+            out_str = ident + reg_name + ' = (' + cmnt + '\n' + out_str + ident + ');'
         else:
             out_str = ident + reg_name + ' = 0000;'
 
@@ -323,11 +328,13 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=''):
         if out_str != '':
             out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                       + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
-                      + ident * 2 + reg_name + ' = ' + rg_name + ';\n' + ident + '#endif'
+                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 10) \
+                      + cmnt + '\n' + ident + '#endif'
         else:
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
-                      + ident * 2 + reg_name + ' = ' + rg_name + ';\n' + ident + '#endif'
+                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 10) \
+                      + cmnt + '\n' + ident + '#endif'
 
         if undef_req.upper() == 'YES':
             out_str += '\n' + ident + '#undef ' + rg_name
@@ -350,7 +357,7 @@ def compose_init_block(src, reg_set, set_bit_list, comment=''):
     fx = list(get_init_block(src, reg_set))
     out_str = ''
     for lx in range(len(fx)):
-        out_str += compose_reg_init(reg_set[lx], fx[lx], set_bit_list) + '\n' * 2
+        out_str += compose_reg_init(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
 
     return out_str
 
@@ -376,6 +383,9 @@ def get_type_list(src):
             if '' == gs or '//' == gs[:2]:
                 # do not parse empty strings or ones beginning with '//'
                 continue
+
+            while ' ;' in gs:
+                gs = gs.replace(' ;', ';')
 
             w = gs.split()
 
@@ -567,7 +577,6 @@ if __name__ == '__main__':
         print('Parameters passed', len(sys.argv))
         print(args)
 
-
     # s_data = read_cmsis_header_file("205rc")
     # s_data = read_cmsis_header_file("429ig")
     # s_data = read_cmsis_header_file("h743zi")
@@ -602,7 +611,7 @@ if __name__ == '__main__':
             for name, lst in get_peripheral_register_list(p):
                 # print(name, ':')
                 for xp in lst:
-                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit))
+                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, xp[1]))
                     # print(xp)
 
     '''
