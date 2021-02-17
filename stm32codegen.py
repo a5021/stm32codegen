@@ -292,20 +292,25 @@ def is_direct_init_mode():
     return reg_init.upper() == 'DIRECT'
 
 
+comment_length = 0
+
+
 def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
     cm = ''
+    global comment_length
     for lx in bit_def:
         cn = '|  /* '
         if lx == bit_def[-1]:
             cn = ' ' + cn[1:]
 
-        if set_bit_list and [0] in set_bit_list:
+        if set_bit_list and lx[0] in set_bit_list:
             bitfield_enable = '1'
         else:
             bitfield_enable = '0'
 
         cm = lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+        comment_length = len(cm)
 
         out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + cm
 
@@ -320,7 +325,7 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         while '  ' in cmnt:
             cmnt = cmnt.replace('  ', ' ')
 
-        cmnt = ('/* ' + addr + ': ' + cmnt).ljust(len(cm)) + ' */'
+        cmnt = ('/* ' + addr + ': ' + cmnt).ljust(comment_length) + ' */'
     else:
         cmnt = ''
 
@@ -328,19 +333,19 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         if out_str != '':
             out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + cmnt + '\n' + out_str + ident + ');'
         else:
-            out_str = ident + reg_name + ' = 0000;'
+            out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + cmnt
 
     else:
         rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
         if out_str != '':
             out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                       + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
-                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 10) \
+                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
                       + cmnt + '\n' + ident + '#endif'
         else:
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
-                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 10) \
+                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
                       + cmnt + '\n' + ident + '#endif'
 
         if undef_req.upper() == 'YES':
@@ -611,11 +616,13 @@ if __name__ == '__main__':
     print()
     '''
 
+    sout = ''
     if args.peripheral:
         for p in args.peripheral:
             for name, lst, in get_peripheral_register_list(p):
                 for xp in lst:
-                    print(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
+                    sout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+    print(sout)
 
     '''
     for z in g:
