@@ -269,6 +269,14 @@ def get_init_block(src, target):
             r_name[1] = 'AFRL'
         elif 'AFR[1]' == r_name[1]:
             r_name[1] = 'AFRH'
+        elif 'EXTICR[0]' == r_name[1]:
+            r_name[1] = 'EXTICR1'
+        elif 'EXTICR[1]' == r_name[1]:
+            r_name[1] = 'EXTICR2'
+        elif 'EXTICR[2]' == r_name[1]:
+            r_name[1] = 'EXTICR3'
+        elif 'EXTICR[3]' == r_name[1]:
+            r_name[1] = 'EXTICR4'
 
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
