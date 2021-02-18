@@ -297,8 +297,6 @@ comment_length = 0
 
 def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
-    cm = ''
-    global comment_length
     for lx in bit_def:
         cn = '|  /* '
         if lx == bit_def[-1]:
@@ -309,10 +307,10 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         else:
             bitfield_enable = '0'
 
-        cm = lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
-        comment_length = len(cm)
+        # cm =
 
-        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn + cm
+        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
+            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if is_direct_init_mode():
             out_str += '\n'
@@ -320,20 +318,20 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
             out_str += '\\\n'
 
     if comment:
-        cmnt = comment[0]
-        addr = comment[1]
-        while '  ' in cmnt:
-            cmnt = cmnt.replace('  ', ' ')
+        reg_comment = comment[0]
+        reg_address = comment[1]
+        while '  ' in reg_comment:
+            reg_comment = reg_comment.replace('  ', ' ')
 
-        cmnt = ('/* ' + addr + ': ' + cmnt).ljust(comment_length) + ' */'
+        reg_comment = ('/* ' + reg_address + ': ' + reg_comment).ljust(max_field_len[1] + max_field_len[2] + 17) + ' */'
     else:
-        cmnt = ''
+        reg_comment = ''
 
     if is_direct_init_mode():
         if out_str != '':
-            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + cmnt + '\n' + out_str + ident + ');'
+            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + '\n' + out_str + ident + ');'
         else:
-            out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + cmnt
+            out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
     else:
         rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
@@ -341,12 +339,12 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
             out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                       + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                      + cmnt + '\n' + ident + '#endif'
+                      + reg_comment + '\n' + ident + '#endif'
         else:
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                      + cmnt + '\n' + ident + '#endif'
+                      + reg_comment + '\n' + ident + '#endif'
 
         if undef_req.upper() == 'YES':
             out_str += '\n' + ident + '#undef ' + rg_name
