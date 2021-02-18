@@ -546,8 +546,10 @@ if __name__ == '__main__':
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('-i', '--ident', type=int, default=2)
-    parser.add_argument('-m', '--module', nargs='+')
-    parser.add_argument('-f', '--function', nargs='+')
+    parser.add_argument('-m', '--module')
+    parser.add_argument('-f', '--function')
+    # parser.add_argument('-m', '--module', nargs='+')
+    # parser.add_argument('-f', '--function', nargs='+')
     parser.add_argument('-p', '--peripheral', nargs='+')
     parser.add_argument('-r', '--register', nargs='+')
     parser.add_argument('-b', '--set-bit', nargs='+')
@@ -614,13 +616,20 @@ if __name__ == '__main__':
     print()
     '''
 
-    sout = ''
+    stout = ''
     if args.peripheral:
         for p in args.peripheral:
             for name, lst, in get_peripheral_register_list(p):
                 for xp in lst:
-                    sout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
-    print(sout)
+                    stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+
+    if args.function:
+        stout = make_init_func(args.function, stout)
+
+    if args.module:
+        stout = make_init_module(args.module, stout)
+
+    print(stout)
 
     '''
     for z in g:
