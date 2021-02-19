@@ -37,6 +37,8 @@ reg_init = 'indirect'
 undef_req = 'yes'
 ident = 2 * ' '
 
+def_set = set()
+
 
 def get_cmsis_header_file(hdr_name):
     txt, hf_name = read_cmsis_header_file(hdr_name)
@@ -305,6 +307,7 @@ comment_length = 0
 
 def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
+    global def_set
     for lx in bit_def:
         cn = '|  /* '
         if lx == bit_def[-1]:
@@ -343,6 +346,7 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     else:
         rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
+        def_set.add(rg_name)
         if out_str != '':
             out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                       + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
@@ -624,15 +628,26 @@ if __name__ == '__main__':
     print()
     '''
 
+    pr_set = []
     stout = ''
     if args.peripheral:
         for p in args.peripheral:
             for name, lst, in get_peripheral_register_list(p):
                 for xp in lst:
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+                x_out = '('
+                for ds in def_set:
+                    x_out += f'({ds} != 0) | '
+                x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
+                pr_set.append(x_out)
 
     if args.function:
         stout = make_init_func(args.function, stout)
+
+    if not args.direct:
+        stout += '\n'
+        for en in pr_set:
+            stout += ident + en + '\n'
 
     if args.module:
         stout = make_init_module(args.module, stout)
