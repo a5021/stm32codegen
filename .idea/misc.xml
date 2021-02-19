@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (stm32cmsis)" project-jdk-type="Python SDK" />
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/init.h" />
+    <file url="file://$PROJECT_DIR$/stm32f103xb.h" />
+    <file url="file://$PROJECT_DIR$/stm32f217xx.h" />
+    <file url="file://$PROJECT_DIR$/stm32f373xc.h" />
+    <file url="file://$PROJECT_DIR$/stm32f469xx.h" />
+    <file url="file://$PROJECT_DIR$/stm32f730xx.h" />
+    <file url="file://$PROJECT_DIR$/stm32g474xx.h" />
+    <file url="file://$PROJECT_DIR$/stm32l053xx.h" />
+    <file url="file://$PROJECT_DIR$/stm32l433xx.h" />
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
 </project>

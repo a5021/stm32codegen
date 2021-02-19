@@ -340,7 +340,8 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     if is_direct_init_mode():
         if out_str != '':
-            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + '\n' + out_str + ident + ');'
+            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
+                      '\n' + out_str + ident + ');'
         else:
             out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
@@ -640,6 +641,7 @@ if __name__ == '__main__':
                     x_out += f'({ds} != 0) | '
                 x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
                 pr_set.append(x_out)
+                def_set = set()
 
     if args.function:
         stout = make_init_func(args.function, stout)
