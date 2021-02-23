@@ -566,6 +566,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--peripheral', nargs='+')
     parser.add_argument('-r', '--register', nargs='+')
     parser.add_argument('-b', '--set-bit', nargs='+')
+    parser.add_argument('-M', '--use-macro', nargs='+')
     parser.add_argument('-v', '--verbose', action="store_true", default=False)
     # parser.add_argument('-m', '--module', action='append', nargs='+')
     # parser.add_argument('-f', '--function',  action='append', nargs='+')
@@ -631,10 +632,38 @@ if __name__ == '__main__':
 
     pr_set = []
     stout = ''
+    use_gpio_macros = ''
+    if args.use_macro and 'GPIO' in args.use_macro:
+        use_gpio_macros = 'yes'
+
     if args.peripheral:
         for p in args.peripheral:
             for name, lst, in get_peripheral_register_list(p):
                 for xp in lst:
+
+                    if use_gpio_macros:
+                        # in the case '-M GPIO' option used
+                        if 'CRL' == xp[0]:
+                            stout += ident + '#define ' + name + '_CR (\n'
+                            or_sign = '|'
+                            pad_str = ' '
+                            for zc in range(16):
+                                if zc == 15:
+                                    or_sign = ' '
+                                if zc == 10:
+                                    pad_str = ''
+                                stout += ident * 2 + 'PIN_CFG(' + str(zc) + ',' + pad_str + ' I_ANALOG)  ' + or_sign \
+                                    + '  /* PIN ' + str(zc) + ' */\n'
+
+                            stout += ident + ')\n'
+                            stout += ident + '#if ' + name + '_CR != 0\n'
+                            stout += ident * 2 + f'*(unsigned long long*) {name}_BASE = ' + name + '_CR;\n'
+                            stout += ident + '#endif\n\n'
+                            continue
+
+                        if 'CRH' == xp[0]:
+                            continue
+
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
                 x_out = '('
                 for ds in def_set:
@@ -773,4 +802,9 @@ if __name__ == '__main__':
     # print(compose_init_block(s_data, 'TIM5->CR2'))
     # print(compose_init_block(s_data, 'TIM5->DIER'))
     # print(get_init_block(s_data, target))
+'''
+
+
+GPIO_MACRO = '''
+
 '''
