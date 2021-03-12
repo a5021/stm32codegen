@@ -6,7 +6,7 @@ import sys
 try:
     from stm32cmsis import read_cmsis_header_file
 except ImportError:
-    print('Could not import CMSIS library')
+    print('Could not import STM32CMSIS library')
     # print('pip install cmsis')
     sys.exit(1)
 
