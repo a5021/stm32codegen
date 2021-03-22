@@ -647,19 +647,15 @@ if __name__ == '__main__':
         stout = make_init_func(args.function, stout)
 
     if not args.direct:
-        stout += '\n'
+        stout += '\n\n'
         for en in pr_set:
-            stout += ident + en + '\n'
+            # stout += ident + en + '\n'
+            stout += en + '\n'
 
     if args.module:
         stout = make_init_module(args.module, stout)
 
     print(stout)
-
-    '''
-    for z in g:
-        defined_type.append()
-    '''
 
     if len(sys.argv) == 2 and args.cpu != '':
         for x in peripheral:
