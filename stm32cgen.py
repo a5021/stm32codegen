@@ -667,7 +667,7 @@ if __name__ == '__main__':
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
                 x_out = '('
                 for ds in def_set:
-                    x_out += f'({ds} != 0) | '
+                    x_out += f'({ds} != 0) || '
                 x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
                 pr_set.append(x_out)
                 def_set = set()
