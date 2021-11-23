@@ -6,7 +6,7 @@ import sys
 try:
     from stm32cmsis import read_cmsis_header_file
 except ImportError:
-    print('Could not import STM32CMSIS library')
+    print('Could not import STM32 CMSIS library')
     # print('pip install cmsis')
     sys.exit(1)
 
@@ -349,17 +349,28 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
         def_set.add(rg_name)
         if out_str != '':
-            out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
-                      + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
-                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                      + reg_comment + '\n' + ident + '#endif'
+            if args.undef == False:
+                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
+                          + '\\\n' + out_str + ident + ')\n' + ident + '#if defined ' + rg_name + '\n'\
+                          + ident * 2 + '#if ' + rg_name + ' != 0\n' \
+                          + (ident * 3 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+                          + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
+                          + ident + '#else\n' + ident * 2 + '#define ' + rg_name + ' 0\n'\
+                          + ident + '#endif\n'
+
+            else:
+                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
+                          + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
+                          + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+                          + reg_comment + '\n' + ident + '#endif'
+
         else:
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
                       + reg_comment + '\n' + ident + '#endif'
 
-        if undef_req.upper() == 'YES':
+        if args.undef == True:
             out_str += '\n' + ident + '#undef ' + rg_name
 
     return out_str
@@ -555,6 +566,7 @@ if __name__ == '__main__':
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
+    parser.add_argument('-u', '--undef', action="store_true", default=False, help="place #undef for each initialization definition")
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
@@ -665,11 +677,13 @@ if __name__ == '__main__':
                             continue
 
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
-                x_out = '('
-                for ds in def_set:
-                    x_out += f'({ds} != 0) || '
-                x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
-                pr_set.append(x_out)
+
+                if args.undef == False:
+                    x_out = '('
+                    for ds in def_set:
+                        x_out += f'({ds} != 0) || '
+                    x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
+                    pr_set.append(x_out)
                 def_set = set()
 
     if args.function:
