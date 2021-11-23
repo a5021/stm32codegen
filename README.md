@@ -1,3 +1,3 @@
 # stm32codegen
 
-The script to generate C source code for initialize peripherals of STM32 microcontrollers
+The tool to generate C source code from CMSIS header files to initialize peripherals of STM32 microcontrollers.
