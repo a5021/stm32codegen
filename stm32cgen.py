@@ -34,7 +34,6 @@ uniq_type = set()
 uniq_addr = set()
 
 reg_init = 'indirect'
-undef_req = 'yes'
 ident = 2 * ' '
 
 def_set = set()
@@ -565,7 +564,7 @@ if __name__ == '__main__':
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
-    parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
+    # parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
     parser.add_argument('-u', '--undef', action="store_true", default=False, help="place #undef for each initialization definition")
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
@@ -607,9 +606,6 @@ if __name__ == '__main__':
         exit()
 
     args.cpu = cpu_name
-
-    if args.no_undef:
-        undef_req = 'no'
 
     if args.verbose:
         print('Parameters passed', len(sys.argv))
@@ -682,7 +678,8 @@ if __name__ == '__main__':
                     x_out = '('
                     for ds in def_set:
                         x_out += f'({ds} != 0) || '
-                    x_out = '#define ' + name + '_EN ' + x_out[:-3] + ')'
+                    x_out = '#define ' + name + '_EN ' + x_out[:-3]
+                    x_out = x_out.strip() + ')'
                     pr_set.append(x_out)
                 def_set = set()
 
