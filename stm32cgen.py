@@ -684,7 +684,7 @@ if __name__ == '__main__':
                             x_out += '\\\n' + ident
                             cnt = 0
                     x_out = '#define ' + name + '_EN ' + x_out[:-3]
-                    x_out = x_out.strip() + ')'
+                    x_out = x_out.strip() + ')\n'
                     pr_set.append(x_out)
                 def_set = set()
 
