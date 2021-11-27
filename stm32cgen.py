@@ -699,7 +699,7 @@ if __name__ == '__main__':
                     
                     enabler.append(name + '_EN')
                     x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3]
-                    x_out = x_out.strip() + ')\n'
+                    x_out = x_out.strip().strip('\\').strip().strip('||').strip() + '\n)\n'
                     pr_set.append(x_out)
                 def_set = set()
 
