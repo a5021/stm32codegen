@@ -317,16 +317,4 @@ if __name__ == '__main__':
         p = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', x[0], re.MULTILINE | re.DOTALL)
         dev_desc = (x[1], p[0] if p else "")
         print(dev_desc)
-        # if p:
-        #     print(p[0])
-        # else:
-        #     print()
-        continue
 
-        q = re.findall(r'typedef\s+struct\s*{\s*(.*)', x[0], re.MULTILINE | re.DOTALL)
-        if q:
-            e = q[0].split('\n')
-            for y in e:
-                print('  ', y.strip())
-            else:
-                print()
