@@ -278,8 +278,6 @@ def get_init_block(src, target):
             r_name[1] = 'EXTICR3'
         elif 'EXTICR[3]' == r_name[1]:
             r_name[1] = 'EXTICR4'
-        #elif 'BKP' in r_name[1]:
-        #    r_name[1] = 'BKUP' + r_name[1][3:]
 
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
@@ -382,13 +380,13 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
                 out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                           + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
                           + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                          + reg_comment + '\n' + ident + '#endif'
+                          + ' ' + reg_comment + '\n' + ident + '#endif'
 
         else:
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                      + reg_comment + '\n' + ident + '#endif'
+                      + ' ' + reg_comment + '\n' + ident + '#endif'
 
         if args.undef is True:
             out_str += '\n' + ident + '#undef ' + rg_name
@@ -434,8 +432,8 @@ def get_type_list(src):
         t_list = []
         for gy in gx[0].replace(';/', '; /').split('\n'):
             gs = gy.strip()
-            if '' == gs or '//' == gs[:2]:
-                # do not parse empty strings or ones beginning with '//'
+            if '' == gs or '//' == gs[:2] or 'AND triple modes' in gs:
+                # do not parse empty strings or ones beginning with those
                 continue
 
             while ' ;' in gs:
@@ -718,7 +716,6 @@ if __name__ == '__main__':
     if not args.direct:
         stout += '\n\n'
         for en in pr_set:
-            # stout += ident + en + '\n'
             stout += en + '\n'
 
     if args.module:
@@ -762,8 +759,6 @@ if __name__ == '__main__':
         else:
             per = args.peripheral
 
-    # print(per)
-    # print(g)
     exit()
 
     x_reg = [x + '->' + y for x in per for y in reg]
