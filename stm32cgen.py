@@ -137,7 +137,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
                         elif 'CORDIC' == lx[0][:6] and 'CORDIC' == ly[1]:
                             lx[3] = 'CORDIC Accelerator'
                         elif 'FMAC' == lx[0][:4] and 'FMAC' == ly[1]:
-                            lx[3] = 'Filter Math ACcelerator'
+                            lx[3] = 'Filter Math Accelerator'
                         elif 'VREFBUF' in lx[0] and 'VREFBUF' == ly[1]:
                             lx[3] = 'Voltage Reference Buffer'
                         elif 'COMP' in lx[0] and 'COMP_TypeDef' == ly[0] and '' == ly[1]:
@@ -348,7 +348,7 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
         def_set.add(rg_name)
         if out_str != '':
-            if args.undef == False:
+            if args.undef is False:
                 out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
                           + '\\\n' + out_str + ident + ')\n' + ident + '#if defined ' + rg_name + '\n'\
                           + ident * 2 + '#if ' + rg_name + ' != 0\n' \
@@ -369,7 +369,7 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
                       + reg_comment + '\n' + ident + '#endif'
 
-        if args.undef == True:
+        if args.undef is True:
             out_str += '\n' + ident + '#undef ' + rg_name
 
     return out_str
@@ -675,7 +675,7 @@ if __name__ == '__main__':
 
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
 
-                if args.undef == False:
+                if args.undef is False:
                     x_out = '(\\\n' + ident
                     cnt = 0
                     for ds in def_set:
@@ -698,7 +698,6 @@ if __name__ == '__main__':
                 x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
                          
-
     if args.function:
         stout = make_init_func(args.function, stout)
 
