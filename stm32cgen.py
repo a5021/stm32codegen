@@ -314,7 +314,14 @@ def ch_def_name(def_name):
         d_name = def_name.replace('_EP', '_ENP')
     if 'USB_CNTR' == def_name:
         d_name = 'USB_CTLR'
-
+    if 'USB_ISTR' == def_name:
+        d_name = 'USB_INTSTR'
+    if 'USB_FNR' == def_name:
+        d_name = 'USB_FRNR'
+    if 'USB_DADR' == def_name:
+        d_name = 'USB_DEVADDR'
+    if 'USB_BTABLE' == def_name:
+        d_name = 'USB_BUFTABLE'
     return d_name
 
 
