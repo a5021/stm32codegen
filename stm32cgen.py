@@ -312,6 +312,8 @@ def ch_def_name(def_name):
         d_name = def_name.replace('BKP', 'BKUP')
     if 'USB_EP' in def_name:
         d_name = def_name.replace('_EP', '_ENP')
+    if 'USB_CNTR' == def_name:
+        d_name = 'USB_CTLR'
 
     return d_name
 
