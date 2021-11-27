@@ -639,6 +639,7 @@ if __name__ == '__main__':
     '''
 
     pr_set = []
+    enabler = []
     stout = ''
     use_gpio_macros = ''
     if args.use_macro and 'GPIO' in args.use_macro:
@@ -683,10 +684,20 @@ if __name__ == '__main__':
                         if cnt == 5:
                             x_out += '\\\n' + ident
                             cnt = 0
-                    x_out = '#define ' + name + '_EN ' + x_out[:-3]
+                    
+                    enabler.append(name + '_EN')
+                    x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3]
                     x_out = x_out.strip() + ')\n'
                     pr_set.append(x_out)
                 def_set = set()
+
+            if len(enabler) != 0 and args.function:
+                x_out = ''
+                for en in enabler:
+                    x_out += f'({en} != 0) || '
+                x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + '();\n' + ident + '#endif\n#endif\n'
+                pr_set.append(x_out)
+                         
 
     if args.function:
         stout = make_init_func(args.function, stout)
