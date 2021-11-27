@@ -306,6 +306,16 @@ def is_direct_init_mode():
 comment_length = 0
 
 
+def ch_def_name(def_name):
+    d_name = def_name
+    if 'RTC_BKP' in def_name:
+        d_name = def_name.replace('BKP', 'BKUP')
+    if 'USB_EP' in def_name:
+        d_name = def_name.replace('_EP', '_ENP')
+
+    return d_name
+
+
 def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
     global def_set
@@ -347,7 +357,7 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
             out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
     else:
-        rg_name = reg_name.replace("->", "_").replace('[', '_').replace(']', '')
+        rg_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
         def_set.add(rg_name)
         if out_str != '':
             if args.undef is False:
@@ -366,8 +376,6 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
                           + reg_comment + '\n' + ident + '#endif'
 
         else:
-            if 'RTC_BKP' in rg_name:
-                rg_name = rg_name.replace('BKP', 'BKUP')
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
