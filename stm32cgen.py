@@ -688,7 +688,7 @@ if __name__ == '__main__':
                     stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
 
                 if args.undef is False:
-                    x_out = '(\\\n' + ident
+                    x_out = '( \\\n' + ident
                     cnt = 0
                     for ds in def_set:
                         x_out += f'({ds} != 0) || '
@@ -696,10 +696,13 @@ if __name__ == '__main__':
                         if cnt == 5:
                             x_out += '\\\n' + ident
                             cnt = 0
+
+                    if cnt == 0:
+                        x_out = x_out[:-4]
                     
                     enabler.append(name + '_EN')
-                    x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3]
-                    x_out = x_out.strip() + ')\n'
+                    x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3].strip() + ' \\\n)\n'
+                    #x_out = x_out.strip() + ' \\\n)\n'
                     pr_set.append(x_out)
                 def_set = set()
 
