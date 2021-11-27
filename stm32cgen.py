@@ -640,16 +640,6 @@ if __name__ == '__main__':
         with open(hdr_file_name, 'bw') as f:
             f.write(bytes(s_data, 'utf-8'))
 
-    '''
-    for key, value in register_dic.items():
-        print(key)
-        for x in value:
-            # print('  name =', x[0] + '; size =', x[1] + '; desc = "' + x[2] + '"')
-            print(' ', x)
-
-    print()
-    '''
-
     pr_set = []
     enabler = []
     stout = ''
@@ -702,7 +692,6 @@ if __name__ == '__main__':
                     
                     enabler.append(name + '_EN')
                     x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3].strip() + ' \\\n)\n'
-                    #x_out = x_out.strip() + ' \\\n)\n'
                     pr_set.append(x_out)
                 def_set = set()
 
