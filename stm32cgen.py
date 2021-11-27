@@ -278,6 +278,8 @@ def get_init_block(src, target):
             r_name[1] = 'EXTICR3'
         elif 'EXTICR[3]' == r_name[1]:
             r_name[1] = 'EXTICR4'
+        #elif 'BKP' in r_name[1]:
+        #    r_name[1] = 'BKUP' + r_name[1][3:]
 
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
@@ -364,6 +366,8 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
                           + reg_comment + '\n' + ident + '#endif'
 
         else:
+            if 'RTC_BKP' in rg_name:
+                rg_name = rg_name.replace('BKP', 'BKUP')
             out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
                       + '#if ' + rg_name + ' != 0\n' \
                       + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
@@ -610,13 +614,6 @@ if __name__ == '__main__':
     if args.verbose:
         print('Parameters passed', len(sys.argv))
         print(args)
-
-    # s_data = read_cmsis_header_file("205rc")
-    # s_data = read_cmsis_header_file("429ig")
-    # s_data = read_cmsis_header_file("h743zi")
-    # s_data = read_cmsis_header_file("303c8")
-    # s_data = get_cmsis_header_file("l496zg")
-    # s_data = get_cmsis_header_file("g474re")
 
     s_data, hdr_file_name = get_cmsis_header_file(args.cpu)
 
