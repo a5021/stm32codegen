@@ -513,8 +513,12 @@ def find_peripheral(periph_name):
     """ return address and typedef name of the peripheral. Example: ('TIM3', '0x40000400', 'TIM_TypeDef') """
     pn = periph_name.strip()
     for xc in peripheral:
-        if pn in xc[1]:
-            yield xc[1], xc[0], xc[2][:-1]
+        if args.strict is False:
+            if pn in xc[1]:
+                yield xc[1], xc[0], xc[2][:-1]
+        else:
+            if pn == xc[1]:
+                yield xc[1], xc[0], xc[2][:-1]
 
 
 '''
@@ -588,6 +592,7 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
+    parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--ident', type=int, default=2)
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
