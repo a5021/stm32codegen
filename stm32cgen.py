@@ -579,6 +579,21 @@ def get_peripheral_register_list(periph_name):
             yield pe[0], get_register_list(pe)
 
 
+def sort_peripheral_by_num(p):
+    k = p[0]
+    pn = ''
+    while True:
+        if k[-1] in '0123456789':
+            pn = k[-1] + pn
+            k = k[:-1]
+        else:
+            break
+    if pn != '':
+        return int(pn)
+    else:
+        return 0
+
+
 if __name__ == '__main__':
 
     import argparse
@@ -654,7 +669,8 @@ if __name__ == '__main__':
 
     if args.peripheral:
         for p in args.peripheral:
-            for name, lst, in get_peripheral_register_list(p):
+            j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
+            for name, lst, in j_sorted:
                 for xp in lst:
 
                     if use_gpio_macros:
