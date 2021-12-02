@@ -282,6 +282,8 @@ def get_init_block(src, target):
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
 
+        if r_name[0]  == 'UART':
+            r_name[0] = 'USART'
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
 
         for dx in c_set:
@@ -577,6 +579,11 @@ def get_peripheral_register_list(periph_name):
     for pe in find_peripheral(periph_name):  #
         if is_hex(pe[1]):
             yield pe[0], get_register_list(pe)
+
+    if periph_name == 'USART':
+        for pe in find_peripheral('UART'):  #
+            if is_hex(pe[1]):
+                yield pe[0], get_register_list(pe)
 
 
 def sort_peripheral_by_num(p):
