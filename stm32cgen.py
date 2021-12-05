@@ -282,8 +282,12 @@ def get_init_block(src, target):
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
 
-        if r_name[0]  == 'UART':
+        if r_name[0] == 'UART':
             r_name[0] = 'USART'
+
+        if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
+            r_name[0] = 'DMA'
+
         c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
 
         for dx in c_set:
