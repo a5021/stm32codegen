@@ -370,17 +370,18 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
             out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
     else:
+        # p_str = ""
         rg_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
         def_set.add(rg_name)
         if out_str != '':
             if args.undef is False:
-                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
-                          + '\\\n' + out_str + ident + ')\n' + ident + '#if defined ' + rg_name + '\n'\
-                          + ident * 2 + '#if ' + rg_name + ' != 0\n' \
-                          + (ident * 3 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
-                          + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                          + ident + '#else\n' + ident * 2 + '#define ' + rg_name + ' 0\n'\
-                          + ident + '#endif\n'
+                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) + '\\\n' + out_str + ident + ')\n'
+
+                out_str += ident + '#if defined ' + rg_name + '\n' + ident * 2 + '#if ' + rg_name + ' != 0\n' \
+                    + (ident * 3 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+                    + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
+                    + ident + '#else\n' + ident * 2 + '#define ' + rg_name + ' 0\n'\
+                    + ident + '#endif\n'
 
             else:
                 out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
@@ -527,18 +528,6 @@ def find_peripheral(periph_name):
                 yield xc[1], xc[0], xc[2][:-1]
 
 
-'''
-def find_peripheral_type(periph_name):
-    pn = strip_suffix(periph_name)
-
-    for xf in peripheral:
-        if xf[1] == pn:
-            return xf[2][:-1]
-
-    return ""
-'''
-
-
 def get_register_set(periph_name):
     pn = strip_suffix(periph_name)
     dict_key = pn + '_TypeDef'
@@ -678,36 +667,16 @@ if __name__ == '__main__':
     if args.use_macro and 'GPIO' in args.use_macro:
         use_gpio_macros = 'yes'
 
+    init_bock = []
+
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
             for name, lst, in j_sorted:
                 for xp in lst:
-
-                    if use_gpio_macros:
-                        # in the case '-M GPIO' option used
-                        if 'CRL' == xp[0]:
-                            stout += ident + '#define ' + name + '_CR (\n'
-                            or_sign = '|'
-                            pad_str = ' '
-                            for zc in range(16):
-                                if zc == 15:
-                                    or_sign = ' '
-                                if zc == 10:
-                                    pad_str = ''
-                                stout += ident * 2 + 'PIN_CFG(' + str(zc) + ',' + pad_str + ' I_ANALOG)  ' + or_sign \
-                                    + '  /* PIN ' + str(zc) + ' */\n'
-
-                            stout += ident + ')\n'
-                            stout += ident + '#if ' + name + '_CR != 0\n'
-                            stout += ident * 2 + f'*(unsigned long long*) {name}_BASE = ' + name + '_CR;\n'
-                            stout += ident + '#endif\n\n'
-                            continue
-
-                        if 'CRH' == xp[0]:
-                            continue
-
-                    stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+                    init_bock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
+                    # stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+                    stout += init_bock[-1]
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
@@ -721,7 +690,9 @@ if __name__ == '__main__':
 
                     if cnt == 0:
                         x_out = x_out[:-4]
-                    
+
+                    if 'DMA' == name[:3] and len(name) < 6:
+                        name = name + '_IS'
                     enabler.append(name + '_EN')
                     x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3].strip() + ' \\\n)\n'
                     pr_set.append(x_out)
