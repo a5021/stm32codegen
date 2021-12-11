@@ -329,6 +329,9 @@ def ch_def_name(def_name):
     return d_name
 
 
+i_block = []
+
+
 def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     out_str = ''
     global def_set
@@ -377,11 +380,15 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
                 out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) + '\\\n' + out_str + ident + ')\n'
 
-                out_str += ident + '#if defined ' + rg_name + '\n' + ident * 2 + '#if ' + rg_name + ' != 0\n' \
+                tmp_str = ident + '#if defined ' + rg_name + '\n' + ident * 2 + '#if ' + rg_name + ' != 0\n' \
                     + (ident * 3 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
                     + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
                     + ident + '#else\n' + ident * 2 + '#define ' + rg_name + ' 0\n'\
                     + ident + '#endif\n'
+
+                i_block.append((out_str, tmp_str))
+
+                out_str += tmp_str
 
             else:
                 out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
@@ -579,8 +586,8 @@ def get_peripheral_register_list(periph_name):
                 yield pe[0], get_register_list(pe)
 
 
-def sort_peripheral_by_num(p):
-    k = p[0]
+def sort_peripheral_by_num(peripherial):
+    k = peripherial[0]
     pn = ''
     while True:
         if k[-1] in '0123456789':
@@ -609,6 +616,7 @@ if __name__ == '__main__':
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--ident', type=int, default=2)
+    parser.add_argument('-t', '--test', action="store_true", default=False)
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
     # parser.add_argument('-m', '--module', nargs='+')
@@ -753,6 +761,13 @@ if __name__ == '__main__':
             per = [x[1] for x in peripheral]
         else:
             per = args.peripheral
+
+    if args.test:
+        i_block.sort()
+        for ay, by in i_block:
+            print(ay)
+        for ay, by in i_block:
+            print(by)
 
     exit()
 
