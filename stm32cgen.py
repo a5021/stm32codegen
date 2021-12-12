@@ -58,7 +58,7 @@ def get_cmsis_header_file(hdr_name):
 
     peripheral = [p_list[xg] for xg in range(len(p_list)) if xg not in get_dupe_list(p_list)]
 
-    temp_list = list(get_type_list(txt)) 
+    temp_list = list(get_type_list(txt))
 
     for xg in temp_list:
         register_dic[xg[0]] = xg[2]
@@ -326,7 +326,7 @@ i_block = []
 
 
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
-    bitfield_block = ''
+    bitfield_block = assign_block = ''
     global def_set
     for lx in bit_def:
         cn = '|  /* '
@@ -339,7 +339,8 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             bitfield_enable = '0'
 
         bitfield_block += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+                          + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(
+            11) + ' */'
 
         if args.direct:
             bitfield_block += '\n'
@@ -359,7 +360,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     if args.direct:
         if bitfield_block != '':
             bitfield_block = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
-                      '\n' + bitfield_block + ident + ');'
+                             '\n' + bitfield_block + ident + ');'
         else:
             bitfield_block = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
@@ -368,54 +369,59 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         def_set.add(def_name)
         if bitfield_block != '':
             if args.undef is False:
-                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) + '\\\n' + bitfield_block + ident + ')\n'
+                bitfield_block = f'{ident}#define {def_name} ('.ljust(
+                    max_field_len[0] + 9) + '\\\n' + bitfield_block + ident + ')\n'
 
-                tmp_str = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
-                    + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                    + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                    + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n'\
-                    + ident + '#endif\n'
+                assign_block = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
+                               + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                               + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
+                               + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
+                               + ident + '#endif\n'
 
-                i_block.append((bitfield_block, tmp_str))
+                i_block.append((bitfield_block, assign_block))
 
-                bitfield_block += tmp_str
+                # bitfield_block += tmp_str
 
             else:
-                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) \
-                          + '\\\n' + bitfield_block + ident + ')\n' + ident + '#if ' + def_name + ' != 0\n' \
-                          + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                          + ' ' + reg_comment + '\n' + ident + '#endif'
+                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) + '\\\n' \
+                                 + bitfield_block + ident + ')\n'
+
+                assign_block = f'{ident}#if {def_name} != 0\n' \
+                               + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                               + ' ' + reg_comment + '\n' + ident + '#endif'
 
         else:
             bitfield_block = f'{ident}#define {def_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
-                      + '#if ' + def_name + ' != 0\n' \
-                      + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                      + ' ' + reg_comment + '\n' + ident + '#endif'
+                             + '#if ' + def_name + ' != 0\n' \
+                             + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                             + ' ' + reg_comment + '\n' + ident + '#endif'
 
         if args.undef is True:
-            bitfield_block += '\n' + ident + '#undef ' + def_name
+            assign_block += '\n' + ident + '#undef ' + def_name
 
-    return bitfield_block
+    return bitfield_block, assign_block
 
 
 def make_init_func(func_name, func_body):
     return f'\n__STATIC_INLINE void {func_name}(void) {{\n\n{func_body}}}'
 
 
-def make_init_module(module_name, module_body):
+def make_h_module(module_name, module_body):
     uname = module_name.upper()
     return f'#ifndef __{uname}_H__\n#define __{uname}_H__\n\n' \
            + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + module_body + '\n\n#ifdef __cplusplus\n  }\n' \
            + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
 
 
-def compose_init_block(src, reg_set, set_bit_list, comment=('', "")):
+def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
     fx = list(get_init_block(src, reg_set))
-    out_str = ''
+    block_list = []
     for lx in range(len(fx)):
-        out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
+        # out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
+        sa, sb = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
+        block_list.append([sa, sb])  # + '\n' * 2
 
-    return out_str
+    return block_list
 
 
 def get_reg_size(sz):
@@ -449,7 +455,7 @@ def get_type_list(src):
 
             name_ndx = 0
 
-            for gz in range(len(w)):        # find word index of register name
+            for gz in range(len(w)):  # find word index of register name
                 if w[gz].endswith(';'):
                     name_ndx = gz
 
@@ -560,7 +566,7 @@ def get_register_list(peripheral_property):
     for xa in register_dic[peripheral_property[2]]:
         for reg_name, reg_offs in get_register_property(xa):
             if 'RESERVED' not in reg_name.upper():
-                yield [reg_name, xa[2],  f'0x{int(peripheral_property[1], 16) + register_address:X}']
+                yield [reg_name, xa[2], f'0x{int(peripheral_property[1], 16) + register_address:X}']
 
             register_address += int(reg_offs)
 
@@ -600,7 +606,8 @@ if __name__ == '__main__':
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     # parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
-    parser.add_argument('-u', '--undef', action="store_true", default=False, help="place #undef for each initialization definition")
+    parser.add_argument('-u', '--undef', action="store_true", default=False,
+                        help="place #undef for each initialization definition")
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
@@ -662,16 +669,21 @@ if __name__ == '__main__':
     if args.use_macro and 'GPIO' in args.use_macro:
         use_gpio_macros = 'yes'
 
-    init_bock = []
-
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
             for name, lst, in j_sorted:
                 for xp in lst:
-                    init_bock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
-                    # stout += compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
-                    stout += init_bock[-1]
+                    # init_bock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
+                    x1 = compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
+                    # sx = ''
+                    # for x1, x2 in s_block:
+                        # sx += x1 + '\n' + x2 + '\n\n'
+
+                    s0 = x1[0][0] + '\n'
+                    s1 = x1[0][1] + '\n\n'
+
+                    stout += s0 + s1
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
@@ -699,9 +711,9 @@ if __name__ == '__main__':
                     x_out += f'({en} != 0) || '
                 x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
-                         
+
     if args.function:
-        stout = make_init_func(args.function, stout)
+        stout = make_init_func(args.function, stout[:-1])
 
     if not args.direct:
         stout += '\n\n'
@@ -709,7 +721,7 @@ if __name__ == '__main__':
             stout += en + '\n'
 
     if args.module:
-        stout = make_init_module(args.module, stout)
+        stout = make_h_module(args.module, stout.strip('\n'))
 
     print(stout)
 
@@ -756,6 +768,6 @@ if __name__ == '__main__':
         s = make_init_func(args.function, s)
 
     if args.module:
-        s = make_init_module(args.module, s)
+        s = make_h_module(args.module, s)
 
     print(s)
