@@ -303,13 +303,6 @@ def get_init_block(src, target):
         yield c_set
 
 
-def is_direct_init_mode():
-    return reg_init.upper() == 'DIRECT'
-
-
-comment_length = 0
-
-
 def ch_def_name(def_name):
     d_name = def_name
     if 'RTC_BKP' in def_name:
@@ -332,8 +325,8 @@ def ch_def_name(def_name):
 i_block = []
 
 
-def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
-    out_str = ''
+def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
+    bitfield_block = ''
     global def_set
     for lx in bit_def:
         cn = '|  /* '
@@ -345,15 +338,13 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
         else:
             bitfield_enable = '0'
 
-        # cm =
-
-        out_str += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
+        bitfield_block += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
             + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
-        if is_direct_init_mode():
-            out_str += '\n'
+        if args.direct:
+            bitfield_block += '\n'
         else:
-            out_str += '\\\n'
+            bitfield_block += '\\\n'
 
     if comment:
         reg_comment = comment[0]
@@ -365,47 +356,46 @@ def compose_reg_init(reg_name, bit_def, set_bit_list, comment=('', '')):
     else:
         reg_comment = ''
 
-    if is_direct_init_mode():
-        if out_str != '':
-            out_str = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
-                      '\n' + out_str + ident + ');'
+    if args.direct:
+        if bitfield_block != '':
+            bitfield_block = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
+                      '\n' + bitfield_block + ident + ');'
         else:
-            out_str = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
+            bitfield_block = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
 
     else:
-        # p_str = ""
-        rg_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
-        def_set.add(rg_name)
-        if out_str != '':
+        def_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
+        def_set.add(def_name)
+        if bitfield_block != '':
             if args.undef is False:
-                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) + '\\\n' + out_str + ident + ')\n'
+                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) + '\\\n' + bitfield_block + ident + ')\n'
 
-                tmp_str = ident + '#if defined ' + rg_name + '\n' + ident * 2 + '#if ' + rg_name + ' != 0\n' \
-                    + (ident * 3 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+                tmp_str = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
+                    + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                     + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                    + ident + '#else\n' + ident * 2 + '#define ' + rg_name + ' 0\n'\
+                    + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n'\
                     + ident + '#endif\n'
 
-                i_block.append((out_str, tmp_str))
+                i_block.append((bitfield_block, tmp_str))
 
-                out_str += tmp_str
+                bitfield_block += tmp_str
 
             else:
-                out_str = f'{ident}#define {rg_name} ('.ljust(max_field_len[0] + 9) \
-                          + '\\\n' + out_str + ident + ')\n' + ident + '#if ' + rg_name + ' != 0\n' \
-                          + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) \
+                          + '\\\n' + bitfield_block + ident + ')\n' + ident + '#if ' + def_name + ' != 0\n' \
+                          + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                           + ' ' + reg_comment + '\n' + ident + '#endif'
 
         else:
-            out_str = f'{ident}#define {rg_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
-                      + '#if ' + rg_name + ' != 0\n' \
-                      + (ident * 2 + reg_name + ' = ' + rg_name + ';').ljust(max_field_len[0] + 12) \
+            bitfield_block = f'{ident}#define {def_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
+                      + '#if ' + def_name + ' != 0\n' \
+                      + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                       + ' ' + reg_comment + '\n' + ident + '#endif'
 
         if args.undef is True:
-            out_str += '\n' + ident + '#undef ' + rg_name
+            bitfield_block += '\n' + ident + '#undef ' + def_name
 
-    return out_str
+    return bitfield_block
 
 
 def make_init_func(func_name, func_body):
@@ -423,7 +413,7 @@ def compose_init_block(src, reg_set, set_bit_list, comment=('', "")):
     fx = list(get_init_block(src, reg_set))
     out_str = ''
     for lx in range(len(fx)):
-        out_str += compose_reg_init(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
+        out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
 
     return out_str
 
@@ -633,9 +623,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if args.direct:
-        reg_init = 'direct'
-
     cpu_name = args.cpu.upper()
 
     if cpu_name[0:5] == 'STM32':
@@ -735,15 +722,6 @@ if __name__ == '__main__':
         print(f'Peripheral count: {len(peripheral)} (uniq address: {len(uniq_addr)});')
         print(f'Unique type count: {len(uniq_type)} (from {len(defined_type)} defined);')
         print(f'Extra: {len(list(set(defined_type) - set(uniq_type)))} {list(set(defined_type) - set(uniq_type))}')
-
-    # target = 'RCC_CFGR_'
-    # target = 'RCC_APB2ENR_'
-    # target = 'TIM5->CR1'
-    # target = 'I2C_SR'
-    # target = 'GPIO_CRL'
-    # target = 'TIM10->EGR'
-
-    # init_section = ['TIM5->PSC', 'TIM5->ARR', 'TIM5->EGR', 'TIM5->SR', 'TIM5->CR2', 'TIM5->DIER', 'TIM5->CR1']
 
     # print(peripheral)
     # exit()
