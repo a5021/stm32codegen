@@ -419,7 +419,7 @@ def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
     for lx in range(len(fx)):
         # out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
         sa, sb = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
-        block_list.append([sa, sb])  # + '\n' * 2
+        block_list.append((sa, sb))  # + '\n' * 2
 
     return block_list
 
@@ -608,6 +608,8 @@ if __name__ == '__main__':
     # parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
+    parser.add_argument('--mix-blocks', action="store_true", default=False,
+                        help="mix definition and initialization blocks of code")
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
@@ -672,18 +674,19 @@ if __name__ == '__main__':
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
+            iblock = []
             for name, lst, in j_sorted:
                 for xp in lst:
                     # init_bock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
-                    x1 = compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2]))
-                    # sx = ''
-                    # for x1, x2 in s_block:
-                        # sx += x1 + '\n' + x2 + '\n\n'
+                    iblock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
+                    #sx = ''
+                    #for z0 in x1:
+                    #    sx += z0[0] + '\n' + z0[1] + '\n\n'
 
-                    s0 = x1[0][0] + '\n'
-                    s1 = x1[0][1] + '\n\n'
+                    # s0 = x1[0][0] + '\n'
+                    # s1 = x1[0][1] + '\n\n'
 
-                    stout += s0 + s1
+                    #stout += sx
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
@@ -712,8 +715,19 @@ if __name__ == '__main__':
                 x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
+    def_block = ""
+    init_block = ""
+    for xx in iblock:
+        for xy in xx:
+            if args.mix_blocks is False:
+                def_block += xy[0] + '\n'
+            else:
+                init_block += xy[0] + '\n'
+
+            init_block += xy[1] + '\n'
+
     if args.function:
-        stout = make_init_func(args.function, stout[:-1])
+        stout = def_block + make_init_func(args.function, init_block)
 
     if not args.direct:
         stout += '\n\n'
