@@ -384,17 +384,17 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
             else:
                 bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) + '\\\n' \
-                                 + bitfield_block + ident + ')\n'
+                    + bitfield_block + ident + ')\n'
 
                 assign_block = f'{ident}#if {def_name} != 0\n' \
-                               + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                               + ' ' + reg_comment + '\n' + ident + '#endif'
+                    + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                    + ' ' + reg_comment + '\n' + ident + '#endif'
 
         else:
-            bitfield_block = f'{ident}#define {def_name} '.ljust(max_field_len[0] + 9) + '0000\n' + ident \
-                             + '#if ' + def_name + ' != 0\n' \
-                             + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                             + ' ' + reg_comment + '\n' + ident + '#endif'
+            bitfield_block = f'{ident}#define {def_name} '.ljust(max_field_len[0] + 9) + '0000\n'
+            assign_block = ident + '#if ' + def_name + ' != 0\n' \
+                + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                + ' ' + reg_comment + '\n' + ident + '#endif'
 
         if args.undef is True:
             assign_block += '\n' + ident + '#undef ' + def_name
