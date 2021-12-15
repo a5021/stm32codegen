@@ -326,7 +326,7 @@ i_block = []
 
 
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
-    bitfield_block = assign_block = ''
+    s0 = bitfield_block = assign_block = ''
     global def_set
     for lx in bit_def:
         cn = '|  /* '
@@ -338,14 +338,22 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         else:
             bitfield_enable = '0'
 
-        bitfield_block += ident * 2 + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-                          + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(
-            11) + ' */'
+        idn = 1
+        if args.mix_blocks is True or args.direct is True:
+            idn = 2
+
+        s0 += ident * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
+            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if args.direct:
-            bitfield_block += '\n'
+            s0 += '\n'
         else:
-            bitfield_block += '\\\n'
+            s0 += '\\\n'
+
+    if args.direct:
+        assign_block = s0
+    else:
+        bitfield_block = s0
 
     if comment:
         reg_comment = comment[0]
@@ -357,41 +365,44 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     else:
         reg_comment = ''
 
+    idn = 0
+    if args.mix_blocks is True:
+        idn = 1
+
     if args.direct:
-        if bitfield_block != '':
-            bitfield_block = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
-                             '\n' + bitfield_block + ident + ');'
+        if assign_block != '':
+            assign_block = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
+                             '\n' + assign_block + ident + ');\n'
         else:
-            bitfield_block = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment
+            assign_block = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment + '\n'
 
     else:
         def_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
         def_set.add(def_name)
+        flen = (9 - ((not idn) * 2))
         if bitfield_block != '':
             if args.undef is False:
-                bitfield_block = f'{ident}#define {def_name} ('.ljust(
-                    max_field_len[0] + 9) + '\\\n' + bitfield_block + ident + ')\n'
+                bitfield_block = f'{ident * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n'\
+                                 + bitfield_block + ident * idn + ')\n'
 
                 assign_block = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
-                               + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                               + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                               + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
-                               + ident + '#endif\n'
+                    + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                    + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
+                    + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
+                    + ident + '#endif\n'
 
                 i_block.append((bitfield_block, assign_block))
 
-                # bitfield_block += tmp_str
-
             else:
-                bitfield_block = f'{ident}#define {def_name} ('.ljust(max_field_len[0] + 9) + '\\\n' \
-                    + bitfield_block + ident + ')\n'
+                bitfield_block = f'{ident * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
+                    + bitfield_block + ident * idn + ')\n'
 
                 assign_block = f'{ident}#if {def_name} != 0\n' \
                     + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                     + ' ' + reg_comment + '\n' + ident + '#endif'
 
         else:
-            bitfield_block = f'{ident}#define {def_name} '.ljust(max_field_len[0] + 9) + '0000\n'
+            bitfield_block = f'{ident * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             assign_block = ident + '#if ' + def_name + ' != 0\n' \
                 + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                 + ' ' + reg_comment + '\n' + ident + '#endif'
@@ -443,7 +454,7 @@ def get_type_list(src):
         for gy in gx[0].replace(';/', '; /').split('\n'):
             gs = gy.strip()
             if '' == gs or '//' == gs[:2] or 'AND triple modes' in gs:
-                # do not parse empty strings or ones beginning with those
+                # do not parse empty strings or one's beginning with those
                 continue
 
             while ' ;' in gs:
@@ -582,8 +593,8 @@ def get_peripheral_register_list(periph_name):
                 yield pe[0], get_register_list(pe)
 
 
-def sort_peripheral_by_num(peripherial):
-    k = peripherial[0]
+def sort_peripheral_by_num(periph):
+    k = periph[0]
     pn = ''
     while True:
         if k[-1] in '0123456789':
@@ -671,22 +682,14 @@ if __name__ == '__main__':
     if args.use_macro and 'GPIO' in args.use_macro:
         use_gpio_macros = 'yes'
 
+    iblock = []
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
-            iblock = []
             for name, lst, in j_sorted:
-                for xp in lst:
-                    # init_bock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
-                    iblock.append(compose_init_block(s_data, [name + '->' + xp[0]], args.set_bit, (xp[1], xp[2])))
-                    #sx = ''
-                    #for z0 in x1:
-                    #    sx += z0[0] + '\n' + z0[1] + '\n\n'
-
-                    # s0 = x1[0][0] + '\n'
-                    # s1 = x1[0][1] + '\n\n'
-
-                    #stout += sx
+                for rg in lst:
+                    # 'rg' is a list in format of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
+                    iblock.append(compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2])))
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
@@ -712,32 +715,33 @@ if __name__ == '__main__':
                 x_out = ''
                 for en in enabler:
                     x_out += f'({en} != 0) || '
-                x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + '();\n' + ident + '#endif\n#endif\n'
+                x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + \
+                        '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
-    def_block = ""
-    init_block = ""
-    for xx in iblock:
-        for xy in xx:
-            if args.mix_blocks is False:
-                def_block += xy[0] + '\n'
-            else:
-                init_block += xy[0] + '\n'
+        def_block = ""
+        init_block = ""
+        for xx in iblock:
+            for xy in xx:
+                if args.mix_blocks is False:
+                    def_block += xy[0] + '\n'
+                else:
+                    init_block += xy[0] + '\n'
 
-            init_block += xy[1] + '\n'
+                init_block += xy[1] + '\n'
 
-    if args.function:
-        stout = def_block + make_init_func(args.function, init_block)
+        if args.function:
+            stout = def_block + make_init_func(args.function, init_block)
 
-    if not args.direct:
-        stout += '\n\n'
-        for en in pr_set:
-            stout += en + '\n'
+        if not args.direct:
+            stout += '\n\n'
+            for en in pr_set:
+                stout += en + '\n'
 
-    if args.module:
-        stout = make_h_module(args.module, stout.strip('\n'))
+        if args.module:
+            stout = make_h_module(args.module, stout.strip('\n'))
 
-    print(stout)
+        print(stout)
 
     if len(sys.argv) == 2 and args.cpu != '':
         for x in peripheral:
@@ -755,7 +759,7 @@ if __name__ == '__main__':
     per = reg = []
 
     if args.register:
-        if 'ALL' == args.register[0][0].upper():
+        if 'ALL' == args.rg[0][0].upper():
             reg = []
         else:
             reg = args.register
