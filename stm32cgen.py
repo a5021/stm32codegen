@@ -616,7 +616,6 @@ if __name__ == '__main__':
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
-    # parser.add_argument('-n', '--no-undef', action="store_true", default=False, help="No undef")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix-blocks', action="store_true", default=False,
@@ -629,17 +628,11 @@ if __name__ == '__main__':
     parser.add_argument('-t', '--test', action="store_true", default=False)
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
-    # parser.add_argument('-m', '--module', nargs='+')
-    # parser.add_argument('-f', '--function', nargs='+')
     parser.add_argument('-p', '--peripheral', nargs='+')
     parser.add_argument('-r', '--register', nargs='+')
     parser.add_argument('-b', '--set-bit', nargs='+')
     parser.add_argument('-M', '--use-macro', nargs='+')
     parser.add_argument('-v', '--verbose', action="store_true", default=False)
-    # parser.add_argument('-m', '--module', action='append', nargs='+')
-    # parser.add_argument('-f', '--function',  action='append', nargs='+')
-    # parser.add_argument('-p', '--peripheral', action='append', nargs='+')
-    # parser.add_argument('-r', '--register', action='append', nargs='+')
 
     args = parser.parse_args()
 
@@ -688,7 +681,7 @@ if __name__ == '__main__':
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
             for name, lst, in j_sorted:
                 for rg in lst:
-                    # 'rg' is a list in format of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
+                    # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
                     iblock.append(compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2])))
 
                 if args.undef is False:
