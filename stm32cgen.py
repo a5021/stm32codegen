@@ -686,16 +686,13 @@ if __name__ == '__main__':
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
-                    cnt = 0
-                    for ds in def_set:
+                    for cnt, ds in enumerate(sorted(def_set), start=1):
                         x_out += f'({ds} != 0) || '
-                        cnt += 1
-                        if cnt == 5:
+                        if cnt % 5 == 0:
                             x_out += '\\\n' + ident
-                            cnt = 0
-
-                    if cnt == 0:
-                        x_out = x_out[:-4]
+                    else:
+                        if cnt % 5 == 0:
+                            x_out = x_out[:-4]
 
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_IS'
