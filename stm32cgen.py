@@ -339,7 +339,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             bitfield_enable = '0'
 
         idn = 1
-        if args.mix_blocks is True or args.direct is True:
+        if args.mix is True or args.direct is True:
             idn = 2
 
         s0 += ident * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
@@ -366,7 +366,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         reg_comment = ''
 
     idn = 0
-    if args.mix_blocks is True:
+    if args.mix is True:
         idn = 1
 
     if args.direct:
@@ -618,7 +618,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
-    parser.add_argument('--mix-blocks', action="store_true", default=False,
+    parser.add_argument('--mix', action="store_true", default=False,
                         help="mix definition and initialization blocks of code")
     parser.add_argument('-s', '--separate-func', action="store_true", default=False)
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
@@ -715,7 +715,7 @@ if __name__ == '__main__':
         init_block = ""
         for xx in sorted(iblock):
             for xy in xx:
-                if args.mix_blocks is False:
+                if args.mix is False:
                     def_block += xy[0] + '\n'
                 else:
                     init_block += xy[0] + '\n'
