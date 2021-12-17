@@ -713,7 +713,7 @@ if __name__ == '__main__':
 
         def_block = ""
         init_block = ""
-        for xx in iblock:
+        for xx in sorted(iblock):
             for xy in xx:
                 if args.mix_blocks is False:
                     def_block += xy[0] + '\n'
