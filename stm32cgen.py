@@ -665,16 +665,9 @@ if __name__ == '__main__':
         print(f'unable to get data for "{args.cpu}"')
         exit()
 
-    # if args.save_header_file:
-    #      with open(hdr_file_name, 'bw') as f:
-    #          f.write(bytes(s_data, 'utf-8'))
-
     pr_set = []
     enabler = []
     stout = ''
-    use_gpio_macros = ''
-    if args.use_macro and 'GPIO' in args.use_macro:
-        use_gpio_macros = 'yes'
 
     iblock = []
     if args.peripheral:
@@ -707,7 +700,7 @@ if __name__ == '__main__':
 
                 def_set = set()
 
-            if len(enabler) != 0 and args.function:
+            if len(enabler) != 0:
                 x_out = ''
                 for en in sorted(enabler):
                     x_out += f'({en} != 0) || '
@@ -715,19 +708,20 @@ if __name__ == '__main__':
                         '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
-        def_block = ""
-        init_block = ""
+        def_block = init_block = ""
         for xx in sorted(iblock):
-            for xy in xx:
+            for yy in xx:
                 if args.mix is False:
-                    def_block += xy[0] + '\n'
+                    def_block += yy[0] + '\n'
                 else:
-                    init_block += xy[0] + '\n'
+                    init_block += yy[0] + '\n'
 
-                init_block += xy[1] + '\n'
+                init_block += yy[1] + '\n'
 
         if args.function:
             stout = def_block + make_init_func(args.function, init_block)
+        else:
+            stout = def_block + init_block
 
         if not args.direct:
             stout += '\n\n'
