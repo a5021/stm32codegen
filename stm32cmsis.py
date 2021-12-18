@@ -291,10 +291,21 @@ def compose_cmsis_header_file_name(hdr_name):
     return hdr_name
 
 
-def read_cmsis_header_file(mcu_name):
+def read_cmsis_header_file(mcu_name, fetch=True, save=False):
     hdr_file_name = compose_cmsis_header_file_name(mcu_name)
-    r = requests.get(compose_cmsis_header_file_url(hdr_file_name))
-    return (r.text, hdr_file_name) if r.ok else ("", "")
+    txt = ''
+    if fetch is True:
+        r = requests.get(compose_cmsis_header_file_url(hdr_file_name))
+        if r.ok:
+            txt = r.text
+            if save is True:
+                with open(hdr_file_name, 'bw') as f:
+                    f.write(bytes(txt, 'utf-8'))
+    else:
+        with open(hdr_file_name) as f:
+            txt = f.read()
+
+    return txt
 
 
 # Press the green button in the gutter to run the script.

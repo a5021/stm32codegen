@@ -39,10 +39,10 @@ ident = 2 * ' '
 def_set = set()
 
 
-def get_cmsis_header_file(hdr_name):
-    txt, hf_name = read_cmsis_header_file(hdr_name)
+def get_cmsis_header_file(hdr_name, fetch=True, save=False):
+    txt = read_cmsis_header_file(hdr_name, fetch, save)
     if not txt:
-        return "", ""
+        return ""
 
     global macro_definition, peripheral, uniq_type, uniq_addr, defined_type
     macro_definition = parse_macro_def(txt)
@@ -65,7 +65,7 @@ def get_cmsis_header_file(hdr_name):
 
     defined_type = [zg[0] for zg in temp_list]
 
-    return txt, hf_name
+    return txt
 
 
 def get_peripheral_description(src):
@@ -616,6 +616,7 @@ if __name__ == '__main__':
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
+    parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix', action="store_true", default=False,
@@ -658,15 +659,15 @@ if __name__ == '__main__':
         print('Parameters passed', len(sys.argv))
         print(args)
 
-    s_data, hdr_file_name = get_cmsis_header_file(args.cpu)
+    s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
     if not s_data:
         print(f'unable to get data for "{args.cpu}"')
         exit()
 
-    if args.save_header_file:
-        with open(hdr_file_name, 'bw') as f:
-            f.write(bytes(s_data, 'utf-8'))
+    # if args.save_header_file:
+    #      with open(hdr_file_name, 'bw') as f:
+    #          f.write(bytes(s_data, 'utf-8'))
 
     pr_set = []
     enabler = []
@@ -697,10 +698,13 @@ if __name__ == '__main__':
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
 
-                    if 'RCC' not in name:
+                    if name in ['RCC', 'FLASH']:
+                        pass
+                    else:
                         enabler.append(name + '_EN')
                         x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3].strip() + ' \\\n)\n'
                         pr_set.append(x_out)
+
                 def_set = set()
 
             if len(enabler) != 0 and args.function:
