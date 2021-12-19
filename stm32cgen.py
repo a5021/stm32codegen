@@ -606,13 +606,8 @@ def sort_peripheral_by_num(periph):
 
 
 def unify_usart_name(u_name):
-    '''
-    if '#define UART' in u_name[0][0]:
-        return 1
-    else:
-        return 0
-    '''
-    return u_name[0][0].replace('UART', 'USART')
+    return u_name[0][0].replace('UART', 'USART').replace('CR1', 'ZZ1').replace('BRR', 'AAA')
+
 
 if __name__ == '__main__':
 
