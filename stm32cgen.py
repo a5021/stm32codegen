@@ -7,7 +7,6 @@ try:
     from stm32cmsis import read_cmsis_header_file
 except ImportError:
     print('Could not import STM32 CMSIS library')
-    # print('pip install cmsis')
     sys.exit(1)
 
 max_field_len = [0, 0, 0]
@@ -33,7 +32,6 @@ register_dic = {}
 uniq_type = set()
 uniq_addr = set()
 
-reg_init = 'indirect'
 ident = 2 * ' '
 
 def_set = set()
@@ -194,7 +192,6 @@ def parse_macro_def(macro_def_data):
     macro_def_dict = {}
     for lx in re.findall(r'#define\s+?(\S+?)\s+(.*?)$', macro_def_data, re.DOTALL | re.MULTILINE):
         pa = lx[0].strip()
-
         k = lx[1].strip()
         if k.startswith('/*'):
             # if definition has no value
@@ -608,6 +605,15 @@ def sort_peripheral_by_num(periph):
         return 0
 
 
+def unify_usart_name(u_name):
+    '''
+    if '#define UART' in u_name[0][0]:
+        return 1
+    else:
+        return 0
+    '''
+    return u_name[0][0].replace('UART', 'USART')
+
 if __name__ == '__main__':
 
     import argparse
@@ -708,8 +714,15 @@ if __name__ == '__main__':
                         '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
+        uname = []
         def_block = init_block = ""
-        for xx in sorted(iblock):
+        kex = iblock[0][0][0]
+        if 'USART' in kex:
+            uname = sorted(iblock, key=unify_usart_name)
+        else:
+            uname = sorted(iblock)
+
+        for xx in uname:
             for yy in xx:
                 if args.mix is False:
                     def_block += yy[0] + '\n'
