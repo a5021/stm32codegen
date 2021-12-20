@@ -415,21 +415,25 @@ def make_init_func(func_name, func_body):
 
 
 def make_h_module(module_name, module_body):
-    uname = module_name.upper()
-    return f'#ifndef __{uname}_H__\n#define __{uname}_H__\n\n' \
+    mname = module_name.upper()
+    return f'#ifndef __{mname}_H__\n#define __{mname}_H__\n\n' \
            + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + module_body + '\n\n#ifdef __cplusplus\n  }\n' \
-           + '#endif /* __cplusplus */\n' + f'#endif /* __{uname}_H__ */\n'
+           + '#endif /* __cplusplus */\n' + f'#endif /* __{mname}_H__ */\n'
 
 
 def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
     fx = list(get_init_block(src, reg_set))
-    block_list = []
+    # block_list = []
+    block_a = []
+    block_b = []
     for lx in range(len(fx)):
         # out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
-        sa, sb = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
-        block_list.append((sa, sb))  # + '\n' * 2
+        bl_a, bl_b = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
+        # block_list.append([sa, sb])  # + '\n' * 2
+        block_a.append(bl_a)
+        block_b.append(bl_b)
 
-    return block_list
+    return block_a, block_b
 
 
 def get_reg_size(sz):
@@ -671,13 +675,18 @@ if __name__ == '__main__':
     stout = ''
 
     iblock = []
+    code_block_def = []
+    code_block_ini = []
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
             for name, lst, in j_sorted:
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
-                    iblock.append(compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2])))
+                    # iblock.append(compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2])))
+                    sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
+                    code_block_def.append(sa)
+                    code_block_ini.append(sb)
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
@@ -711,20 +720,23 @@ if __name__ == '__main__':
 
         uname = []
         def_block = init_block = ""
-        kex = iblock[0][0][0]
+        kex = code_block_def[0][0]
         if 'USART' in kex:
-            uname = sorted(iblock, key=unify_usart_name)
+            # uname = sorted(iblock, key=unify_usart_name)
+            code_block_def = sorted(code_block_def, key=unify_usart_name)
+            code_block_ini = sorted(code_block_ini, key=unify_usart_name)
         else:
-            uname = sorted(iblock)
+            # uname = sorted(iblock)
+            code_block_def = sorted(code_block_def)
+            code_block_ini = sorted(code_block_ini)
 
-        for xx in uname:
-            for yy in xx:
-                if args.mix is False:
-                    def_block += yy[0] + '\n'
-                else:
-                    init_block += yy[0] + '\n'
+        for cd, ci in zip(code_block_def, code_block_ini):
+            if args.mix is False:
+                def_block += cd[0] + '\n'
+            else:
+                init_block += cd[0] + '\n'
 
-                init_block += yy[1] + '\n'
+            init_block += ci[0] + '\n'
 
         if args.function:
             stout = def_block + make_init_func(args.function, init_block)
