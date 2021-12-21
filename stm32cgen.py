@@ -609,8 +609,32 @@ def sort_peripheral_by_num(periph):
         return 0
 
 
-def unify_usart_name(u_name):
-    return u_name[0][0].replace('UART', 'USART').replace('CR1', 'ZZ1').replace('BRR', 'AAA')
+def sort_def_block(definition_block):
+    ret_name = definition_block[0].replace('UART', 'USART')
+    ret_name = ret_name.replace('ISR', 'VV0')
+    ret_name = ret_name.replace('ICR', 'VV1')
+    ret_name = ret_name.replace('BDTR', 'WW0')
+    ret_name = ret_name.replace('CNT', 'WW1')
+    ret_name = ret_name.replace('RDR', 'WW0')
+    ret_name = ret_name.replace('TDR', 'WW1')
+    ret_name = ret_name.replace('PSC', 'AA0')
+    ret_name = ret_name.replace('EGR', 'AS0')
+    ret_name = ret_name.replace('BRR', 'AB0')
+    ret_name = ret_name.replace('CR1', 'C01')
+    ret_name = ret_name.replace('CR2', 'C02')
+    ret_name = ret_name.replace('CR3', 'C03')
+    return ret_name
+
+
+def sort_ini_block(initialization_block):
+    ret_name = initialization_block[0].replace('UART', 'USART').replace('BRR', 'AAA')
+    ret_name = ret_name.replace('CR1', 'ZZ1')
+    ret_name = ret_name.replace('ISR', 'VV0')
+    ret_name = ret_name.replace('ICR', 'VV1')
+    ret_name = ret_name.replace('RDR', 'WW0')
+    ret_name = ret_name.replace('TDR', 'WW1')
+    ret_name = ret_name.replace('BRR', 'AAA')
+    return ret_name
 
 
 if __name__ == '__main__':
@@ -720,15 +744,11 @@ if __name__ == '__main__':
 
         uname = []
         def_block = init_block = ""
-        kex = code_block_def[0][0]
-        if 'USART' in kex:
-            # uname = sorted(iblock, key=unify_usart_name)
-            code_block_def = sorted(code_block_def, key=unify_usart_name)
-            code_block_ini = sorted(code_block_ini, key=unify_usart_name)
-        else:
-            # uname = sorted(iblock)
-            code_block_def = sorted(code_block_def)
-            code_block_ini = sorted(code_block_ini)
+        # kex = code_block_def[0][0]
+        # if 'USART' in kex:
+
+        code_block_def = sorted(code_block_def, key=sort_def_block)
+        code_block_ini = sorted(code_block_ini, key=sort_ini_block)
 
         for cd, ci in zip(code_block_def, code_block_ini):
             if args.mix is False:
