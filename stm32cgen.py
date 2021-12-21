@@ -609,8 +609,80 @@ def sort_peripheral_by_num(periph):
         return 0
 
 
-def unify_usart_name(u_name):
-    return u_name[0][0].replace('UART', 'USART').replace('CR1', 'ZZ1').replace('BRR', 'AAA')
+def sort_def_block(definition_block):
+    ret_name = definition_block[0].replace('UART', 'USART')
+    ret_name = ret_name.replace('ISR', 'VV0')
+    ret_name = ret_name.replace('ICR', 'VV1')
+    ret_name = ret_name.replace('CNT', 'WW1')
+    ret_name = ret_name.replace('RDR', 'WW0')
+    ret_name = ret_name.replace('TDR', 'WW1')
+    ret_name = ret_name.replace('PSC', 'AA0')
+    ret_name = ret_name.replace('EGR', 'AS0')
+    ret_name = ret_name.replace('MODER', 'AA0')
+    ret_name = ret_name.replace('BRR', 'AB0')
+    ret_name = ret_name.replace('_CR', '_C0')
+    ret_name = ret_name.replace('DIER', 'C10')
+    ret_name = ret_name.replace('RCR',  'C20')
+    ret_name = ret_name.replace('CCMR', 'C30')
+    ret_name = ret_name.replace('CCER', 'C40')
+    ret_name = ret_name.replace('SMCR', 'C50')
+    ret_name = ret_name.replace('BDTR', 'U00')
+    ret_name = ret_name.replace('_SR', '_U10')
+    ret_name = ret_name.replace('AHBENR', 'A50')
+    ret_name = ret_name.replace('AHB1ENR', 'A51')
+    ret_name = ret_name.replace('AHB2ENR', 'A52')
+    ret_name = ret_name.replace('AHB3ENR', 'A53')
+    ret_name = ret_name.replace('APB1ENR', 'A60')
+    ret_name = ret_name.replace('APB2ENR', 'A70')
+    ret_name = ret_name.replace('AHB1SMENR', 'A80')
+    ret_name = ret_name.replace('AHB2SMENR', 'A90')
+    ret_name = ret_name.replace('AHB3SMENR', 'AA0')
+    ret_name = ret_name.replace('APB1SMENR', 'AB0')
+    ret_name = ret_name.replace('APB2SMENR', 'AB2')
+    ret_name = ret_name.replace('RCC_CFGR', 'RCC_AC0')
+    ret_name = ret_name.replace('RCC_CR', 'RCC_AD0')
+    ret_name = ret_name.replace('RCC_CSR', 'RCC_AE0')
+    ret_name = ret_name.replace('RCC_CIR', 'RCC_AF0')
+    ret_name = ret_name.replace('AHBRSTR', 'U50')
+    ret_name = ret_name.replace('AHB1RSTR', 'U51')
+    ret_name = ret_name.replace('AHB2RSTR', 'U52')
+    ret_name = ret_name.replace('AHB3RSTR', 'U53')
+    ret_name = ret_name.replace('APB1RSTR', 'U60')
+    ret_name = ret_name.replace('APB2RSTR', 'U70')
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
+    return ret_name
+
+
+def sort_ini_block(initialization_block):
+    ret_name = initialization_block[0].replace('UART', 'USART')
+    ret_name = ret_name.replace('_OR', '_ZX1')
+    ret_name = ret_name.replace('_CR1', '_ZZ1')
+    ret_name = ret_name.replace('ISR', 'VV0')
+    ret_name = ret_name.replace('ICR', 'VV1')
+    ret_name = ret_name.replace('RDR', 'WW0')
+    ret_name = ret_name.replace('TDR', 'WW1')
+    ret_name = ret_name.replace('BRR', 'AAA')
+    ret_name = ret_name.replace('PSC', 'AA0')
+    ret_name = ret_name.replace('EGR', 'AS0')
+    ret_name = ret_name.replace('CCER', 'CCSR')
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
+    return ret_name
 
 
 if __name__ == '__main__':
@@ -701,7 +773,7 @@ if __name__ == '__main__':
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
 
-                    if name in ['RCC', 'FLASH']:
+                    if name in ['RCC']:
                         pass
                     else:
                         enabler.append(name + '_EN')
@@ -720,15 +792,11 @@ if __name__ == '__main__':
 
         uname = []
         def_block = init_block = ""
-        kex = code_block_def[0][0]
-        if 'USART' in kex:
-            # uname = sorted(iblock, key=unify_usart_name)
-            code_block_def = sorted(code_block_def, key=unify_usart_name)
-            code_block_ini = sorted(code_block_ini, key=unify_usart_name)
-        else:
-            # uname = sorted(iblock)
-            code_block_def = sorted(code_block_def)
-            code_block_ini = sorted(code_block_ini)
+        # kex = code_block_def[0][0]
+        # if 'USART' in kex:
+
+        code_block_def = sorted(code_block_def, key=sort_def_block)
+        code_block_ini = sorted(code_block_ini, key=sort_ini_block)
 
         for cd, ci in zip(code_block_def, code_block_ini):
             if args.mix is False:
