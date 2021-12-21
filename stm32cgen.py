@@ -613,7 +613,6 @@ def sort_def_block(definition_block):
     ret_name = definition_block[0].replace('UART', 'USART')
     ret_name = ret_name.replace('ISR', 'VV0')
     ret_name = ret_name.replace('ICR', 'VV1')
-    ret_name = ret_name.replace('BDTR', 'WW0')
     ret_name = ret_name.replace('CNT', 'WW1')
     ret_name = ret_name.replace('RDR', 'WW0')
     ret_name = ret_name.replace('TDR', 'WW1')
@@ -623,11 +622,37 @@ def sort_def_block(definition_block):
     ret_name = ret_name.replace('CR1', 'C01')
     ret_name = ret_name.replace('CR2', 'C02')
     ret_name = ret_name.replace('CR3', 'C03')
+    ret_name = ret_name.replace('DIER', 'C10')
+    ret_name = ret_name.replace('RCR',  'C20')
+    ret_name = ret_name.replace('CCMR', 'C30')
+    ret_name = ret_name.replace('CCER', 'C40')
+    ret_name = ret_name.replace('SMCR', 'C50')
+    ret_name = ret_name.replace('BDTR', 'U00')
+    ret_name = ret_name.replace('_SR', '_U10')
+    ret_name = ret_name.replace('AHBENR', 'A50')
+    ret_name = ret_name.replace('APB1ENR', 'A60')
+    ret_name = ret_name.replace('APB2ENR', 'A70')
+    ret_name = ret_name.replace('RCC_CFGR', 'RCC_AA7')
+    ret_name = ret_name.replace('RCC_CR', 'RCC_AB7')
+    ret_name = ret_name.replace('RCC_CSR', 'RCC_ABA')
+    ret_name = ret_name.replace('RCC_CIR', 'RCC_ABC')
+    ret_name = ret_name.replace('AHBRSTR', 'U50')
+    ret_name = ret_name.replace('APB1RSTR', 'U60')
+    ret_name = ret_name.replace('APB2RSTR', 'U70')
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
     return ret_name
 
 
 def sort_ini_block(initialization_block):
-    ret_name = initialization_block[0].replace('UART', 'USART').replace('BRR', 'AAA')
+    ret_name = initialization_block[0].replace('UART', 'USART')
     ret_name = ret_name.replace('CR1', 'ZZ1')
     ret_name = ret_name.replace('ISR', 'VV0')
     ret_name = ret_name.replace('ICR', 'VV1')
