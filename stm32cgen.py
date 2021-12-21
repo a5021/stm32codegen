@@ -653,12 +653,24 @@ def sort_def_block(definition_block):
 
 def sort_ini_block(initialization_block):
     ret_name = initialization_block[0].replace('UART', 'USART')
-    ret_name = ret_name.replace('CR1', 'ZZ1')
+    ret_name = ret_name.replace('_CR1', '_ZZ1')
     ret_name = ret_name.replace('ISR', 'VV0')
     ret_name = ret_name.replace('ICR', 'VV1')
     ret_name = ret_name.replace('RDR', 'WW0')
     ret_name = ret_name.replace('TDR', 'WW1')
     ret_name = ret_name.replace('BRR', 'AAA')
+    ret_name = ret_name.replace('PSC', 'AA0')
+    ret_name = ret_name.replace('EGR', 'AS0')
+    ret_name = ret_name.replace('CCER', 'CCSR')
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
     return ret_name
 
 
