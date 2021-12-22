@@ -774,7 +774,7 @@ if __name__ == '__main__':
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
 
-                    if name in ['RCC', 'FLASH']:
+                    if name in ['RCC']:
                         pass
                     else:
                         enabler.append(name + '_EN')
