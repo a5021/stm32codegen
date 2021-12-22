@@ -618,6 +618,7 @@ def sort_def_block(definition_block):
     ret_name = ret_name.replace('TDR', 'WW1')
     ret_name = ret_name.replace('PSC', 'AA0')
     ret_name = ret_name.replace('EGR', 'AS0')
+    ret_name = ret_name.replace('MODER', 'AA0')
     ret_name = ret_name.replace('BRR', 'AB0')
     ret_name = ret_name.replace('_CR', '_C0')
     # ret_name = ret_name.replace('CR1', 'C01')
