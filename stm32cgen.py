@@ -645,6 +645,9 @@ def sort_def_block(definition_block):
     ret_name = ret_name.replace('RCC_CSR', 'RCC_AE0')
     ret_name = ret_name.replace('RCC_CIR', 'RCC_AF0')
     ret_name = ret_name.replace('AHBRSTR', 'U50')
+    ret_name = ret_name.replace('AHB1RSTR', 'U51')
+    ret_name = ret_name.replace('AHB2RSTR', 'U52')
+    ret_name = ret_name.replace('AHB3RSTR', 'U53')
     ret_name = ret_name.replace('APB1RSTR', 'U60')
     ret_name = ret_name.replace('APB2RSTR', 'U70')
 
