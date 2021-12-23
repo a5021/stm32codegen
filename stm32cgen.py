@@ -663,6 +663,7 @@ def sort_def_block(definition_block):
 
 def sort_ini_block(initialization_block):
     ret_name = initialization_block[0].replace('UART', 'USART')
+    ret_name = ret_name.replace('_OR', '_ZX1')
     ret_name = ret_name.replace('_CR1', '_ZZ1')
     ret_name = ret_name.replace('ISR', 'VV0')
     ret_name = ret_name.replace('ICR', 'VV1')
