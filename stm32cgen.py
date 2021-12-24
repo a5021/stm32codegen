@@ -400,9 +400,11 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
         else:
             bitfield_block = f'{ident * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
-            assign_block = ident + '#if ' + def_name + ' != 0\n' \
-                + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                + ' ' + reg_comment + '\n' + ident + '#endif'
+            assign_block = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
+                + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
+                + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
+                + ident + '#endif\n'
 
         if args.undef is True:
             assign_block += '\n' + ident + '#undef ' + def_name
