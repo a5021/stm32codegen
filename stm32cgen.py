@@ -423,13 +423,10 @@ def make_h_module(module_name, module_body):
 
 def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
     fx = list(get_init_block(src, reg_set))
-    # block_list = []
     block_a = []
     block_b = []
     for lx in range(len(fx)):
-        # out_str += compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment) + '\n' * 2
         bl_a, bl_b = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
-        # block_list.append([sa, sb])  # + '\n' * 2
         block_a.append(bl_a)
         block_b.append(bl_b)
 
@@ -609,55 +606,22 @@ def sort_peripheral_by_num(periph):
         return 0
 
 
-def_sort_list = [('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'),
-                 ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
-                 ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'),
-                 ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
-                 ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
-                 ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
-                 ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
-                 ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM')]
-
-'''
-def sort_def_block(definition_block):
-    ret_name = definition_block[0]
-    for xsrc, xdst in def_sort_list:
-        ret_name = ret_name.replace(xsrc, xdst)
-
-    for xtr in range(10, 99):
-        tim = 'TIM'
-        d1 = xtr % 10
-        d2 = xtr // 10
-        n = tim + str(xtr)
-        if n in ret_name:
-            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
-
-    return ret_name
-'''
+def_sort_list = [
+    ('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'),
+    ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
+    ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'),
+    ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
+    ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
+    ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
+    ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
+    ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM')
+]
 
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('_OR', '_ZX1'), ('_CR1', '_ZZ1'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'),
     ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR')
 ]
-
-'''
-def sort_ini_block(initialization_block):
-    ret_name = initialization_block[0]
-
-    for xsrc, xdst in ini_sort_list:
-        ret_name = ret_name.replace(xsrc, xdst)
-
-    for xtr in range(10, 99):
-        tim = 'TIM'
-        d1 = xtr % 10
-        d2 = xtr // 10
-        n = tim + str(xtr)
-        if n in ret_name:
-            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
-
-    return ret_name
-'''
 
 
 def sort_code_block(code_block, rep_list):
