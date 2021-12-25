@@ -614,13 +614,14 @@ def_sort_list = [
     ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
     ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
     ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
-    ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM')
+    ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM'), ('QUADSPI', 'XSPI')
 ]
 
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('_OR', '_ZX1'), ('_CR1', '_ZZ1'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'),
-    ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR')
+    ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
+    ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR')
 ]
 
 
@@ -737,6 +738,9 @@ if __name__ == '__main__':
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
 
+                    if 'QUADSPI' == name[:8] and len(name) < 9:
+                        name = name[0] + name[4:]
+
                     if name in ['RCC']:
                         pass
                     else:
@@ -754,10 +758,7 @@ if __name__ == '__main__':
                         '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
-        uname = []
         def_block = init_block = ""
-        # kex = code_block_def[0][0]
-        # if 'USART' in kex:
 
         code_block_def = sorted(code_block_def, key=sort_def_block)
         code_block_ini = sorted(code_block_ini, key=sort_ini_block)
