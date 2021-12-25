@@ -279,6 +279,9 @@ def get_init_block(src, target):
         if (args.cpu[0] == '3' or args.cpu[0:2] == 'L0' or args.cpu[0:2] == 'L1') and r_name[1] == 'OSPEEDR':
             r_name[1] = 'OSPEEDER'
 
+        if r_name[0] == 'LPUART':
+            r_name[0] = 'USART'
+
         if r_name[0] == 'UART':
             r_name[0] = 'USART'
 
@@ -607,7 +610,8 @@ def sort_peripheral_by_num(periph):
 
 
 def sort_def_block(definition_block):
-    ret_name = definition_block[0].replace('UART', 'USART')
+    ret_name = definition_block[0].replace('LPUART', 'XUART')
+    ret_name = ret_name.replace('UART', 'USART')
     ret_name = ret_name.replace('ISR', 'VV0')
     ret_name = ret_name.replace('ICR', 'VV1')
     ret_name = ret_name.replace('CNT', 'WW1')
@@ -659,7 +663,8 @@ def sort_def_block(definition_block):
 
 
 def sort_ini_block(initialization_block):
-    ret_name = initialization_block[0].replace('UART', 'USART')
+    ret_name = initialization_block[0].replace('LPUART', 'XUART')
+    ret_name = ret_name.replace('UART', 'USART')
     ret_name = ret_name.replace('_OR', '_ZX1')
     ret_name = ret_name.replace('_CR1', '_ZZ1')
     ret_name = ret_name.replace('ISR', 'VV0')
