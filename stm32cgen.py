@@ -319,9 +319,6 @@ def ch_def_name(def_name):
     return d_name
 
 
-i_block = []
-
-
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     s0 = bitfield_block = assign_block = ''
     global def_set
@@ -387,8 +384,6 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                     + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
                     + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
                     + ident + '#endif\n'
-
-                i_block.append((bitfield_block, assign_block))
 
             else:
                 bitfield_block = f'{ident * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
@@ -851,12 +846,7 @@ if __name__ == '__main__':
             per = args.peripheral
 
     if args.test:
-        i_block.sort()
-        for ay, by in i_block:
-            print(ay)
-        for ay, by in i_block:
-            print(by)
-
+        pass
     exit()
 
     x_reg = [x + '->' + y for x in per for y in reg]
