@@ -609,47 +609,62 @@ def sort_peripheral_by_num(periph):
         return 0
 
 
+def_sort_list = [('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'),
+                 ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
+                 ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'),
+                 ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
+                 ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
+                 ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
+                 ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'),('LCD_RAM_13', 'LCD_RAM_D'),
+                 ('LCD_RAM_14', 'LCD_RAM_E'),('LCD_RAM_15', 'LCD_RAM_F')]
+
+'''
 def sort_def_block(definition_block):
-    ret_name = definition_block[0].replace('LPUART', 'XUART')
-    ret_name = ret_name.replace('UART', 'USART')
-    ret_name = ret_name.replace('ISR', 'VV0')
-    ret_name = ret_name.replace('ICR', 'VV1')
-    ret_name = ret_name.replace('CNT', 'WW1')
-    ret_name = ret_name.replace('RDR', 'WW0')
-    ret_name = ret_name.replace('TDR', 'WW1')
-    ret_name = ret_name.replace('PSC', 'AA0')
-    ret_name = ret_name.replace('EGR', 'AS0')
-    ret_name = ret_name.replace('MODER', 'AA0')
-    ret_name = ret_name.replace('BRR', 'AB0')
-    ret_name = ret_name.replace('_CR', '_C0')
-    ret_name = ret_name.replace('DIER', 'C10')
-    ret_name = ret_name.replace('RCR',  'C20')
-    ret_name = ret_name.replace('CCMR', 'C30')
-    ret_name = ret_name.replace('CCER', 'C40')
-    ret_name = ret_name.replace('SMCR', 'C50')
-    ret_name = ret_name.replace('BDTR', 'U00')
-    ret_name = ret_name.replace('_SR', '_U10')
-    ret_name = ret_name.replace('AHBENR', 'A50')
-    ret_name = ret_name.replace('AHB1ENR', 'A51')
-    ret_name = ret_name.replace('AHB2ENR', 'A52')
-    ret_name = ret_name.replace('AHB3ENR', 'A53')
-    ret_name = ret_name.replace('APB1ENR', 'A60')
-    ret_name = ret_name.replace('APB2ENR', 'A70')
-    ret_name = ret_name.replace('AHB1SMENR', 'A80')
-    ret_name = ret_name.replace('AHB2SMENR', 'A90')
-    ret_name = ret_name.replace('AHB3SMENR', 'AA0')
-    ret_name = ret_name.replace('APB1SMENR', 'AB0')
-    ret_name = ret_name.replace('APB2SMENR', 'AB2')
-    ret_name = ret_name.replace('RCC_CFGR', 'RCC_AC0')
-    ret_name = ret_name.replace('RCC_CR', 'RCC_AD0')
-    ret_name = ret_name.replace('RCC_CSR', 'RCC_AE0')
-    ret_name = ret_name.replace('RCC_CIR', 'RCC_AF0')
-    ret_name = ret_name.replace('AHBRSTR', 'U50')
-    ret_name = ret_name.replace('AHB1RSTR', 'U51')
-    ret_name = ret_name.replace('AHB2RSTR', 'U52')
-    ret_name = ret_name.replace('AHB3RSTR', 'U53')
-    ret_name = ret_name.replace('APB1RSTR', 'U60')
-    ret_name = ret_name.replace('APB2RSTR', 'U70')
+    ret_name = definition_block[0]
+    for xsrc, xdst in def_sort_list:
+        ret_name = ret_name.replace(xsrc, xdst)
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
+    return ret_name
+'''
+
+ini_sort_list = [
+    ('LPUART', 'XUART'), ('UART', 'USART'), ('_OR', '_ZX1'), ('_CR1', '_ZZ1'), ('ISR', 'VV0'),
+    ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'),
+    ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR')
+]
+
+'''
+def sort_ini_block(initialization_block):
+    ret_name = initialization_block[0]
+
+    for xsrc, xdst in ini_sort_list:
+        ret_name = ret_name.replace(xsrc, xdst)
+
+    for xtr in range(10, 99):
+        tim = 'TIM'
+        d1 = xtr % 10
+        d2 = xtr // 10
+        n = tim + str(xtr)
+        if n in ret_name:
+            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+
+    return ret_name
+'''
+
+
+def sort_code_block(code_block, rep_list):
+    ret_name = code_block[0]
+
+    for xsrc, xdst in rep_list:
+        ret_name = ret_name.replace(xsrc, xdst)
 
     for xtr in range(10, 99):
         tim = 'TIM'
@@ -663,28 +678,11 @@ def sort_def_block(definition_block):
 
 
 def sort_ini_block(initialization_block):
-    ret_name = initialization_block[0].replace('LPUART', 'XUART')
-    ret_name = ret_name.replace('UART', 'USART')
-    ret_name = ret_name.replace('_OR', '_ZX1')
-    ret_name = ret_name.replace('_CR1', '_ZZ1')
-    ret_name = ret_name.replace('ISR', 'VV0')
-    ret_name = ret_name.replace('ICR', 'VV1')
-    ret_name = ret_name.replace('RDR', 'WW0')
-    ret_name = ret_name.replace('TDR', 'WW1')
-    ret_name = ret_name.replace('BRR', 'AAA')
-    ret_name = ret_name.replace('PSC', 'AA0')
-    ret_name = ret_name.replace('EGR', 'AS0')
-    ret_name = ret_name.replace('CCER', 'CCSR')
+    return sort_code_block(initialization_block, ini_sort_list)
 
-    for xtr in range(10, 99):
-        tim = 'TIM'
-        d1 = xtr % 10
-        d2 = xtr // 10
-        n = tim + str(xtr)
-        if n in ret_name:
-            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
 
-    return ret_name
+def sort_def_block(definition_block):
+    return sort_code_block(definition_block, def_sort_list)
 
 
 if __name__ == '__main__':
