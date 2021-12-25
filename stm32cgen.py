@@ -615,8 +615,8 @@ def_sort_list = [('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART'
                  ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
                  ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
                  ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
-                 ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'),('LCD_RAM_13', 'LCD_RAM_D'),
-                 ('LCD_RAM_14', 'LCD_RAM_E'),('LCD_RAM_15', 'LCD_RAM_F')]
+                 ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
+                 ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM')]
 
 '''
 def sort_def_block(definition_block):
