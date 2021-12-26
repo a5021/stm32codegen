@@ -760,7 +760,11 @@ if __name__ == '__main__':
 
         def_block = init_block = ""
 
-        code_block_def = sorted(code_block_def, key=sort_def_block)
+        if args.mix is False:
+            code_block_def = sorted(code_block_def, key=sort_def_block)
+        else:
+            code_block_def = sorted(code_block_def, key=sort_ini_block)
+
         code_block_ini = sorted(code_block_ini, key=sort_ini_block)
 
         for cd, ci in zip(code_block_def, code_block_ini):
