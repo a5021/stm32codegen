@@ -658,6 +658,7 @@ if __name__ == '__main__':
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
+    parser.add_argument('-D', '--define', nargs='+')
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
@@ -776,7 +777,7 @@ if __name__ == '__main__':
             init_block += ci[0] + '\n'
 
         if args.function:
-            stout = def_block + make_init_func(args.function, init_block)
+            stout = def_block + make_init_func(args.function, init_block) + '\n'
         else:
             stout = def_block + init_block
 
@@ -784,6 +785,17 @@ if __name__ == '__main__':
             stout += '\n\n'
             for en in pr_set:
                 stout += en + '\n'
+
+        if args.define:
+            ndx = 0
+            stout += '\n'
+            while len(args.define) > ndx:
+                stout += '#define ' + args.define[ndx]
+                ndx += 1
+                if ndx == len(args.define):
+                    break
+                stout += ident * 4 + args.define[ndx] + '\n'
+                ndx += 1
 
         if args.module:
             stout = make_h_module(args.module, stout.strip('\n'))
