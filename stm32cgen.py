@@ -750,7 +750,7 @@ if __name__ == '__main__':
 
                 def_set = set()
 
-            if len(enabler) != 0:
+            if len(enabler) != 0 and args.function:
                 x_out = ''
                 for en in sorted(enabler):
                     x_out += f'({en} != 0) || '
