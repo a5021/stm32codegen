@@ -408,7 +408,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 + ident + '#endif\n'
 
         if args.undef is True:
-            assign_block += '\n' + ident + '#undef ' + def_name
+            assign_block += '\n' + ident + '#undef ' + def_name + '\n'
 
     return bitfield_block, assign_block
 
@@ -567,8 +567,8 @@ def get_register_property(reg_name):
     right_bracket = reg_name[0].find(']')
     arr_size = reg_name[0][left_bracket + 1:right_bracket]
     if all([sg.isdigit() for sg in arr_size]):
-        for ndx in range(int(arr_size)):
-            yield reg_name[0][:left_bracket + 1] + str(ndx) + ']', get_register_size(reg_name[1])
+        for x_ndx in range(int(arr_size)):
+            yield reg_name[0][:left_bracket + 1] + str(x_ndx) + ']', get_register_size(reg_name[1])
     else:
         yield reg_name[0], get_register_size(reg_name[1])
 
@@ -832,9 +832,6 @@ if __name__ == '__main__':
         print(f'Peripheral count: {len(peripheral)} (uniq address: {len(uniq_addr)});')
         print(f'Unique type count: {len(uniq_type)} (from {len(defined_type)} defined);')
         print(f'Extra: {len(list(set(defined_type) - set(uniq_type)))} {list(set(defined_type) - set(uniq_type))}')
-
-    # print(peripheral)
-    # exit()
 
     per = reg = []
 
