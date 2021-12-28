@@ -659,6 +659,8 @@ if __name__ == '__main__':
     # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-D', '--define', nargs='+')
+    parser.add_argument('-H', '--header', nargs='+')
+    parser.add_argument('-F', '--footer', nargs='+')
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
@@ -677,6 +679,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--set-bit', nargs='+')
     parser.add_argument('-M', '--use-macro', nargs='+')
     parser.add_argument('-v', '--verbose', action="store_true", default=False)
+    parser.add_argument('-X', '--exclude', nargs='+')
 
     args = parser.parse_args()
 
@@ -721,7 +724,6 @@ if __name__ == '__main__':
             for name, lst, in j_sorted:
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
-                    # iblock.append(compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2])))
                     sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
                     code_block_def.append(sa)
                     code_block_ini.append(sb)
@@ -781,6 +783,12 @@ if __name__ == '__main__':
         else:
             stout = def_block + init_block
 
+        if args.header:
+            x_out = ''
+            for x_hdr in args.header:
+                x_out += x_hdr + '\n'
+            stout = x_out + stout
+
         if not args.direct:
             stout += '\n\n'
             for en in pr_set:
@@ -796,6 +804,12 @@ if __name__ == '__main__':
                     break
                 stout += ident * 4 + args.define[ndx] + '\n'
                 ndx += 1
+
+        if args.footer:
+            x_out = ''
+            for x_hdr in args.footer:
+                x_out += x_hdr + '\n'
+            stout = stout + x_out
 
         if args.module:
             stout = make_h_module(args.module, stout.strip('\n'))
