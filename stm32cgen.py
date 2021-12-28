@@ -261,6 +261,9 @@ def get_init_block(src, target):
 
         r_name = lx.upper().split('->')
 
+        if r_name[1] in args.exclude:
+            continue
+
         r_name[0] = strip_suffix(r_name[0])
 
         if 'AFR[0]' == r_name[1]:
@@ -618,15 +621,18 @@ def_sort_list = [
 ]
 
 ini_sort_list = [
-    ('LPUART', 'XUART'), ('UART', 'USART'), ('_OR', '_ZX1'), ('_CR1', '_ZZ1'), ('ISR', 'VV0'),
-    ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'),
+    ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
+    ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
     ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
-    ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR')
+    ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'), ('DMAR', 'U40'), ('BDTR', 'U60'),
 ]
 
 
 def sort_code_block(code_block, rep_list):
-    ret_name = code_block[0]
+    if len(code_block) > 0 and code_block[0] != '':
+        ret_name = code_block[0]
+    else:
+        return ''
 
     for xsrc, xdst in rep_list:
         ret_name = ret_name.replace(xsrc, xdst)
@@ -715,7 +721,7 @@ if __name__ == '__main__':
     enabler = []
     stout = ''
 
-    iblock = []
+    # iblock = []
     code_block_def = []
     code_block_ini = []
     if args.peripheral:
@@ -725,8 +731,9 @@ if __name__ == '__main__':
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
                     sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
-                    code_block_def.append(sa)
-                    code_block_ini.append(sb)
+                    if sa:
+                        code_block_def.append(sa)
+                        code_block_ini.append(sb)
 
                 if args.undef is False:
                     x_out = '( \\\n' + ident
