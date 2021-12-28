@@ -261,7 +261,7 @@ def get_init_block(src, target):
 
         r_name = lx.upper().split('->')
 
-        if r_name[1] in args.exclude:
+        if args.exclude and r_name[1] in args.exclude:
             continue
 
         r_name[0] = strip_suffix(r_name[0])
@@ -617,7 +617,8 @@ def_sort_list = [
     ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
     ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
     ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
-    ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM'), ('QUADSPI', 'XSPI')
+    ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM'), ('QUADSPI', 'XSPI'),
+    ('ADC123', 'ADCT'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
 
 ini_sort_list = [
@@ -625,6 +626,7 @@ ini_sort_list = [
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
     ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
     ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'), ('DMAR', 'U40'), ('BDTR', 'U60'),
+    ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
 
 
