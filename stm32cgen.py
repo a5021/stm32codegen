@@ -612,7 +612,7 @@ def sort_peripheral_by_num(periph):
 def_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
-    ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'),
+    ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'), ('IER', 'CGR'),
     ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
     ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
     ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
