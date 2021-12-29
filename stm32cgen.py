@@ -288,6 +288,9 @@ def get_init_block(src, target):
         if r_name[0] == 'UART':
             r_name[0] = 'USART'
 
+        if r_name[0] == 'FIREWALL':
+            r_name[0] = 'FW'
+
         if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
             r_name[0] = 'DMA'
 
@@ -752,6 +755,9 @@ if __name__ == '__main__':
 
                     if 'QUADSPI' == name[:8] and len(name) < 9:
                         name = name[0] + name[4:]
+
+                    if 'FIREWALL' == name:
+                        name = 'FW'
 
                     if name in ['RCC']:
                         pass
