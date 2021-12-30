@@ -770,8 +770,10 @@ if __name__ == '__main__':
 
             if len(enabler) != 0 and args.function:
                 x_out = ''
-                for en in sorted(enabler):
+                for cnt, en in enumerate(sorted(enabler), start=1):
                     x_out += f'({en} != 0) || '
+                    if cnt % 5 == 0:
+                        x_out += '\\\n' + ident * 3
                 x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + \
                         '();\n' + ident + '#endif\n#endif\n'
                 pr_set.append(x_out)
