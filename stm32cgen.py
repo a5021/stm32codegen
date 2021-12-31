@@ -32,7 +32,7 @@ register_dic = {}
 uniq_type = set()
 uniq_addr = set()
 
-ident = 2 * ' '
+indent = 2 * ' '
 
 def_set = set()
 
@@ -213,6 +213,17 @@ def parse_macro_def(macro_def_data):
     return expand_macrodef(macro_def_data, macro_def_list, macro_def_dict)
 
 
+def is_num_ended(a_str):
+    if a_str == '':
+        return '', ''
+
+    for ax in range(len(a_str) - 1, -1, -1):
+        if a_str[ax] not in '1234567890':
+            return a_str[:ax+1], a_str[ax+1:]
+
+    return '', a_str
+
+
 def get_reg_set(reg_str, macro_def_list):
     for gx in macro_def_list:
         if gx[0].startswith(reg_str):
@@ -245,7 +256,8 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_BSRR_BS_' in gx[0] or '_BSRR_BR_' in gx[0]:
                     continue
 
-            if gx[0][-2] == '_' and gx[0][-1] in '0123456789':  # if string ends with _1 or _2 or _3 etc.
+            sa1, sb1 = is_num_ended(gx[0])
+            if sa1[-1] == '_' and sb1 != '':  # if string ends with _1 or _2 or .. _9876543210 etc.
                 gx[2] = '  ' + gx[2].strip()
 
             yield gx
@@ -345,8 +357,8 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         if args.mix is True or args.direct is True:
             idn = 2
 
-        s0 += ident * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+        s0 += indent * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
+              + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if args.direct:
             s0 += '\n'
@@ -374,10 +386,10 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     if args.direct:
         if assign_block != '':
-            assign_block = (ident + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
-                             '\n' + assign_block + ident + ');\n'
+            assign_block = (indent + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
+                             '\n' + assign_block + indent + ');\n'
         else:
-            assign_block = (ident + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment + '\n'
+            assign_block = (indent + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment + '\n'
 
     else:
         def_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
@@ -385,33 +397,33 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         flen = (9 - ((not idn) * 2))
         if bitfield_block != '':
             if args.undef is False:
-                bitfield_block = f'{ident * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n'\
-                                 + bitfield_block + ident * idn + ')\n'
+                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
+                                 + bitfield_block + indent * idn + ')\n'
 
-                assign_block = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
-                    + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                    + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                    + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
-                    + ident + '#endif\n'
+                assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
+                               + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                               + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
+                               + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
+                               + indent + '#endif\n'
 
             else:
-                bitfield_block = f'{ident * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
-                    + bitfield_block + ident * idn + ')\n'
+                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
+                                 + bitfield_block + indent * idn + ')\n'
 
-                assign_block = f'{ident}#if {def_name} != 0\n' \
-                    + (ident * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                    + ' ' + reg_comment + '\n' + ident + '#endif'
+                assign_block = f'{indent}#if {def_name} != 0\n' \
+                               + (indent * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                               + ' ' + reg_comment + '\n' + indent + '#endif'
 
         else:
-            bitfield_block = f'{ident * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
-            assign_block = ident + '#if defined ' + def_name + '\n' + ident * 2 + '#if ' + def_name + ' != 0\n' \
-                + (ident * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                + ' ' + reg_comment + '\n' + ident * 2 + '#endif\n' \
-                + ident + '#else\n' + ident * 2 + '#define ' + def_name + ' 0\n' \
-                + ident + '#endif\n'
+            bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
+            assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
+                           + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                           + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
+                           + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
+                           + indent + '#endif\n'
 
         if args.undef is True:
-            assign_block += '\n' + ident + '#undef ' + def_name + '\n'
+            assign_block += '\n' + indent + '#undef ' + def_name + '\n'
 
     return bitfield_block, assign_block
 
@@ -613,7 +625,7 @@ def sort_peripheral_by_num(periph):
 
 
 def_sort_list = [
-    ('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'),
+    ('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'), ('DR', 'WR'),
     ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
     ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'), ('IER', 'CGR'),
     ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
@@ -621,7 +633,7 @@ def_sort_list = [
     ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
     ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
     ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM'), ('QUADSPI', 'XSPI'),
-    ('ADC123', 'ADCT'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
+    ('ADC123', 'ADCT'), ('ADC12', 'ADCU'), ('ADC1_2', 'ADCU'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
 
 ini_sort_list = [
@@ -681,7 +693,7 @@ if __name__ == '__main__':
     parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
-    parser.add_argument('-i', '--ident', type=int, default=2)
+    parser.add_argument('-i', '--indent', type=int, default=2)
     parser.add_argument('-t', '--test', action="store_true", default=False)
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
@@ -741,11 +753,11 @@ if __name__ == '__main__':
                         code_block_ini.append(sb)
 
                 if args.undef is False:
-                    x_out = '( \\\n' + ident
+                    x_out = '( \\\n' + indent
                     for cnt, ds in enumerate(sorted(def_set), start=1):
                         x_out += f'({ds} != 0) || '
                         if cnt % 5 == 0:
-                            x_out += '\\\n' + ident
+                            x_out += '\\\n' + indent
 
                     if len(def_set) % 5 == 0:
                         x_out = x_out[:-4]
@@ -773,9 +785,10 @@ if __name__ == '__main__':
                 for cnt, en in enumerate(sorted(enabler), start=1):
                     x_out += f'({en} != 0) || '
                     if cnt % 5 == 0:
-                        x_out += '\\\n' + ident * 3
-                x_out = '\n#if 0\n' + ident + '#if ' + f'{x_out[:-3]}' + '\n' + ident * 2 + f'{args.function}' + \
-                        '();\n' + ident + '#endif\n#endif\n'
+                        x_out += '\\\n' + indent * 3
+
+                x_out = '\n#if 0\n' + indent + '#if ' + f'{x_out[:-3]}' + '\n' + indent * 2 + f'{args.function}' + \
+                        '();\n' + indent + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
         def_block = init_block = ""
@@ -819,7 +832,7 @@ if __name__ == '__main__':
                 ndx += 1
                 if ndx == len(args.define):
                     break
-                stout += ident * 4 + args.define[ndx] + '\n'
+                stout += indent * 4 + args.define[ndx] + '\n'
                 ndx += 1
 
         if args.footer:

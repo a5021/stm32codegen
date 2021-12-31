@@ -328,4 +328,3 @@ if __name__ == '__main__':
         p = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', x[0], re.MULTILINE | re.DOTALL)
         dev_desc = (x[1], p[0] if p else "")
         print(dev_desc)
-
