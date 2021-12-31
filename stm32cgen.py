@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import re
 import sys
@@ -358,7 +358,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             idn = 2
 
         s0 += indent * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-              + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
         if args.direct:
             s0 += '\n'
@@ -401,26 +401,26 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                                  + bitfield_block + indent * idn + ')\n'
 
                 assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
-                               + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                               + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
-                               + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
-                               + indent + '#endif\n'
+                    + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                    + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
+                    + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
+                    + indent + '#endif\n'
 
             else:
                 bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
-                                 + bitfield_block + indent * idn + ')\n'
+                    + bitfield_block + indent * idn + ')\n'
 
                 assign_block = f'{indent}#if {def_name} != 0\n' \
-                               + (indent * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                               + ' ' + reg_comment + '\n' + indent + '#endif'
+                    + (indent * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                    + ' ' + reg_comment + '\n' + indent + '#endif'
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
-                           + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                           + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
-                           + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
-                           + indent + '#endif\n'
+                + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
+                + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
+                + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
+                + indent + '#endif\n'
 
         if args.undef is True:
             assign_block += '\n' + indent + '#undef ' + def_name + '\n'
@@ -738,7 +738,6 @@ if __name__ == '__main__':
     enabler = []
     stout = ''
 
-    # iblock = []
     code_block_def = []
     code_block_ini = []
     if args.peripheral:
