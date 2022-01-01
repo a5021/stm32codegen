@@ -854,32 +854,3 @@ if __name__ == '__main__':
         print(f'Peripheral count: {len(peripheral)} (uniq address: {len(uniq_addr)});')
         print(f'Unique type count: {len(uniq_type)} (from {len(defined_type)} defined);')
         print(f'Extra: {len(list(set(defined_type) - set(uniq_type)))} {list(set(defined_type) - set(uniq_type))}')
-
-    per = reg = []
-
-    if args.register:
-        if 'ALL' == args.rg[0][0].upper():
-            reg = []
-        else:
-            reg = args.register
-
-    if args.peripheral:
-        if 'ALL' == args.peripheral[0][0].upper():
-            per = [x[1] for x in peripheral]
-        else:
-            per = args.peripheral
-
-    if args.test:
-        pass
-    exit()
-
-    x_reg = [x + '->' + y for x in per for y in reg]
-    s = compose_init_block(s_data, x_reg, args.set_bit)
-
-    if args.function:
-        s = make_init_func(args.function, s)
-
-    if args.module:
-        s = make_h_module(args.module, s)
-
-    print(s)
