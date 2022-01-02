@@ -348,10 +348,17 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         if lx == bit_def[-1]:
             cn = ' ' + cn[1:]
 
-        if set_bit_list and lx[0] in set_bit_list:
-            bitfield_enable = '1'
+        bitfield_enable = '0'
+
+        if args.enable_rcc_macro:
+            if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
+                bf = lx[0].split('_')
+                if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
+                    bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
+
         else:
-            bitfield_enable = '0'
+            if set_bit_list and lx[0] in set_bit_list:
+                bitfield_enable = '1'
 
         idn = 1
         if args.mix is True or args.direct is True:
@@ -396,8 +403,9 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         def_set.add(def_name)
         flen = (9 - ((not idn) * 2))
         if bitfield_block != '':
+            s_pos = bitfield_block.find('|')
             if args.undef is False:
-                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
+                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
                                  + bitfield_block + indent * idn + ')\n'
 
                 assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
@@ -407,7 +415,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                     + indent + '#endif\n'
 
             else:
-                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(max_field_len[0] + flen) + '\\\n' \
+                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
                     + bitfield_block + indent * idn + ')\n'
 
                 assign_block = f'{indent}#if {def_name} != 0\n' \
@@ -684,6 +692,7 @@ if __name__ == '__main__':
     parser.add_argument('-D', '--define', nargs='+')
     parser.add_argument('-H', '--header', nargs='+')
     parser.add_argument('-F', '--footer', nargs='+')
+    parser.add_argument('-R', '--enable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
