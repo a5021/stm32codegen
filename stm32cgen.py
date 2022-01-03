@@ -350,7 +350,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
         bitfield_enable = '0'
 
-        if args.enable_rcc_macro:
+        if not args.disable_rcc_macro:
             if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                 bf = lx[0].split('_')
                 if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
@@ -687,19 +687,16 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(prog='stm32cmsis', description='STM32 initialization generator')
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
-    # parser.add_argument('-a', '--all', action="store_true", default=False)
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-D', '--define', nargs='+')
     parser.add_argument('-H', '--header', nargs='+')
     parser.add_argument('-F', '--footer', nargs='+')
-    parser.add_argument('-R', '--enable-rcc-macro', action="store_true", default=False)
+    parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix', action="store_true", default=False,
                         help="mix definition and initialization blocks of code")
-    parser.add_argument('-s', '--separate-func', action="store_true", default=False)
-    parser.add_argument('-S', '--separate-module', action="store_true", default=False)
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2)
@@ -707,9 +704,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
     parser.add_argument('-p', '--peripheral', nargs='+')
-    parser.add_argument('-r', '--register', nargs='+')
     parser.add_argument('-b', '--set-bit', nargs='+')
-    parser.add_argument('-M', '--use-macro', nargs='+')
     parser.add_argument('-v', '--verbose', action="store_true", default=False)
     parser.add_argument('-X', '--exclude', nargs='+')
 
