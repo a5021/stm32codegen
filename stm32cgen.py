@@ -686,6 +686,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(prog='stm32cmsis', description='STM32 initialization generator')
+    parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-D', '--define', nargs='+')
@@ -700,15 +701,18 @@ if __name__ == '__main__':
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2)
-    parser.add_argument('-t', '--test', action="store_true", default=False)
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
     parser.add_argument('-p', '--peripheral', nargs='+')
     parser.add_argument('-b', '--set-bit', nargs='+')
-    parser.add_argument('-v', '--verbose', action="store_true", default=False)
+    parser.add_argument('-v', '--verbose')
     parser.add_argument('-X', '--exclude', nargs='+')
 
     args = parser.parse_args()
+
+    if args.version:
+        print("Version 0.07b\n")
+        exit()
 
     cpu_name = args.cpu.upper()
 
