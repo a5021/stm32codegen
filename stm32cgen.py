@@ -683,9 +683,13 @@ def sort_def_block(definition_block):
 
 if __name__ == '__main__':
 
+    if '-V' in sys.argv or '--version' in sys.argv:
+        print('0.07b\n')
+        exit()
+
     import argparse
 
-    parser = argparse.ArgumentParser(prog='stm32cmsis', description='STM32 initialization generator')
+    parser = argparse.ArgumentParser(prog='stm32cgen', description='STM32 initialization generator')
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
@@ -709,10 +713,6 @@ if __name__ == '__main__':
     parser.add_argument('-X', '--exclude', nargs='+')
 
     args = parser.parse_args()
-
-    if args.version:
-        print("Version 0.07b\n")
-        exit()
 
     cpu_name = args.cpu.upper()
 
