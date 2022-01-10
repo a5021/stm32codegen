@@ -754,10 +754,11 @@ if __name__ == '__main__':
             for name, lst, in j_sorted:
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
-                    sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
-                    if sa:
-                        code_block_def.append(sa)
-                        code_block_ini.append(sb)
+                    if rg[0] not in args.exclude:
+                        sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
+                        if sa:
+                            code_block_def.append(sa)
+                            code_block_ini.append(sb)
 
                 if args.undef is False:
                     x_out = '( \\\n' + indent
