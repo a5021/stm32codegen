@@ -350,15 +350,18 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
         bitfield_enable = '0'
 
-        if not args.disable_rcc_macro:
+        if set_bit_list:
+            if lx[0] in set_bit_list:
+                bitfield_enable = '1'
+            for bit_mnem in set_bit_list:
+                if bit_mnem in lx[0]:
+                    bitfield_enable = '1'
+
+        if not args.disable_rcc_macro and bitfield_enable == '0':
             if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                 bf = lx[0].split('_')
                 if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
                     bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
-
-        else:
-            if set_bit_list and lx[0] in set_bit_list:
-                bitfield_enable = '1'
 
         idn = 1
         if args.mix is True or args.direct is True:
@@ -754,11 +757,14 @@ if __name__ == '__main__':
             for name, lst, in j_sorted:
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
-                    if rg[0] not in args.exclude:
-                        sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
-                        if sa:
-                            code_block_def.append(sa)
-                            code_block_ini.append(sb)
+                    if args.exclude and rg[0] in args.exclude:
+                        # do not process register if it is in exclude list
+                        continue
+
+                    sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
+                    if sa:
+                        code_block_def.append(sa)
+                        code_block_ini.append(sb)
 
                 if args.undef is False:
                     x_out = '( \\\n' + indent
