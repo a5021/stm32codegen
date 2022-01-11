@@ -343,37 +343,49 @@ def ch_def_name(def_name):
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     s0 = bitfield_block = assign_block = ''
     global def_set
-    for lx in bit_def:
-        cn = '|  /* '
-        if lx == bit_def[-1]:
-            cn = ' ' + cn[1:]
 
-        bitfield_enable = '0'
+    rn = reg_name.split('->')[1]
 
-        if set_bit_list:
-            if lx[0] in set_bit_list:
-                bitfield_enable = '1'
-            for bit_mnem in set_bit_list:
-                if bit_mnem in lx[0]:
+    idn = 1
+    if args.mix is True or args.direct is True:
+        idn = 2
+
+    if not args.direct_init or rn not in args.direct_init:
+
+        for lx in bit_def:
+            cn = '|  /* '
+            if lx == bit_def[-1]:
+                cn = ' ' + cn[1:]
+
+            bitfield_enable = '0'
+
+            if set_bit_list:
+                if lx[0] in set_bit_list:
                     bitfield_enable = '1'
+                for bit_mnem in set_bit_list:
+                    if bit_mnem in lx[0]:
+                        bitfield_enable = '1'
 
-        if not args.disable_rcc_macro and bitfield_enable == '0':
-            if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
-                bf = lx[0].split('_')
-                if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
-                    bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
+            if not args.disable_rcc_macro and bitfield_enable == '0':
+                if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
+                    bf = lx[0].split('_')
+                    if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
+                        bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
 
-        idn = 1
-        if args.mix is True or args.direct is True:
-            idn = 2
+            s0 += indent * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
+                + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
 
-        s0 += indent * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-            + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
-
+            if args.direct:
+                s0 += '\n'
+            else:
+                s0 += '\\\n'
+    else:
+        b_ndx = args.direct_init.index(rn)
+        s0 = indent * idn + args.direct_init[b_ndx + 1]
         if args.direct:
             s0 += '\n'
         else:
-            s0 += '\\\n'
+            s0 += ' \\\n'
 
     if args.direct:
         assign_block = s0
@@ -650,7 +662,7 @@ def_sort_list = [
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
-    ('EGR', 'AS0'), ('CCER', 'CCSR'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
+    ('EGR', 'AS0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
     ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'), ('DMAR', 'U40'), ('BDTR', 'U60'),
     ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
@@ -708,6 +720,7 @@ if __name__ == '__main__':
     parser.add_argument('--save-header-file', action="store_true", default=False)
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2)
+    parser.add_argument('-I', '--direct-init', nargs='+')
     parser.add_argument('-m', '--module')
     parser.add_argument('-f', '--function')
     parser.add_argument('-p', '--peripheral', nargs='+')
