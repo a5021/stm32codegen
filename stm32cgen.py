@@ -424,11 +424,16 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
                                  + bitfield_block + indent * idn + ')\n'
 
-                assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
-                    + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                    + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
-                    + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
-                    + indent + '#endif\n'
+                if not args.light:
+                    assign_block = f'{indent}#if defined {def_name}\n' \
+                        + f'{indent * 2}#if {def_name} != 0\n' \
+                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                        + f'{indent * 2}#endif\n' \
+                        + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                else:
+                    assign_block = f'{indent}#if {def_name} != 0\n' \
+                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                        + f'{indent}#endif\n'
 
             else:
                 bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
@@ -440,11 +445,16 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
-            assign_block = indent + '#if defined ' + def_name + '\n' + indent * 2 + '#if ' + def_name + ' != 0\n' \
-                + (indent * 3 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                + ' ' + reg_comment + '\n' + indent * 2 + '#endif\n' \
-                + indent + '#else\n' + indent * 2 + '#define ' + def_name + ' 0\n' \
-                + indent + '#endif\n'
+            if not args.light:
+                assign_block = f'{indent}#if defined {def_name}\n' \
+                    + f'{indent * 2}#if {def_name} != 0\n' \
+                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                    + f'{indent * 2}#endif\n' \
+                    + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+            else:
+                assign_block = f'{indent}#if {def_name} != 0\n' \
+                    + f'{indent * 2}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                    + f'{indent}#endif\n'
 
         if args.undef is True:
             assign_block += '\n' + indent + '#undef ' + def_name + '\n'
@@ -724,6 +734,8 @@ if __name__ == '__main__':
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix', action="store_true", default=False,
                         help="mix definition and initialization blocks of code")
+    parser.add_argument('--light', action="store_true", default=False,
+                        help="use light initialization codeblocks")
     parser.add_argument('--save-header-file', action="store_true", default=False, help='write fetched file to disk')
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2, help="set the indentation for code in spaces")
