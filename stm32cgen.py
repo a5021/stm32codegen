@@ -708,25 +708,25 @@ if __name__ == '__main__':
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
-    parser.add_argument('-D', '--define', nargs='+')
-    parser.add_argument('-H', '--header', nargs='+')
-    parser.add_argument('-F', '--footer', nargs='+')
+    parser.add_argument('-D', '--define', nargs='+', help="add #define MACRO at the end")
+    parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
+    parser.add_argument('-F', '--footer', nargs='+', help="add strings to footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix', action="store_true", default=False,
                         help="mix definition and initialization blocks of code")
-    parser.add_argument('--save-header-file', action="store_true", default=False)
+    parser.add_argument('--save-header-file', action="store_true", default=False, help='write fetched file to disk')
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
-    parser.add_argument('-i', '--indent', type=int, default=2)
-    parser.add_argument('-I', '--direct-init', nargs='+')
-    parser.add_argument('-m', '--module')
-    parser.add_argument('-f', '--function')
-    parser.add_argument('-p', '--peripheral', nargs='+')
-    parser.add_argument('-b', '--set-bit', nargs='+')
-    parser.add_argument('-v', '--verbose')
-    parser.add_argument('-X', '--exclude', nargs='+')
+    parser.add_argument('-i', '--indent', type=int, default=2, help="set the indentation for code in spaces")
+    parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
+    parser.add_argument('-m', '--module', help="produce output in form of a header file")
+    parser.add_argument('-f', '--function', help="place code into a function")
+    parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
+    parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
+    parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
+    parser.add_argument('-X', '--exclude', nargs='+', help="exclude the registers from processing")
 
     args = parser.parse_args()
 
@@ -873,7 +873,7 @@ if __name__ == '__main__':
 
         print(stout)
 
-    if len(sys.argv) == 2 and args.cpu != '':
+    if len(sys.argv) < 4 and args.cpu != '':
         for x in peripheral:
             print(x[1].ljust(15), x[0], x[2][:-1], '"' + x[3] + '"')
 
