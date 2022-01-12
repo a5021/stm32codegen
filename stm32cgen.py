@@ -362,8 +362,9 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if set_bit_list:
                 if lx[0] in set_bit_list:
                     bitfield_enable = '1'
+                bf = lx[0].split('_')[2]
                 for bit_mnem in set_bit_list:
-                    if bit_mnem in lx[0]:
+                    if bit_mnem == bf:
                         bitfield_enable = '1'
 
             if not args.disable_rcc_macro and bitfield_enable == '0':
@@ -451,14 +452,20 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     return bitfield_block, assign_block
 
 
-def make_init_func(func_name, func_body):
-    return f'\n__STATIC_INLINE void {func_name}(void) {{\n\n{func_body}}}'
+def make_init_func(func_name, func_body, header='', footer=''):
+    hdr = ftr = ''
+    if header != '':
+        hdr = header + '\n\n'
+    if footer != '':
+        ftr = '\n\n' + ftr
+
+    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{ftr}{func_body}{hdr}\n}}'
 
 
 def make_h_module(module_name, module_body):
     mname = module_name.upper()
     return f'#ifndef __{mname}_H__\n#define __{mname}_H__\n\n' \
-           + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + module_body + '\n\n#ifdef __cplusplus\n  }\n' \
+           + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + module_body + '\n#ifdef __cplusplus\n  }\n' \
            + '#endif /* __cplusplus */\n' + f'#endif /* __{mname}_H__ */\n'
 
 
@@ -814,7 +821,7 @@ if __name__ == '__main__':
                     if cnt % 5 == 0:
                         x_out += '\\\n' + indent * 3
 
-                x_out = '\n#if 0\n' + indent + '#if ' + f'{x_out[:-3]}' + '\n' + indent * 2 + f'{args.function}' + \
+                x_out = '#if 0\n' + indent + '#if ' + f'{x_out[:-3]}' + '\n' + indent * 2 + f'{args.function}' + \
                         '();\n' + indent + '#endif\n#endif\n'
                 pr_set.append(x_out)
 
@@ -835,10 +842,13 @@ if __name__ == '__main__':
 
             init_block += ci[0] + '\n'
 
+        def_block = def_block.strip('\n')
+        init_block = init_block.strip('\n')
+
         if args.function:
-            stout = def_block + make_init_func(args.function, init_block) + '\n'
+            stout = (def_block + '\n\n\n' + make_init_func(args.function, init_block)).strip('\n')
         else:
-            stout = def_block + init_block
+            stout = def_block + '\n\n' + init_block
 
         if args.header:
             x_out = ''
@@ -846,8 +856,8 @@ if __name__ == '__main__':
                 x_out += x_hdr + '\n'
             stout = x_out + stout
 
+        stout += '\n\n'
         if not args.direct:
-            stout += '\n\n'
             for en in pr_set:
                 stout += en + '\n'
 
@@ -869,7 +879,7 @@ if __name__ == '__main__':
             stout = stout + x_out
 
         if args.module:
-            stout = make_h_module(args.module, stout.strip('\n'))
+            stout = make_h_module(args.module, stout)
 
         print(stout)
 
