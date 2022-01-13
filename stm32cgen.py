@@ -716,7 +716,7 @@ def sort_def_block(definition_block):
 if __name__ == '__main__':
 
     if '-V' in sys.argv or '--version' in sys.argv:
-        print('0.07b\n')
+        print('0.08b\n')
         exit()
 
     import argparse
@@ -743,6 +743,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--module', help="produce output in form of a header file")
     parser.add_argument('-f', '--function', help="place code into a function")
     parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
+    parser.add_argument('-r', '--register', nargs='+', help="process the registers specified")
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
     parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
     parser.add_argument('-X', '--exclude', nargs='+', help="exclude the registers from processing")
@@ -789,8 +790,13 @@ if __name__ == '__main__':
             for name, lst, in j_sorted:
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
+
                     if args.exclude and rg[0] in args.exclude:
                         # do not process register if it is in exclude list
+                        continue
+
+                    if args.register and rg[0] not in args.register:
+                        # do not process register outside the list
                         continue
 
                     sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
