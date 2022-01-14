@@ -420,9 +420,12 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         flen = (9 - ((not idn) * 2))
         if bitfield_block != '':
             s_pos = bitfield_block.find('|')
+            bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + f'\\\n{bitfield_block}{indent * idn})'
+
+            if not args.mix:
+                bitfield_block += '\n'
+
             if args.undef is False:
-                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
-                                 + bitfield_block + indent * idn + ')\n'
 
                 if not args.light:
                     assign_block = f'{indent}#if defined {def_name}\n' \
@@ -436,9 +439,6 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                         + f'{indent}#endif\n'
 
             else:
-                bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + '\\\n' \
-                    + bitfield_block + indent * idn + ')\n'
-
                 assign_block = f'{indent}#if {def_name} != 0\n' \
                     + (indent * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
                     + ' ' + reg_comment + '\n' + indent + '#endif'
