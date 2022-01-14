@@ -40,7 +40,7 @@ def_set = set()
 def get_cmsis_header_file(hdr_name, fetch=True, save=False):
     txt = read_cmsis_header_file(hdr_name, fetch, save)
     if not txt:
-        return ""
+        return ''
 
     global macro_definition, peripheral, uniq_type, uniq_addr, defined_type
     macro_definition = parse_macro_def(txt)
@@ -399,7 +399,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         while '  ' in reg_comment:
             reg_comment = reg_comment.replace('  ', ' ')
 
-        reg_comment = ('/* ' + reg_address + ': ' + reg_comment).ljust(max_field_len[1] + max_field_len[2] + 17) + ' */'
+        reg_comment = f'/* {reg_address}: {reg_comment}'.ljust(max_field_len[1] + max_field_len[2] + 17) + ' */'
     else:
         reg_comment = ''
 
@@ -409,15 +409,18 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     if args.direct:
         if assign_block != '':
-            assign_block = (indent + reg_name + ' = (').ljust(max_field_len[0] + 12) + reg_comment + \
-                             '\n' + assign_block + indent + ');\n'
+            assign_block = f'{indent}{reg_name} = ('.ljust(max_field_len[0] + 12) + \
+                           f'{reg_comment}\n{assign_block}{indent});\n'
         else:
-            assign_block = (indent + reg_name + ' = 0000;').ljust(max_field_len[0] + 12) + reg_comment + '\n'
+            assign_block = f'{indent}{reg_name} = 0000;'.ljust(max_field_len[0] + 12) + f'{reg_comment}\n'
 
     else:
-        def_name = ch_def_name(reg_name.replace("->", "_").replace('[', '_').replace(']', ''))
+        def_name = ch_def_name(reg_name.replace('->', '_').replace('[', '_').replace(']', ''))
         def_set.add(def_name)
         flen = (9 - ((not idn) * 2))
+
+        lj12 = max_field_len[0] + 12
+
         if bitfield_block != '':
             s_pos = bitfield_block.find('|')
             bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + f'\\\n{bitfield_block}{indent * idn})'
@@ -428,36 +431,34 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
 
                 if not args.light:
-                    assign_block = f'{indent}#if defined {def_name}\n' \
-                        + f'{indent * 2}#if {def_name} != 0\n' \
-                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
+                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
                         + f'{indent * 2}#endif\n' \
                         + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
                 else:
                     assign_block = f'{indent}#if {def_name} != 0\n' \
-                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
                         + f'{indent}#endif\n'
 
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n' \
-                    + (indent * 2 + reg_name + ' = ' + def_name + ';').ljust(max_field_len[0] + 12) \
-                    + ' ' + reg_comment + '\n' + indent + '#endif'
+                assign_block = \
+                    f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
+                    + f' {reg_comment}\n{indent}#endif'
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
-                assign_block = f'{indent}#if defined {def_name}\n' \
-                    + f'{indent * 2}#if {def_name} != 0\n' \
-                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
+                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
                     + f'{indent * 2}#endif\n' \
                     + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
             else:
                 assign_block = f'{indent}#if {def_name} != 0\n' \
-                    + f'{indent * 2}{reg_name} = {def_name};'.ljust(max_field_len[0] + 12) + f' {reg_comment}\n' \
+                    + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
                     + f'{indent}#endif\n'
 
         if args.undef is True:
-            assign_block += '\n' + indent + '#undef ' + def_name + '\n'
+            assign_block += f'\n{indent}#undef {def_name}\n'
 
     return bitfield_block, assign_block
 
@@ -600,7 +601,7 @@ def find_peripheral(periph_name):
 
 def get_register_set(periph_name):
     pn = strip_suffix(periph_name)
-    dict_key = pn + '_TypeDef'
+    dict_key = f'{pn}_TypeDef'
     if dict_key in register_dic:
         return register_dic[dict_key]
     return []
@@ -826,8 +827,8 @@ if __name__ == '__main__':
                     if name in ['RCC']:
                         pass
                     else:
-                        enabler.append(name + '_EN')
-                        x_out = '#define ' + enabler[-1] + ' ' + x_out[:-3].strip() + ' \\\n)\n'
+                        enabler.append(f'{name}_EN')
+                        x_out = f'#define {enabler[-1]} {x_out[:-3]}'.strip() + ' \\\n)\n'
                         pr_set.append(x_out)
 
                 def_set = set()
@@ -837,10 +838,9 @@ if __name__ == '__main__':
                 for cnt, en in enumerate(sorted(enabler), start=1):
                     x_out += f'({en} != 0) || '
                     if cnt % 5 == 0:
-                        x_out += '\\\n' + indent * 3
+                        x_out += f'\\\n{indent * 3}'
 
-                x_out = '#if 0\n' + indent + '#if ' + f'{x_out[:-3]}' + '\n' + indent * 2 + f'{args.function}' + \
-                        '();\n' + indent + '#endif\n#endif\n'
+                x_out = f'#if 0\n{indent}#if {x_out[:-3]}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
                 pr_set.append(x_out)
 
         def_block = init_block = ""
@@ -864,9 +864,9 @@ if __name__ == '__main__':
         init_block = init_block.strip('\n')
 
         if args.function:
-            stout = (def_block + '\n\n\n' + make_init_func(args.function, init_block)).strip('\n')
+            stout = f'{def_block}\n\n\n{make_init_func(args.function, init_block)}'.strip('\n')
         else:
-            stout = def_block + '\n\n' + init_block
+            stout = f'{def_block}\n\n{init_block}'
 
         if args.header:
             x_out = ''
