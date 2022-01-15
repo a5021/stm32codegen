@@ -373,8 +373,8 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
                         bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
 
-            s0 += indent * idn + bitfield_enable + ' * ' + lx[0].ljust(max_field_len[0] + 1) + cn \
-                + lx[1].ljust(max_field_len[1] + 2) + lx[2].ljust(max_field_len[2] + 1) + lx[3].ljust(11) + ' */'
+            s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
+                + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */'
 
             if args.direct:
                 s0 += '\n'
@@ -399,7 +399,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         while '  ' in reg_comment:
             reg_comment = reg_comment.replace('  ', ' ')
 
-        reg_comment = f'/* {reg_address}: {reg_comment}'.ljust(max_field_len[1] + max_field_len[2] + 17) + ' */'
+        reg_comment = f'/* {reg_address}: {reg_comment.ljust(max_field_len[1] + max_field_len[2] + 17)} */'
     else:
         reg_comment = ''
 
@@ -407,19 +407,18 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     if args.mix is True:
         idn = 1
 
+    lj12 = max_field_len[0] + 12
+
     if args.direct:
         if assign_block != '':
-            assign_block = f'{indent}{reg_name} = ('.ljust(max_field_len[0] + 12) + \
-                           f'{reg_comment}\n{assign_block}{indent});\n'
+            assign_block = f'{indent}{reg_name} = ('.ljust(lj12) + f'{reg_comment}\n{assign_block}{indent});\n'
         else:
-            assign_block = f'{indent}{reg_name} = 0000;'.ljust(max_field_len[0] + 12) + f'{reg_comment}\n'
+            assign_block = f'{indent}{reg_name} = 0000;'.ljust(lj12) + f'{reg_comment}\n'
 
     else:
         def_name = ch_def_name(reg_name.replace('->', '_').replace('[', '_').replace(']', ''))
         def_set.add(def_name)
         flen = (9 - ((not idn) * 2))
-
-        lj12 = max_field_len[0] + 12
 
         if bitfield_block != '':
             s_pos = bitfield_block.find('|')
@@ -432,30 +431,25 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
                 if not args.light:
                     assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
-                        + f'{indent * 2}#endif\n' \
+                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
                         + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
                 else:
                     assign_block = f'{indent}#if {def_name} != 0\n' \
-                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
-                        + f'{indent}#endif\n'
+                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent}#endif\n'
 
             else:
-                assign_block = \
-                    f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
+                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
                     + f' {reg_comment}\n{indent}#endif'
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
                 assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
-                    + f'{indent * 2}#endif\n' \
+                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
                     + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n' \
-                    + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n' \
-                    + f'{indent}#endif\n'
+                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12)\
+                             + f' {reg_comment}\n{indent}#endif\n'
 
         if args.undef is True:
             assign_block += f'\n{indent}#undef {def_name}\n'
@@ -474,10 +468,9 @@ def make_init_func(func_name, func_body, header='', footer=''):
 
 
 def make_h_module(module_name, module_body):
-    mname = module_name.upper()
-    return f'#ifndef __{mname}_H__\n#define __{mname}_H__\n\n' \
-           + '#ifdef __cplusplus\n  extern "C" {\n#endif\n\n' + module_body + '\n#ifdef __cplusplus\n  }\n' \
-           + '#endif /* __cplusplus */\n' + f'#endif /* __{mname}_H__ */\n'
+    mn = module_name.upper()
+    return f'#ifndef __{mn}_H__\n#define __{mn}_H__\n\n#ifdef __cplusplus\n  extern "C" {{\n#endif\n\n'\
+           + f'{module_body}\n#ifdef __cplusplus\n  }}\n#endif /* __cplusplus */\n' + f'#endif /* __{mn}_H__ */\n'
 
 
 def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
