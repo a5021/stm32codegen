@@ -772,7 +772,7 @@ if __name__ == '__main__':
         print(f'unable to get data for "{args.cpu}"')
         exit()
 
-    pr_set = []
+    tblock = []
     enabler = []
     stout = ''
 
@@ -822,7 +822,7 @@ if __name__ == '__main__':
                     else:
                         enabler.append(f'{name}_EN')
                         x_out = f'#define {enabler[-1]} {x_out[:-3]}'.strip() + ' \\\n)\n'
-                        pr_set.append(x_out)
+                        tblock.append(x_out)
 
                 def_set = set()
 
@@ -834,7 +834,7 @@ if __name__ == '__main__':
                         x_out += f'\\\n{indent * 3}'
 
                 x_out = f'#if 0\n{indent}#if {x_out[:-3]}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
-                pr_set.append(x_out)
+                tblock.append(x_out)
 
         def_block = init_block = ""
 
@@ -867,9 +867,12 @@ if __name__ == '__main__':
                 x_out += x_hdr + '\n'
             stout = x_out + stout
 
+        # delete all '#if 0' strings from the list except the last
+        tblock = [st for st in tblock if '#if 0' not in st] + [[st for st in tblock if st.startswith('#if 0')][-1]]
+
         stout += '\n\n'
         if not args.direct:
-            for en in pr_set:
+            for en in tblock:
                 stout += en + '\n'
 
         if args.define:
