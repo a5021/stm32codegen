@@ -273,19 +273,19 @@ def compose_cmsis_header_file_name(hdr_name):
     elif k1 == 'l1':
         a = l1
     elif k1 == 'l4':
-        return "stm32l4" + hn[2:4] + 'xx.h'
+        return 'stm32l4' + hn[2:4] + 'xx.h'
     elif k1 == 'g0':
-        return "stm32g0" + hn[2:4] + 'xx.h'
+        return 'stm32g0' + hn[2:4] + 'xx.h'
     elif k1 == 'g4':
-        return "stm32g4" + hn[2:4] + 'xx.h'
+        return 'stm32g4' + hn[2:4] + 'xx.h'
 
     else:
-        res = "stm32" + hn + ".h"
+        res = 'stm32' + hn + '.h'
         return res
 
     for gx in a:
         if res in a[gx]:
-            res = "stm32" + k1 + gx + ".h"
+            res = 'stm32' + k1 + gx + '.h'
             return res
 
     return hdr_name
@@ -324,7 +324,6 @@ if __name__ == '__main__':
     m = re.findall(r'Peripheral_registers_structures(.*?)Peripheral_memory_map', header_text, re.MULTILINE | re.DOTALL)
     n = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
     for x in n:
-        # print((x[1] + ':').ljust(30), end='')
         p = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', x[0], re.MULTILINE | re.DOTALL)
-        dev_desc = (x[1], p[0] if p else "")
+        dev_desc = (x[1], p[0] if p else '')
         print(dev_desc)

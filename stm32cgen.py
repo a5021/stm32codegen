@@ -71,7 +71,7 @@ def get_peripheral_description(src):
     n = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
     for ix in n:
         pg = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
-        yield ix[1], pg[0] if pg else ""
+        yield ix[1], pg[0] if pg else ''
 
 
 def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
@@ -362,10 +362,11 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if set_bit_list:
                 if lx[0] in set_bit_list:
                     bitfield_enable = '1'
-                bf = lx[0].split('_')[2]
-                for bit_mnem in set_bit_list:
-                    if bit_mnem == bf:
-                        bitfield_enable = '1'
+                bf = lx[0].split('_')
+                if bf:
+                    for bit_mnem in set_bit_list:
+                        if bit_mnem == bf[-1]:
+                            bitfield_enable = '1'
 
             if not args.disable_rcc_macro and bitfield_enable == '0':
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
@@ -836,7 +837,7 @@ if __name__ == '__main__':
                 x_out = f'#if 0\n{indent}#if {x_out[:-3]}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
                 tblock.append(x_out)
 
-        def_block = init_block = ""
+        def_block = init_block = ''
 
         if args.mix is False:
             code_block_def = sorted(code_block_def, key=sort_def_block)
@@ -867,8 +868,13 @@ if __name__ == '__main__':
                 x_out += x_hdr + '\n'
             stout = x_out + stout
 
+        stout = f'/* This code is intended to run on {args.cpu} microcontroller. ' + \
+                f'Created using stm32cgen. */\n\n{stout.strip()}'
+
         # delete all '#if 0' strings from the list except the last
-        tblock = [st for st in tblock if '#if 0' not in st] + [[st for st in tblock if st.startswith('#if 0')][-1]]
+        tb = [st for st in tblock if st.startswith('#if 0')]
+        if len(tb) > 1:
+            tblock = [st for st in tblock if '#if 0' not in st] + [tb[-1]]
 
         stout += '\n\n'
         if not args.direct:
