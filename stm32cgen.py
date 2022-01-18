@@ -344,10 +344,10 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     s0 = bitfield_block = assign_block = ''
     global def_set
 
-    gx = reg_name.split('->')
-    pr = is_num_ended(gx[0])
-    rn = gx[1]
-    pn = f'{pr[0]}_{gx[1]}_'
+    ms = bit_def[0][0].split('_')[0:2]
+    bit_def_base = '_'.join(ms) + '_'
+
+    rn = reg_name.split('->')[1]
 
     idn = 1
     if args.mix is True or args.direct is True:
@@ -366,7 +366,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 if lx[0] in set_bit_list:
                     bitfield_enable = '1'
 
-                bf = lx[0].replace(pn, '')
+                bf = lx[0].replace(bit_def_base, '')
                 if bf:
                     for bit_mnem in set_bit_list:
                         if bit_mnem == bf:
