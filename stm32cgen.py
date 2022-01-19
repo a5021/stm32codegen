@@ -344,8 +344,11 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     s0 = bitfield_block = assign_block = ''
     global def_set
 
-    ms = bit_def[0][0].split('_')[0:2]
-    bit_def_base = '_'.join(ms) + '_'
+    if bit_def:
+        ms = bit_def[0][0].split('_')[0:2]
+        bit_def_base = '_'.join(ms) + '_'
+    else:
+        bit_def_base = ''
 
     rn = reg_name.split('->')[1]
 
