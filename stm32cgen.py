@@ -341,20 +341,22 @@ def ch_def_name(def_name):
 
 
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
-    s0 = bitfield_block = assign_block = ''
+    s0 = bit_def_base = bitfield_block = assign_block = ''
     global def_set
 
     if bit_def:
         ms = bit_def[0][0].split('_')[0:2]
         bit_def_base = '_'.join(ms) + '_'
-    else:
-        bit_def_base = ''
 
     rn = reg_name.split('->')[1]
 
     idn = 1
     if args.mix is True or args.direct is True:
         idn = 2
+
+    lf = '\\\n'
+    if args.direct:
+        lf = '\n'
 
     if not args.direct_init or rn not in args.direct_init:
 
@@ -382,19 +384,11 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                         bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
 
             s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
-                + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */'
+                + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
 
-            if args.direct:
-                s0 += '\n'
-            else:
-                s0 += '\\\n'
     else:
         b_ndx = args.direct_init.index(rn)
-        s0 = indent * idn + args.direct_init[b_ndx + 1]
-        if args.direct:
-            s0 += '\n'
-        else:
-            s0 += ' \\\n'
+        s0 = f'{indent * idn}{args.direct_init[b_ndx + 1]}{lf}'
 
     if args.direct:
         assign_block = s0
@@ -718,7 +712,7 @@ def sort_def_block(definition_block):
 if __name__ == '__main__':
 
     if '-V' in sys.argv or '--version' in sys.argv:
-        print('0.08b\n')
+        print('0.08c\n')
         exit()
 
     import argparse

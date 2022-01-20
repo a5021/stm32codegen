@@ -231,12 +231,6 @@ def get_src_url(fmly, name):
         f'{fmly.upper()}/master/Drivers/CMSIS/Device/ST/STM32{fmly.upper()}xx/Include/stm32{fmly}{name}.h'
 
 
-# def compose_cmsis_header_file_url(header_name):
-#     return 'https://raw.githubusercontent.com/STMicroelectronics/STM32Cube'\
-#         f'{header_name[5:7].upper()}/master/Drivers/CMSIS/Device/ST/STM32'\
-#         f'{header_name[5:7].upper()}xx/Include/{header_name}'
-
-
 def compose_cmsis_header_file_url(header_name):
     return 'https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_'\
            f'{header_name[5:7]}/master/Include/{header_name}'
