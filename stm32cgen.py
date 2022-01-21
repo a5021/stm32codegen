@@ -68,8 +68,8 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
 
 def get_peripheral_description(src):
     m = re.findall(r'Peripheral_registers_structures(.*?)Peripheral_memory_map', src, re.MULTILINE | re.DOTALL)
-    n = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
-    for ix in n:
+    td = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
+    for ix in td:
         pg = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
         yield ix[1], pg[0] if pg else ''
 
@@ -201,11 +201,11 @@ def parse_macro_def(macro_def_data):
 
         pb = ''
         pc = ''
-        n = len(k)
-        if n > 1:
+        len_k = len(k)
+        if len_k > 1:
             pc = k[1].strip('!<').strip()
             pb = k[0].strip()
-        elif n > 0:
+        elif len_k > 0:
             pb = k[0].strip()
 
         macro_def_list.append([pa, pb, pc, ''])
@@ -694,9 +694,9 @@ def sort_code_block(code_block, rep_list):
         tim = 'TIM'
         d1 = xtr % 10
         d2 = xtr // 10
-        n = tim + str(xtr)
-        if n in ret_name:
-            ret_name = ret_name.replace(n, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+        tm = tim + str(xtr)
+        if tm in ret_name:
+            ret_name = ret_name.replace(tm, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
 
     return ret_name
 
