@@ -1,4 +1,0 @@
-030c8 -d -f init_usart -m usart -p USART1 -X GTPR RDR TDR ISR ICR RQR --define "UART_BAUDRATE(BUS_CLOCK, BAUDRATE)  (((BUS_CLOCK) + ((BAUDRATE)/2U)) / (BAUDRATE))"
-030c8 -l -f init_tim -m tim -p TIM -X CNT
-
-
