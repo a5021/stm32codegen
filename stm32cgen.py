@@ -801,11 +801,11 @@ if __name__ == '__main__':
                         code_block_ini.append(sb)
 
                 if args.undef is False:
-                    x_out = '( \\\n' + indent
+                    x_out = f'( \\\n{indent}'
                     for cnt, ds in enumerate(sorted(def_set), start=1):
                         x_out += f'({ds} != 0) || '
                         if cnt % 5 == 0:
-                            x_out += '\\\n' + indent
+                            x_out += f'\\\n{indent}'
 
                     if len(def_set) % 5 == 0:
                         x_out = x_out[:-4]
@@ -864,7 +864,8 @@ if __name__ == '__main__':
             stout = f'{def_block}\n\n{init_block}'
 
         if args.header:
-            stout = '\n'.join(args.header) + '\n\n' + stout
+            n = '\n'
+            stout = f'{n.join(args.header)}{n * 2}{stout}'
 
         stout = f'/* This code was created using stm32cgen. It is intended to run on {args.cpu} microcontroller.' + \
                 f' */\n\n{stout.strip()}'
