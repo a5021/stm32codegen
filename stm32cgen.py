@@ -839,6 +839,7 @@ if __name__ == '__main__':
                 tblock.append(x_out)
 
         def_block = init_block = ''
+        n = '\n'
 
         if args.mix is False:
             code_block_def = sorted(code_block_def, key=sort_def_block)
@@ -859,25 +860,24 @@ if __name__ == '__main__':
         init_block = init_block.strip('\n')
 
         if args.function:
-            stout = f'{def_block}\n\n\n{make_init_func(args.function, init_block)}'.strip('\n')
+            stout = f'{def_block}{n * 3}{make_init_func(args.function, init_block)}'.strip(n)
         else:
-            stout = f'{def_block}\n\n{init_block}'
+            stout = f'{def_block}{n * 2}{init_block}'
 
         if args.header:
-            n = '\n'
             stout = f'{n.join(args.header)}{n * 2}{stout}'
 
         stout = f'/* This code was created using stm32cgen. It is intended to run on {args.cpu} microcontroller.' + \
-                f' */\n\n{stout.strip()}'
+                f' */{n * 2}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
         if len(tb) > 1:
             tblock = [st for st in tblock if '#if 0' not in st] + [tb[-1]]
 
-        stout += '\n\n'
+        stout += f'{n * 2}'
         if not args.direct:
-            stout += '\n'.join(tblock) + '\n'
+            stout += f'{n.join(tblock)}{n}'
 
         if args.define:
             ndx = 0
@@ -891,7 +891,7 @@ if __name__ == '__main__':
                 ndx += 1
 
         if args.footer:
-            stout = stout + '\n'.join(args.footer)
+            stout = f'{stout}{n.join(args.footer)}'
 
         if args.module:
             stout = make_h_module(args.module, stout)
