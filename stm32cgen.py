@@ -864,13 +864,10 @@ if __name__ == '__main__':
             stout = f'{def_block}\n\n{init_block}'
 
         if args.header:
-            x_out = ''
-            for x_hdr in args.header:
-                x_out += x_hdr + '\n'
-            stout = x_out + stout
+            stout = '\n'.join(args.header) + '\n\n' + stout
 
-        stout = f'/* This code is intended to run on {args.cpu} microcontroller. ' + \
-                f'Created using stm32cgen. */\n\n{stout.strip()}'
+        stout = f'/* This code was created using stm32cgen. It is intended to run on {args.cpu} microcontroller.' + \
+                f' */\n\n{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
@@ -879,8 +876,7 @@ if __name__ == '__main__':
 
         stout += '\n\n'
         if not args.direct:
-            for en in tblock:
-                stout += en + '\n'
+            stout += '\n'.join(tblock) + '\n'
 
         if args.define:
             ndx = 0
@@ -894,10 +890,7 @@ if __name__ == '__main__':
                 ndx += 1
 
         if args.footer:
-            x_out = ''
-            for x_hdr in args.footer:
-                x_out += x_hdr + '\n'
-            stout = stout + x_out
+            stout = stout + '\n'.join(args.footer)
 
         if args.module:
             stout = make_h_module(args.module, stout)
