@@ -388,7 +388,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     else:
         b_ndx = args.direct_init.index(rn)
-        s0 = f'{indent * idn}{args.direct_init[b_ndx + 1]}{lf}'
+        s0 = f'{indent * idn}{args.direct_init[b_ndx + 1]} {lf}'
 
     if args.direct:
         assign_block = s0
@@ -506,7 +506,7 @@ def get_type_list(src):
         for gy in gx[0].replace(';/', '; /').split('\n'):
             gs = gy.strip()
             if '' == gs or '//' == gs[:2] or 'AND triple modes' in gs:
-                # do not parse empty strings or one's beginning with those
+                # do not parse some strings (empty, commented out, etc.)
                 continue
 
             while ' ;' in gs:
@@ -514,24 +514,26 @@ def get_type_list(src):
 
             w = gs.split()
 
-            p_size = get_reg_size(gs)
+            register_size = get_reg_size(gs)
 
-            name_ndx = 0
+            rname = ''
+            for gz in w:  # for every word in the string...
+                if gz.endswith(';'):
+                    rname = gz
+                    break
 
-            for gz in range(len(w)):  # find word index of register name
-                if w[gz].endswith(';'):
-                    name_ndx = gz
+            if gs.startswith('__IO') or gs.startswith('__I') or gs.startswith('__O'):
+                register_name = rname[:-1]
+            else:
+                register_name = w[1][:-1]
 
-            p_name = w[name_ndx][:-1] if gs.startswith('__IO') or gs.startswith('__I') or gs.startswith('__O') \
-                else w[1][:-1] if p_size != 'X' else w[1][:-1]
-
-            if p_size == 'X':
-                p_size = w[0]
+            if register_size == 'X':
+                register_size = w[0]
 
             gc = re.findall(r'/\*\s*(.*?)\s*\*/', gs)
-            p_comment = gc[0].lstrip('!').lstrip('<').lstrip() if len(gc) > 0 else ''
+            register_comment = gc[0].lstrip('!').lstrip('<').lstrip() if len(gc) > 0 else ''
 
-            t_list.append([p_name, p_size, p_comment])
+            t_list.append([register_name, register_size, register_comment])
 
         yield [gx[1], '0x' + '0' * 8, t_list]
 
@@ -721,9 +723,10 @@ if __name__ == '__main__':
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
-    parser.add_argument('-D', '--define', nargs='+', help="add #define MACRO at the end")
+    parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
     parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
-    parser.add_argument('-F', '--footer', nargs='+', help="add strings to footer")
+    parser.add_argument('-E', '--peripheral_enable', nargs='+', help="add _EN MACRO to the footer")
+    parser.add_argument('-F', '--footer', nargs='+', help="add strings to the footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
@@ -867,7 +870,21 @@ if __name__ == '__main__':
         if args.header:
             stout = f'{n.join(args.header)}{n * 2}{stout}'
 
-        stout = f'/* This code was created using stm32cgen. It is intended to run on {args.cpu} microcontroller.' + \
+        if args.define:
+            ndx = 0
+            def_str = '\n'
+            while len(args.define) > ndx:
+                def_str += f'#define {args.define[ndx]}'.ljust(22)
+                ndx += 1
+                if ndx == len(args.define):
+                    break
+                def_str += indent * 4 + args.define[ndx] + '\n'
+                ndx += 1
+
+            stout = def_str + '\n' + stout
+
+        stout = f'{n}/* This code was created using stm32cgen. ' + \
+                f'It is intended to run on {args.cpu} microcontroller.' + \
                 f' */{n * 2}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
@@ -879,15 +896,15 @@ if __name__ == '__main__':
         if not args.direct:
             stout += f'{n.join(tblock)}{n}'
 
-        if args.define:
+        if args.peripheral_enable:
             ndx = 0
             stout += '\n'
-            while len(args.define) > ndx:
-                stout += '#define ' + args.define[ndx]
+            while len(args.peripheral_enable) > ndx:
+                stout += '#define ' + args.peripheral_enable[ndx] + '_EN'
                 ndx += 1
-                if ndx == len(args.define):
+                if ndx == len(args.peripheral_enable):
                     break
-                stout += indent * 4 + args.define[ndx] + '\n'
+                stout += indent * 4 + args.peripheral_enable[ndx] + '\n'
                 ndx += 1
 
         if args.footer:
