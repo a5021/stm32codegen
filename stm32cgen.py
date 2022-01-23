@@ -883,9 +883,11 @@ if __name__ == '__main__':
 
             stout = def_str + '\n' + stout
 
+        h_indent = indent if (args.mix or args.direct) and not args.function else ''
+
         stout = f'{n}/* This code was created using stm32cgen. ' + \
                 f'It is intended to run on {args.cpu} microcontroller.' + \
-                f' */{n * 2}{stout.rstrip()}'
+                f' */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
