@@ -461,12 +461,12 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
 def make_init_func(func_name, func_body, header='', footer=''):
     hdr = ftr = ''
-    if header != '':
-        hdr = header + '\n\n'
-    if footer != '':
-        ftr = '\n\n' + ftr
+    if header:
+        hdr = indent + '\n'.join(header) + '\n\n'
+    if footer:
+        ftr = '\n\n' + indent + '\n'.join(footer) + '\n'
 
-    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{ftr}{func_body}{hdr}\n}}'
+    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}{func_body}{ftr}\n}}'
 
 
 def make_h_module(module_name, module_body):
@@ -741,6 +741,8 @@ if __name__ == '__main__':
     parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
     parser.add_argument('-m', '--module', help="produce output in form of a header file")
     parser.add_argument('-f', '--function', help="place code into a function")
+    parser.add_argument('--function-header', nargs='+', help="add string to the top of function")
+    parser.add_argument('--function-footer', nargs='+', help="add string to the bottom of function")
     parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
     parser.add_argument('-r', '--register', nargs='+', help="process the registers specified")
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
@@ -863,7 +865,13 @@ if __name__ == '__main__':
         init_block = init_block.strip('\n')
 
         if args.function:
-            stout = f'{def_block}{n * 3}{make_init_func(args.function, init_block)}'.strip(n)
+            fheader = ffooter = []
+            if args.function_header:
+                fheader = args.function_header
+            if args.function_footer:
+                ffooter = args.function_footer
+
+            stout = f'{def_block}{n * 3}{make_init_func(args.function, init_block, fheader, ffooter)}'.strip(n)
         else:
             stout = f'{def_block}{n * 2}{init_block}'
 
