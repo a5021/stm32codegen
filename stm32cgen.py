@@ -36,13 +36,25 @@ indent = 2 * ' '
 
 def_set = set()
 
+irq_list = []
+
+
+def get_irq_list(s):
+    m = re.findall(r'(\w*_IRQn).*=.*?([- ]\d+).*/\*(.*)\*/', s, re.MULTILINE)
+    irq = []
+    for xm in m:
+        if len(xm) > 2:
+            irq.append([xm[0], xm[1], xm[2].strip(' !<')])
+
+    return irq
+
 
 def get_cmsis_header_file(hdr_name, fetch=True, save=False):
     txt = read_cmsis_header_file(hdr_name, fetch, save)
     if not txt:
         return ''
 
-    global macro_definition, peripheral, uniq_type, uniq_addr, defined_type
+    global macro_definition, peripheral, uniq_type, uniq_addr, defined_type, irq_list
     macro_definition = parse_macro_def(txt)
 
     typedef_list = []
@@ -62,6 +74,8 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
         register_dic[xg[0]] = xg[2]
 
     defined_type = [zg[0] for zg in temp_list]
+
+    irq_list = get_irq_list(txt)
 
     return txt
 
