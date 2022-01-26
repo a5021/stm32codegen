@@ -758,6 +758,7 @@ if __name__ == '__main__':
     parser.add_argument('--function-header', nargs='+', help="add string to the top of function")
     parser.add_argument('--function-footer', nargs='+', help="add string to the bottom of function")
     parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
+    parser.add_argument('-q', '--irq', action="store_true", help="irq property")
     parser.add_argument('-r', '--register', nargs='+', help="process the registers specified")
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
     parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
@@ -938,6 +939,13 @@ if __name__ == '__main__':
             stout = make_h_module(args.module, stout)
 
         print(stout)
+
+    else:
+        if args.irq:
+            for xi in irq_list:
+                print(f'{xi[0]}, {xi[1]}, {xi[2]}')
+
+            print(f'\nTotal {len(irq_list)} IRQs.')
 
     if len(sys.argv) < 4 and args.cpu != '':
         for x in peripheral:
