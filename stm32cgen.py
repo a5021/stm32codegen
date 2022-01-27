@@ -44,7 +44,17 @@ def get_irq_list(s):
     irq = []
     for xm in m:
         if len(xm) > 2:
-            irq.append([xm[0], xm[1], xm[2].strip(' !<')])
+            no = int(xm[1])
+            irq_handler = xm[0].replace('_IRQn', '_IRQHandler')
+            if no < 0:
+                s01 = xm[0]
+                s01 = s01.replace('NonMaskableInt', 'NMI')
+                s01 = s01.replace('MemoryManagement', 'MemManage')
+                s01 = s01.replace('SVCall', 'SVC')
+                s01 = s01.replace('DebugMonitor', 'DebugMon')
+                irq_handler = s01.replace('_IRQn', '_Handler')
+
+            irq.append([xm[0], irq_handler, xm[1], xm[2].strip(' !<')])
 
     return irq
 
@@ -943,7 +953,7 @@ if __name__ == '__main__':
     else:
         if args.irq:
             for xi in irq_list:
-                print(f'{xi[0]}, {xi[1]}, {xi[2]}')
+                print(f'{xi[0]} / {xi[1]}, {xi[2]}, {xi[3]}')
 
             print(f'\nTotal {len(irq_list)} IRQs.')
 
