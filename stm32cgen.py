@@ -950,14 +950,13 @@ if __name__ == '__main__':
 
         print(stout)
 
-    else:
-        if args.irq:
-            for xi in irq_list:
-                print(f'{xi[0]} / {xi[1]}, {xi[2]}, {xi[3]}')
+    elif args.irq:
+        for xi in irq_list:
+            print(f'{xi[0]} / {xi[1]}, {xi[2]}, {xi[3]}')
 
-            print(f'\nTotal {len(irq_list)} IRQs.')
+        print(f'\nTotal {len(irq_list)} IRQs.')
 
-    if len(sys.argv) < 4 and args.cpu != '':
+    elif len(sys.argv) < 4 and args.cpu != '':
         for x in peripheral:
             print(x[1].ljust(15), x[0], x[2][:-1], '"' + x[3] + '"')
 
