@@ -907,11 +907,20 @@ if __name__ == '__main__':
             ndx = 0
             def_str = '\n'
             while len(args.define) > ndx:
-                def_str += f'#define {args.define[ndx]}'.ljust(22)
+                if args.define[ndx] != '':
+                    def_str += f'#define {args.define[ndx]}'.ljust(22)
+                else:
+                    def_str += '\n'
+                    ndx += 1
+                    continue
+
                 ndx += 1
                 if ndx == len(args.define):
                     break
-                def_str += indent * 4 + args.define[ndx] + '\n'
+                if args.define[ndx] != '' and args.define[ndx].strip() == '':
+                    def_str = def_str.rstrip() + '\n'
+                else:
+                    def_str += indent * 4 + args.define[ndx] + '\n'
                 ndx += 1
 
             stout = def_str + '\n' + stout
@@ -952,7 +961,7 @@ if __name__ == '__main__':
 
     elif args.irq:
         for xi in irq_list:
-            print(f'{xi[0]} / {xi[1]}, {xi[2]}, {xi[3]}')
+            print(f'{xi[0]}, {xi[1]}, {xi[2]}, {xi[3]}')
 
         print(f'\nTotal {len(irq_list)} IRQs.')
 
