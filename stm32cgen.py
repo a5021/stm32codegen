@@ -927,8 +927,8 @@ if __name__ == '__main__':
 
         h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-        stout = f'{n}/* This code was created using stm32cgen. ' + \
-                f'It is intended to run on {args.cpu} microcontroller.' + \
+        stout = f'{n}/* This code was created using stm32cgen and ' + \
+                f'is intended to run on {args.cpu} microcontroller.' + \
                 f' */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
@@ -961,7 +961,7 @@ if __name__ == '__main__':
 
     elif args.irq:
         for xi in irq_list:
-            print(f'{xi[0]}, {xi[1]}, {xi[2]}, {xi[3]}')
+            print((xi[0] + ',').ljust(25), (xi[1] + ',').ljust(30), (xi[2] + ',').ljust(5), xi[3])
 
         print(f'\nTotal {len(irq_list)} IRQs.')
 
