@@ -944,11 +944,11 @@ if __name__ == '__main__':
             ndx = 0
             stout += '\n'
             while len(args.peripheral_enable) > ndx:
-                stout += '#define ' + args.peripheral_enable[ndx] + '_EN'
+                stout += f'#define {args.peripheral_enable[ndx]}_EN'
                 ndx += 1
                 if ndx == len(args.peripheral_enable):
                     break
-                stout += indent * 4 + args.peripheral_enable[ndx] + '\n'
+                stout += f'{indent * 4}{args.peripheral_enable[ndx]}\n'
                 ndx += 1
 
         if args.footer:
@@ -967,7 +967,7 @@ if __name__ == '__main__':
 
     elif len(sys.argv) < 4 and args.cpu != '':
         for x in peripheral:
-            print(x[1].ljust(15), x[0], x[2][:-1], '"' + x[3] + '"')
+            print(f'{x[1].ljust(15)} {x[0]}  {x[2][:-1].ljust(20)} "{x[3]}"')
 
         print()
 
