@@ -749,7 +749,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
     parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
-    parser.add_argument('-E', '--peripheral_enable', nargs='+', help="add _EN MACRO to the footer")
+    parser.add_argument('-E', '--peripheral-enable', nargs='+', help="add _EN MACRO to the footer")
     parser.add_argument('-F', '--footer', nargs='+', help="add strings to the footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
@@ -944,11 +944,12 @@ if __name__ == '__main__':
             ndx = 0
             stout += '\n'
             while len(args.peripheral_enable) > ndx:
-                stout += f'#define {args.peripheral_enable[ndx]}_EN'
+                stout += f'#define {args.peripheral_enable[ndx]}_EN'.ljust(32)
                 ndx += 1
                 if ndx == len(args.peripheral_enable):
+                    stout = stout.rstrip()
                     break
-                stout += f'{indent * 4}{args.peripheral_enable[ndx]}\n'
+                stout += f'{args.peripheral_enable[ndx]}\n'
                 ndx += 1
 
         if args.footer:
