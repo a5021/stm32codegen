@@ -936,6 +936,12 @@ if __name__ == '__main__':
         if len(tb) > 1:
             tblock = [st for st in tblock if '#if 0' not in st] + [tb[-1]]
 
+        if '0' == cpu_name[0] or 'L0' == cpu_name[0:2] or 'G0' == cpu_name[0:2]:
+            for ind, xa in enumerate(tblock, 1):
+                if 'ADC1_EN' in xa:
+                    tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
+                    break
+
         stout += f'{n * 2}'
         if not args.direct:
             stout += f'{n.join(tblock)}{n}'
