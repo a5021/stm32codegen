@@ -652,10 +652,10 @@ def get_register_property(reg_name):
 
 def get_register_list(peripheral_property):
     register_address = 0
-    for xa in register_dic[peripheral_property[2]]:
-        for reg_name, reg_offs in get_register_property(xa):
+    for pp in register_dic[peripheral_property[2]]:
+        for reg_name, reg_offs in get_register_property(pp):
             if 'RESERVED' not in reg_name.upper():
-                yield [reg_name, xa[2], f'0x{int(peripheral_property[1], 16) + register_address:X}']
+                yield [reg_name, pp[2], f'0x{int(peripheral_property[1], 16) + register_address:X}']
 
             register_address += int(reg_offs)
 
@@ -691,9 +691,9 @@ def_sort_list = [
     ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
     ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'), ('IER', 'CGR'),
     ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
-    ('_SR', '_U10'), ('AHBENR', 'A50'), ('AHB1ENR', 'A51'), ('AHB2ENR', 'A52'), ('AHB3ENR', 'A53'),
-    ('APB1ENR', 'A60'), ('APB2ENR', 'A70'), ('LCD_CLR', 'LCD_U20'), ('LCD_RAM_10', 'LCD_RAM_A'),
-    ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
+    ('_SR', '_U10'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'), ('AHB3ENR', 'A40'),
+    ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'), ('LCD_CLR', 'LCD_U20'),
+    ('LCD_RAM_10', 'LCD_RAM_A'), ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
     ('LCD_RAM_14', 'LCD_RAM_E'), ('LCD_RAM_15', 'LCD_RAM_F'), ('LPTIM', 'XTIM'), ('QUADSPI', 'XSPI'),
     ('ADC123', 'ADCT'), ('ADC12', 'ADCU'), ('ADC1_2', 'ADCU'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
@@ -701,9 +701,10 @@ def_sort_list = [
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
-    ('EGR', 'AS0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'),
-    ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'), ('DMAR', 'U40'), ('BDTR', 'U60'),
-    ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
+    ('EGR', 'AS0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
+    ('AHB3ENR', 'A40'), ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'),
+    ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'), ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'),
+    ('DMAR', 'U40'), ('BDTR', 'U60'), ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
 ]
 
 
