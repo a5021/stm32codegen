@@ -859,14 +859,27 @@ if __name__ == '__main__':
 
                 def_set = set()
 
-            if len(enabler) != 0 and args.function:
+            if enabler and args.function:
                 x_out = ''
                 for cnt, en in enumerate(sorted(enabler), start=1):
                     x_out += f'({en} != 0) || '
                     if cnt % 5 == 0:
                         x_out += f'\\\n{indent * 3}'
 
+                if 'DMA' in enabler[0]:
+                    x_out = ''
+                    if 'DMA1_Channel1_EN' in enabler:
+                        x_out = 'DMA1_EN'
+                    if 'DMA2_Channel1_EN' in enabler:
+                        if '' != x_out:
+                            x_out += ' || DMA2_EN'
+                        else:
+                            x_out = 'DMA2_EN'
+
+                    x_out += '   '
+
                 x_out = f'#if 0\n{indent}#if {x_out[:-3]}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
+
                 tblock.append(x_out)
 
         def_block = init_block = ''
@@ -937,11 +950,11 @@ if __name__ == '__main__':
         if len(tb) > 1:
             tblock = [st for st in tblock if '#if 0' not in st] + [tb[-1]]
 
-        if '0' == cpu_name[0] or 'L0' == cpu_name[0:2] or 'G0' == cpu_name[0:2]:
             for ind, xa in enumerate(tblock, 1):
-                if 'ADC1_EN' in xa:
-                    tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
-                    break
+                if '0' == cpu_name[0] or 'L0' == cpu_name[0:2] or 'G0' == cpu_name[0:2]:
+                    if 'ADC1_EN' in xa:
+                        tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
+                        break
 
         stout += f'{n * 2}'
         if not args.direct:
