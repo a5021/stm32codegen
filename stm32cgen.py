@@ -801,6 +801,9 @@ if __name__ == '__main__':
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
+    adcen = '_ADCEN' in s_data
+    dmaen = '_DMAEN' in s_data
+
     if not s_data:
         print(f'unable to get data for "{args.cpu}"')
         exit()
@@ -947,14 +950,17 @@ if __name__ == '__main__':
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
+
         if len(tb) > 1:
             tblock = [st for st in tblock if '#if 0' not in st] + [tb[-1]]
 
-            for ind, xa in enumerate(tblock, 1):
-                if '0' == cpu_name[0] or 'L0' == cpu_name[0:2] or 'G0' == cpu_name[0:2]:
-                    if 'ADC1_EN' in xa:
-                        tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
-                        break
+        for ind, xa in enumerate(tblock, 1):
+            if 'ADC1_EN' in xa and adcen:
+                tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
+                break
+            if 'DMA1_Channel1_EN' in xa and dmaen:
+                tblock.insert(len(tblock) - 1, '#define DMA_EN      DMA1_EN\n')
+                break
 
         stout += f'{n * 2}'
         if not args.direct:
