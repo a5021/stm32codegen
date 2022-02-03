@@ -456,12 +456,12 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
 
                 if not args.light:
-                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                        + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
-                        + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
+                        f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
+                        f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
                 else:
-                    assign_block = f'{indent}#if {def_name} != 0\n' \
-                        + f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent}#endif\n'
+                    assign_block = f'{indent}#if {def_name} != 0\n'\
+                        f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent}#endif\n'
 
             else:
                 assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
@@ -470,9 +470,9 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
-                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                    + f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
-                    + f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
+                    f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
+                    f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
             else:
                 assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12)\
                              + f' {reg_comment}\n{indent}#endif\n'
@@ -496,7 +496,7 @@ def make_init_func(func_name, func_body, header='', footer=''):
 def make_h_module(module_name, module_body):
     mn = module_name.upper()
     return f'#ifndef __{mn}_H__\n#define __{mn}_H__\n\n#ifdef __cplusplus\n  extern "C" {{\n#endif\n\n'\
-           + f'{module_body}\n#ifdef __cplusplus\n  }}\n#endif /* __cplusplus */\n' + f'#endif /* __{mn}_H__ */\n'
+           f'{module_body}\n#ifdef __cplusplus\n  }}\n#endif /* __cplusplus */\n' + f'#endif /* __{mn}_H__ */\n'
 
 
 def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
@@ -801,8 +801,10 @@ if __name__ == '__main__':
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
-    adcen = '_ADCEN' in s_data
-    dmaen = '_DMAEN' in s_data
+    adcen = 'ENR_ADCEN' in s_data
+    dmaen = 'ENR_DMAEN' in s_data
+    dma1en = 'ENR_DMA1EN' in s_data
+    dma2en = 'ENR_DMA2EN' in s_data
 
     if not s_data:
         print(f'unable to get data for "{args.cpu}"')
@@ -870,10 +872,31 @@ if __name__ == '__main__':
                         x_out += f'\\\n{indent * 3}'
 
                 if 'DMA' in enabler[0]:
+                    if dmaen:
+                        tblock.append(f'#define DMA_EN (\\\n{indent}{x_out[:-3].replace(indent * 3, indent)}\\\n)\n')
+                    elif dma1en and not dma2en:
+                        tblock.append(f'#define DMA1_EN (\\\n{indent}{x_out[:-3].replace(indent * 3, indent)}\\\n)\n')
+                    else:
+                        dma_device = [[], [], [], [], [], []]
+                        dma_list = ['DMA1', 'DMA2', 'DMAMUX1', 'DMAMUX2', 'BDMA', 'MDMA']
+
+                        for en in sorted(enabler):
+                            for ndx1 in range(len(dma_list)):
+                                if en.startswith(dma_list[ndx1]):
+                                    dma_device[ndx1].append(en)
+
+                        for ndx1 in range(len(dma_list)):
+                            st = ''
+                            for cnt, en in enumerate(sorted(dma_device[ndx1]), start=1):
+                                st += f'({en} != 0) || '
+                                if cnt % 4 == 0:
+                                    st += f'\\\n{indent * 3}'
+                            tblock.append(f'#define {dma_list[ndx1]}_EN (\\\n{indent}{st[:-3].replace(indent * 3, indent)}\\\n)\n')
+
                     x_out = ''
-                    if 'DMA1_Channel1_EN' in enabler:
+                    if 'DMA1_Channel1_EN' in enabler or 'DMA1_Stream1_EN' in enabler:
                         x_out = 'DMA1_EN'
-                    if 'DMA2_Channel1_EN' in enabler:
+                    if 'DMA2_Channel1_EN' in enabler or 'DMA2_Stream1_EN' in enabler:
                         if '' != x_out:
                             x_out += ' || DMA2_EN'
                         else:
@@ -944,8 +967,8 @@ if __name__ == '__main__':
 
         h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-        stout = f'{n}/* This code was created using stm32cgen and ' + \
-                f'is intended to run on {args.cpu} microcontroller.' + \
+        stout = f'{n}/* This code was created using stm32cgen and '\
+                f'is intended to run on {args.cpu} microcontroller.'\
                 f' */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
@@ -957,9 +980,6 @@ if __name__ == '__main__':
         for ind, xa in enumerate(tblock, 1):
             if 'ADC1_EN' in xa and adcen:
                 tblock.insert(ind, '#define ADC_EN      ADC1_EN\n')
-                break
-            if 'DMA1_Channel1_EN' in xa and dmaen:
-                tblock.insert(len(tblock) - 1, '#define DMA_EN      DMA1_EN\n')
                 break
 
         stout += f'{n * 2}'
