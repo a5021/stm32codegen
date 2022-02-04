@@ -330,7 +330,7 @@ def get_init_block(src, target):
         if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
             r_name[0] = 'DMA'
 
-        c_set = list(get_reg_set(r_name[0] + '_' + r_name[1] + '_', macro_definition))
+        c_set = list(get_reg_set(f'{r_name[0]}_{r_name[1]}_', macro_definition))
 
         for dx in c_set:
             for dy in range(len(max_field_len)):
@@ -370,7 +370,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 
     if bit_def:
         ms = bit_def[0][0].split('_')[0:2]
-        bit_def_base = '_'.join(ms) + '_'
+        bit_def_base = f'{"_".join(ms)}_'
 
     rn = reg_name.split('->')[1]
 
@@ -405,10 +405,10 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                     bf = lx[0].split('_')
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
-                        bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
+                        bitfield_enable = f'{bf[-1][:-2]}_EN'.ljust(10, ' ')
 
-            s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}' \
-                  + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
+            s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
+                  f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
 
     else:
         b_ndx = args.direct_init.index(rn)
@@ -456,29 +456,29 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
 
                 if not args.light:
-                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                                   f'{indent * 3}{reg_name} = {def_name};'.ljust(
-                        lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
-                                f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
+                                   f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + \
+                                   f' {reg_comment}\n{indent * 2}#endif\n'\
+                                   f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
                 else:
-                    assign_block = f'{indent}#if {def_name} != 0\n' \
-                                   f'{indent * 2}{reg_name} = {def_name};'.ljust(
-                        lj12) + f' {reg_comment}\n{indent}#endif\n'
+                    assign_block = f'{indent}#if {def_name} != 0\n'\
+                                   f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + \
+                                   f' {reg_comment}\n{indent}#endif\n'
 
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
-                               + f' {reg_comment}\n{indent}#endif'
+                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) +\
+                               f' {reg_comment}\n{indent}#endif'
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
-                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
-                               f'{indent * 3}{reg_name} = {def_name};'.ljust(
-                    lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
-                            f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
+                               f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) +\
+                               f' {reg_comment}\n{indent * 2}#endif\n'\
+                               f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
-                               + f' {reg_comment}\n{indent}#endif\n'
+                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) +\
+                               f' {reg_comment}\n{indent}#endif\n'
 
         if args.undef is True:
             assign_block += f'\n{indent}#undef {def_name}\n'
@@ -489,9 +489,9 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
 def make_init_func(func_name, func_body, header='', footer=''):
     hdr = ftr = ''
     if header:
-        hdr = indent + '\n'.join(header) + '\n\n'
+        hdr = f'{indent}\n'.join(header) + '\n\n'
     if footer:
-        ftr = '\n\n' + indent + '\n'.join(footer) + '\n'
+        ftr = f'\n\n{indent}\n'.join(footer) + '\n'
 
     return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}{func_body}{ftr}\n}}'
 
@@ -876,22 +876,26 @@ if __name__ == '__main__':
 
                 if 'DMA' in enabler[0]:
 
-                    dma_device = [[], [], [], [], [], []]
-                    dma_list = ['DMA1', 'DMA2', 'DMAMUX1', 'DMAMUX2', 'BDMA', 'MDMA']
+                    dma_register = [[], [], [], [], [], [], [], []]
+                    dma_peripheral = ['DMA1', 'DMA2', 'DMAMUX1', 'DMAMUX2', 'BDMA1', 'BDMA2', 'BDMA', 'MDMA']
 
                     for en in sorted(enabler):
-                        for ndx1 in range(len(dma_list)):
-                            if en.startswith(dma_list[ndx1]):
-                                dma_device[ndx1].append(en)
+                        for ndx1 in range(len(dma_peripheral)):
+                            if en.split('_')[0] == dma_peripheral[ndx1]:
+                                dma_register[ndx1].append(en)
 
-                    for ndx1 in range(len(dma_list)):
-                        if dma_device[ndx1]:
+                    if dma_register[5]:
+                        # if BDMA2 register is present the BDMA register data is irrelevant
+                        dma_register[6] = []
+
+                    for ndx1 in range(len(dma_peripheral)):
+                        if dma_register[ndx1]:
                             st = ''
-                            for cnt, en in enumerate(sorted(dma_device[ndx1]), start=1):
+                            for cnt, en in enumerate(sorted(dma_register[ndx1]), start=1):
                                 st += f'({en} != 0) || '
-                                if cnt % 4 == 0:
+                                if cnt % 4 == 0 and len(dma_register[ndx1]) != cnt:
                                     st += f'\\\n{indent * 3}'
-                            tblock.append(f'#define {dma_list[ndx1]}_EN (\\\n'
+                            tblock.append(f'#define {dma_peripheral[ndx1]}_EN ( \\\n'
                                           f'{indent}{st[:-3].replace(indent * 3, indent)}\\\n)\n')
 
                     x_out = ''
