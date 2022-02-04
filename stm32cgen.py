@@ -203,7 +203,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
 
         if es != '':
             q = hex(es).split('x')
-            lx[1] = '0x' + q[1].upper().rjust(8, '0')
+            lx[1] = f'0x{q[1].upper().rjust(8, "0")}'
 
         if '<<' in lx[1]:
             lx[1] = re.sub(r'0x(\d<<)', '\\1', lx[1], 0).replace('<<', ' << ')  # strip hex prefix: '0x1' --> '1'
@@ -243,7 +243,7 @@ def is_num_ended(a_str):
 
     for ax in range(len(a_str) - 1, -1, -1):
         if a_str[ax] not in '1234567890':
-            return a_str[:ax+1], a_str[ax+1:]
+            return a_str[:ax + 1], a_str[ax + 1:]
 
     return '', a_str
 
@@ -407,8 +407,8 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
                         bitfield_enable = (bf[-1][:-2] + '_EN').ljust(10, ' ')
 
-            s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
-                + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
+            s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}' \
+                  + f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
 
     else:
         b_ndx = args.direct_init.index(rn)
@@ -456,26 +456,29 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
 
                 if not args.light:
-                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
-                        f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
-                        f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
+                                   f'{indent * 3}{reg_name} = {def_name};'.ljust(
+                        lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
+                                f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
                 else:
-                    assign_block = f'{indent}#if {def_name} != 0\n'\
-                        f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent}#endif\n'
+                    assign_block = f'{indent}#if {def_name} != 0\n' \
+                                   f'{indent * 2}{reg_name} = {def_name};'.ljust(
+                        lj12) + f' {reg_comment}\n{indent}#endif\n'
 
             else:
                 assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
-                    + f' {reg_comment}\n{indent}#endif'
+                               + f' {reg_comment}\n{indent}#endif'
 
         else:
             bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
-                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
-                    f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + f' {reg_comment}\n{indent * 2}#endif\n'\
-                    f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n' \
+                               f'{indent * 3}{reg_name} = {def_name};'.ljust(
+                    lj12) + f' {reg_comment}\n{indent * 2}#endif\n' \
+                            f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12)\
-                             + f' {reg_comment}\n{indent}#endif\n'
+                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) \
+                               + f' {reg_comment}\n{indent}#endif\n'
 
         if args.undef is True:
             assign_block += f'\n{indent}#undef {def_name}\n'
@@ -495,7 +498,7 @@ def make_init_func(func_name, func_body, header='', footer=''):
 
 def make_h_module(module_name, module_body):
     mn = module_name.upper()
-    return f'#ifndef __{mn}_H__\n#define __{mn}_H__\n\n#ifdef __cplusplus\n  extern "C" {{\n#endif\n\n'\
+    return f'#ifndef __{mn}_H__\n#define __{mn}_H__\n\n#ifdef __cplusplus\n  extern "C" {{\n#endif\n\n' \
            f'{module_body}\n#ifdef __cplusplus\n  }}\n#endif /* __cplusplus */\n' + f'#endif /* __{mn}_H__ */\n'
 
 
@@ -690,7 +693,7 @@ def_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('ISR', 'VV0'), ('UART', 'USART'), ('ISR', 'VV0'), ('DR', 'WR'),
     ('ICR', 'VV1'), ('CNT', 'WW1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'),
     ('EGR', 'AS0'), ('MODER', 'AA0'), ('BRR', 'AB0'), ('_CR', '_C0'), ('DIER', 'C10'), ('IER', 'CGR'),
-    ('RCR',  'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
+    ('RCR', 'C20'), ('CCMR', 'C30'), ('CCER', 'C40'), ('SMCR', 'C50'), ('BDTR', 'U00'),
     ('_SR', '_U10'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'), ('AHB3ENR', 'A40'),
     ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'), ('LCD_CLR', 'LCD_U20'),
     ('LCD_RAM_10', 'LCD_RAM_A'), ('LCD_RAM_11', 'LCD_RAM_B'), ('LCD_RAM_12', 'LCD_RAM_C'), ('LCD_RAM_13', 'LCD_RAM_D'),
@@ -864,7 +867,7 @@ if __name__ == '__main__':
 
                 def_set = set()
 
-            if enabler and args.function:
+            if enabler and j_sorted and args.function:
                 x_out = ''
                 for cnt, en in enumerate(sorted(enabler), start=1):
                     x_out += f'({en} != 0) || '
@@ -872,26 +875,24 @@ if __name__ == '__main__':
                         x_out += f'\\\n{indent * 3}'
 
                 if 'DMA' in enabler[0]:
-                    if dmaen:
-                        tblock.append(f'#define DMA_EN (\\\n{indent}{x_out[:-3].replace(indent * 3, indent)}\\\n)\n')
-                    elif dma1en and not dma2en:
-                        tblock.append(f'#define DMA1_EN (\\\n{indent}{x_out[:-3].replace(indent * 3, indent)}\\\n)\n')
-                    else:
-                        dma_device = [[], [], [], [], [], []]
-                        dma_list = ['DMA1', 'DMA2', 'DMAMUX1', 'DMAMUX2', 'BDMA', 'MDMA']
 
-                        for en in sorted(enabler):
-                            for ndx1 in range(len(dma_list)):
-                                if en.startswith(dma_list[ndx1]):
-                                    dma_device[ndx1].append(en)
+                    dma_device = [[], [], [], [], [], []]
+                    dma_list = ['DMA1', 'DMA2', 'DMAMUX1', 'DMAMUX2', 'BDMA', 'MDMA']
 
+                    for en in sorted(enabler):
                         for ndx1 in range(len(dma_list)):
+                            if en.startswith(dma_list[ndx1]):
+                                dma_device[ndx1].append(en)
+
+                    for ndx1 in range(len(dma_list)):
+                        if dma_device[ndx1]:
                             st = ''
                             for cnt, en in enumerate(sorted(dma_device[ndx1]), start=1):
                                 st += f'({en} != 0) || '
                                 if cnt % 4 == 0:
                                     st += f'\\\n{indent * 3}'
-                            tblock.append(f'#define {dma_list[ndx1]}_EN (\\\n{indent}{st[:-3].replace(indent * 3, indent)}\\\n)\n')
+                            tblock.append(f'#define {dma_list[ndx1]}_EN (\\\n'
+                                          f'{indent}{st[:-3].replace(indent * 3, indent)}\\\n)\n')
 
                     x_out = ''
                     if 'DMA1_Channel1_EN' in enabler or 'DMA1_Stream1_EN' in enabler:
@@ -967,8 +968,8 @@ if __name__ == '__main__':
 
         h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-        stout = f'{n}/* This code was created using stm32cgen and '\
-                f'is intended to run on {args.cpu} microcontroller.'\
+        stout = f'{n}/* This code was created using stm32cgen and ' \
+                f'is intended to run on {args.cpu} microcontroller.' \
                 f' */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
