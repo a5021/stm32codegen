@@ -17,7 +17,7 @@ max_field_len = [0, 0, 0]
 macro_definition = []
 
 # typedef list for all peripherals like 'TIM_TypeDef', 'USART_TypeDef' etc.
-defined_type = []
+typedef_list = []
 
 # complete list of all peripherals in the format of:
 # 'HEX_ADDRESS',   'NAME',     'TYPEDEF',         'COMMENT'
@@ -34,7 +34,8 @@ uniq_addr = set()
 
 indent = 2 * ' '
 
-def_set = set()
+
+init_macro_name = set()     # set of generated macro names
 
 irq_list = []
 
@@ -64,26 +65,26 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
     if not txt:
         return ''
 
-    global macro_definition, peripheral, uniq_type, uniq_addr, defined_type, irq_list
+    global macro_definition, peripheral, uniq_type, uniq_addr, typedef_list, irq_list
     macro_definition = parse_macro_def(txt)
 
-    typedef_list = []
-    for xg in macro_definition:
-        if 'TypeDef*' in xg[2] and 'IS_' != xg[0][:3]:
-            uniq_type.add(xg[2][:-1])
-            uniq_addr.add(xg[1])
-            typedef_list.append([xg[1], xg[0], xg[2], xg[3]])
+    typedef = []
+    for peripheral_data in macro_definition:
+        if 'TypeDef*' in peripheral_data[2] and 'IS_' != peripheral_data[0][:3]:
+            uniq_type.add(peripheral_data[2][:-1])
+            uniq_addr.add(peripheral_data[1])
+            typedef.append([peripheral_data[1], peripheral_data[0], peripheral_data[2], peripheral_data[3]])
 
-    p_list = sorted(typedef_list)
+    p_list = sorted(typedef)
 
     peripheral = [p_list[xg] for xg in range(len(p_list)) if xg not in get_dupe_list(p_list)]
 
-    temp_list = list(get_type_list(txt))
+    peripheral_list = list(get_type_list(txt))
 
-    for xg in temp_list:
-        register_dic[xg[0]] = xg[2]
+    for peripheral_data in peripheral_list:
+        register_dic[peripheral_data[0]] = peripheral_data[2]
 
-    defined_type = [zg[0] for zg in temp_list]
+    typedef_list = [zg[0] for zg in peripheral_list]
 
     irq_list = get_irq_list(txt)
 
@@ -330,9 +331,10 @@ def get_init_block(src, target):
         if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
             r_name[0] = 'DMA'
 
-        c_set = list(get_reg_set(f'{r_name[0]}_{r_name[1]}_', macro_definition))
+        # bitfield data like this: ['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001']
+        bitfield_data = list(get_reg_set(f'{r_name[0]}_{r_name[1]}_', macro_definition))
 
-        for dx in c_set:
+        for dx in bitfield_data:
             for dy in range(len(max_field_len)):
                 fl = len(dx[dy])
                 if max_field_len[dy] < fl:
@@ -342,7 +344,7 @@ def get_init_block(src, target):
                 dx[2] = dx[3]
                 dx[3] = ''
 
-        yield c_set
+        yield bitfield_data
 
 
 def ch_def_name(def_name):
@@ -366,7 +368,7 @@ def ch_def_name(def_name):
 
 def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
     s0 = bit_def_base = bitfield_block = assign_block = ''
-    global def_set
+    global init_macro_name
 
     if bit_def:
         ms = bit_def[0][0].split('_')[0:2]
@@ -442,13 +444,14 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             assign_block = f'{indent}{reg_name} = 0000;'.ljust(lj12) + f'{reg_comment}\n'
 
     else:
-        def_name = ch_def_name(reg_name.replace('->', '_').replace('[', '_').replace(']', ''))
-        def_set.add(def_name)
+        macro_name = ch_def_name(reg_name.replace('->', '_').replace('[', '_').replace(']', ''))
+        init_macro_name.add(macro_name)
         flen = (9 - ((not idn) * 2))
 
         if bitfield_block != '':
             s_pos = bitfield_block.find('|')
-            bitfield_block = f'{indent * idn}#define {def_name} ('.ljust(s_pos) + f'\\\n{bitfield_block}{indent * idn})'
+            bitfield_block = f'{indent * idn}#define {macro_name} ('.ljust(s_pos) +\
+                             f'\\\n{bitfield_block}{indent * idn})'
 
             if not args.mix:
                 bitfield_block += '\n'
@@ -456,32 +459,32 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             if args.undef is False:
 
                 if not args.light:
-                    assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
-                                   f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) + \
+                    assign_block = f'{indent}#if defined {macro_name}\n{indent * 2}#if {macro_name} != 0\n'\
+                                   f'{indent * 3}{reg_name} = {macro_name};'.ljust(lj12) + \
                                    f' {reg_comment}\n{indent * 2}#endif\n'\
-                                   f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                                   f'{indent}#else\n{indent * 2}#define {macro_name} 0\n{indent}#endif\n'
                 else:
-                    assign_block = f'{indent}#if {def_name} != 0\n'\
-                                   f'{indent * 2}{reg_name} = {def_name};'.ljust(lj12) + \
+                    assign_block = f'{indent}#if {macro_name} != 0\n'\
+                                   f'{indent * 2}{reg_name} = {macro_name};'.ljust(lj12) + \
                                    f' {reg_comment}\n{indent}#endif\n'
 
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) +\
+                assign_block = f'{indent}#if {macro_name} != 0\n{indent * 2}{reg_name} = {macro_name};'.ljust(lj12) +\
                                f' {reg_comment}\n{indent}#endif'
 
         else:
-            bitfield_block = f'{indent * idn}#define {def_name} '.ljust(max_field_len[0] + flen) + '0000\n'
+            bitfield_block = f'{indent * idn}#define {macro_name} '.ljust(max_field_len[0] + flen) + '0000\n'
             if not args.light:
-                assign_block = f'{indent}#if defined {def_name}\n{indent * 2}#if {def_name} != 0\n'\
-                               f'{indent * 3}{reg_name} = {def_name};'.ljust(lj12) +\
+                assign_block = f'{indent}#if defined {macro_name}\n{indent * 2}#if {macro_name} != 0\n'\
+                               f'{indent * 3}{reg_name} = {macro_name};'.ljust(lj12) +\
                                f' {reg_comment}\n{indent * 2}#endif\n'\
-                               f'{indent}#else\n{indent * 2}#define {def_name} 0\n{indent}#endif\n'
+                               f'{indent}#else\n{indent * 2}#define {macro_name} 0\n{indent}#endif\n'
             else:
-                assign_block = f'{indent}#if {def_name} != 0\n{indent * 2}{reg_name} = {def_name};'.ljust(lj12) +\
+                assign_block = f'{indent}#if {macro_name} != 0\n{indent * 2}{reg_name} = {macro_name};'.ljust(lj12) +\
                                f' {reg_comment}\n{indent}#endif\n'
 
         if args.undef is True:
-            assign_block += f'\n{indent}#undef {def_name}\n'
+            assign_block += f'\n{indent}#undef {macro_name}\n'
 
     return bitfield_block, assign_block
 
@@ -841,12 +844,12 @@ if __name__ == '__main__':
 
                 if args.undef is False:
                     x_out = f'( \\\n{indent}'
-                    for cnt, ds in enumerate(sorted(def_set), start=1):
+                    for cnt, ds in enumerate(sorted(init_macro_name), start=1):
                         x_out += f'({ds} != 0) || '
                         if cnt % 5 == 0:
                             x_out += f'\\\n{indent}'
 
-                    if len(def_set) % 5 == 0:
+                    if len(init_macro_name) % 5 == 0:
                         x_out = x_out[:-4]
 
                     if 'DMA' == name[:3] and len(name) < 6:
@@ -865,7 +868,7 @@ if __name__ == '__main__':
                         x_out = f'#define {enabler[-1]} {x_out[:-3]}'.strip() + ' \\\n)\n'
                         tblock.append(x_out)
 
-                def_set = set()
+                init_macro_name = set()
 
             if enabler and j_sorted and args.function:
                 x_out = ''
@@ -1024,5 +1027,5 @@ if __name__ == '__main__':
         print()
 
         print(f'Peripheral count: {len(peripheral)} (uniq address: {len(uniq_addr)});')
-        print(f'Unique type count: {len(uniq_type)} (from {len(defined_type)} defined);')
-        print(f'Extra: {len(list(set(defined_type) - set(uniq_type)))} {list(set(defined_type) - set(uniq_type))}')
+        print(f'Unique type count: {len(uniq_type)} (from {len(typedef_list)} defined);')
+        print(f'Extra: {len(list(set(typedef_list) - set(uniq_type)))} {list(set(typedef_list) - set(uniq_type))}')
