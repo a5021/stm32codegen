@@ -331,18 +331,20 @@ def get_init_block(src, target):
         if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
             r_name[0] = 'DMA'
 
-        # bitfield data like this: ['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001']
+        # bitfield data is a list like this: [['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001'] ... [ ... ]]
         bitfield_data = list(get_reg_set(f'{r_name[0]}_{r_name[1]}_', macro_definition))
 
-        for dx in bitfield_data:
-            for dy in range(len(max_field_len)):
-                fl = len(dx[dy])
-                if max_field_len[dy] < fl:
-                    max_field_len[dy] = fl
+        # find max length of each field
+        for bit_field in bitfield_data:
+            for fndx, field_len in enumerate(max_field_len):
+                fl = len(bit_field[fndx])
+                if field_len < fl:
+                    max_field_len[fndx] = fl
 
-            if dx[2].strip() == '':
-                dx[2] = dx[3]
-                dx[3] = ''
+            # shift field 3 into field 2 if empty
+            if bit_field[2].strip() == '':
+                bit_field[2] = bit_field[3]
+                bit_field[3] = ''
 
         yield bitfield_data
 
