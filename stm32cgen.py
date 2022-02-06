@@ -22,7 +22,7 @@ typedef_list = []
 # complete list of all peripherals in the format of:
 # 'HEX_ADDRESS',   'NAME',     'TYPEDEF',         'COMMENT'
 # ['0x40000000',   'TIM2',   'TIM_TypeDef*',  'Timer peripheral']
-peripheral = []
+peripheral_data = []
 
 # peripheral registers dictionary: { "TypeDef" : [['REGISTER NAME', 'LENGTH', 'COMMENT' ],[...], ... }
 # {'I2C_TypeDef': [['CR1', '4', ''], ['CR2', '4', ''], ['OAR1', '4', ''], ['OAR2', '4', ''], ['DR', '4', '']...]...}
@@ -79,47 +79,47 @@ class bit:
 
 
 class register:
-    def __init__(self, reg_name, reg_address, reg_bit):
-        self.data = ['', -1, []]
-        self.data[0] = reg_name
-        self.data[1] = reg_address
-        self.data[2] = reg_bit
+    def __init__(self, reg):
+
+        self.address = reg[0]
+        self.typedef = reg[1]
+        self.description = reg[2]
+        self.bit = reg[3]
 
     def set_data(self, reg_data):
-        self.data = reg_data
+        self.bit = reg_data
 
     def get_data(self):
-        return self.data
+        return self.bit
 
 
 class peripheral:
-    def __init__(self, periph_name, periph_address, periph_reg, periph_typedef, periph_descr, periph_reg_list):
-        self.data = ['', '', '', '', []]
-        self.data[0] = periph_address
-        self.data[1] = periph_name
-        self.data[2] = periph_typedef
-        self.data[3] = periph_descr
-        self.data[4] = periph_reg_list
+    def __init__(self, periph):
+        self.address = periph[0]
+        self.typedef = periph[1]
+        self.description = periph[2]
+        self.register = periph[3]
 
     def set_data(self, reg_data):
-        self.data = reg_data
+        self.register = reg_data
 
     def get_data(self):
         return self.data
 
 
 class microcontroller:
-    def __init__(self, uc_name, uc_descr, uc_periph_list):
-        self.data = ['', '', []]
-        self.data[0] = uc_name
-        self.data[1] = uc_descr
-        self.data[2] = uc_periph_list
+    def __init__(self, uc_name, uc_descr, periph_list):
+        self.name = uc_name
+        self.description = uc_descr
+        self.peripheral = periph_list
 
     def set_data(self, uc_data):
-        self.data = uc_data
+        self.name = uc_data[0]
+        self.description = uc_data[1]
+        self.peripheral = uc_data[2]
 
     def get_data(self):
-        return self.data
+        return [self.name, self.description, self.peripheral]
 
 
 bits = []
@@ -150,7 +150,7 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
     if not txt:
         return ''
 
-    global macro_definition, peripheral, uniq_type, uniq_addr, typedef_list, irq_list
+    global macro_definition, peripheral_data, uniq_type, uniq_addr, typedef_list, irq_list
     macro_definition = parse_macro_def(txt)
 
     typedef = []
@@ -162,12 +162,12 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
 
     p_list = sorted(typedef)
 
-    peripheral = [p_list[xg] for xg in range(len(p_list)) if xg not in get_dupe_list(p_list)]
+    peripheral_data = [p_list[xg] for xg in range(len(p_list)) if xg not in get_dupe_list(p_list)]
 
     peripheral_list = list(get_type_list(txt))
 
-    for peripheral_data in peripheral_list:
-        register_dic[peripheral_data[0]] = peripheral_data[2]
+    for per_data in peripheral_list:
+        register_dic[per_data[0]] = per_data[2]
 
     typedef_list = [zg[0] for zg in peripheral_list]
 
@@ -704,7 +704,7 @@ def strip_suffix(periph_name):
 def find_peripheral(periph_name):
     """ return address and typedef name of the peripheral. Example: ('TIM3', '0x40000400', 'TIM_TypeDef') """
     pn = periph_name.strip()
-    for xc in peripheral:
+    for xc in peripheral_data:
         if args.strict is False:
             if pn in xc[1]:
                 yield xc[1], xc[0], xc[2][:-1]
@@ -894,15 +894,24 @@ if __name__ == '__main__':
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
-    periph_data = []
-    for x_per in peripheral:
+    periph_data = {}
+    for x_per in peripheral_data:
         px = []
-        for y_per in x_per:
-            px.append(y_per)
+        dic_key = ''
+        r = []
+        for nx, y_per in enumerate(x_per):
+
+            if nx != 1:
+                px.append(y_per)
+            else:
+                dic_key = y_per
+
         px.append([])
-        periph_data.append(px)
+        periph_data[dic_key] = peripheral(px)
 
     uc = microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
+
+    x7 = register_dic[uc.peripheral['TIM2'].typedef[:-1]]
 
     ot = uc.get_data()
 
@@ -1120,11 +1129,11 @@ if __name__ == '__main__':
         print(f'\nTotal {len(irq_list)} IRQs.')
 
     elif len(sys.argv) < 4 and args.cpu != '':
-        for x in peripheral:
+        for x in peripheral_data:
             print(f'{x[1].ljust(15)} {x[0]}  {x[2][:-1].ljust(20)} "{x[3]}"')
 
         print()
 
-        print(f'Peripheral count: {len(peripheral)} (uniq address: {len(uniq_addr)});')
+        print(f'Peripheral count: {len(peripheral_data)} (uniq address: {len(uniq_addr)});')
         print(f'Unique type count: {len(uniq_type)} (from {len(typedef_list)} defined);')
         print(f'Extra: {len(list(set(typedef_list) - set(uniq_type)))} {list(set(typedef_list) - set(uniq_type))}')
