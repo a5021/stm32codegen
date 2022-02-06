@@ -40,6 +40,91 @@ init_macro_name = set()     # set of generated macro names
 irq_list = []
 
 
+class bit:
+    """Microcontroller's peripheral register bit class"""
+
+    def __init__(self, bit_name, bit_descr, bit_mask):
+        self.data = ['', '', -1]
+        self.data[0] = bit_name
+        self.data[1] = bit_descr
+        self.data[2] = bit_mask
+
+    def set_name(self, bit_name):
+        self.data[0] = bit_name
+        return self
+
+    def get_name(self):
+        return self.data[0]
+
+    def set_description(self, bit_descr):
+        self.data[1] = bit_descr
+        return self
+
+    def get_description(self):
+        return self.data[1]
+
+    def set_position(self, bit_mask):
+        self.data[2] = bit_mask
+        return self
+
+    def get_position(self):
+        return self.data[2]
+
+    def set_data(self, bit_data):
+        self.data = bit_data
+        return self
+
+    def get_data(self):
+        return self.data
+
+
+class register:
+    def __init__(self, reg_name, reg_address, reg_bit):
+        self.data = ['', -1, []]
+        self.data[0] = reg_name
+        self.data[1] = reg_address
+        self.data[2] = reg_bit
+
+    def set_data(self, reg_data):
+        self.data = reg_data
+
+    def get_data(self):
+        return self.data
+
+
+class peripheral:
+    def __init__(self, periph_name, periph_address, periph_reg, periph_typedef, periph_descr, periph_reg_list):
+        self.data = ['', '', '', '', []]
+        self.data[0] = periph_address
+        self.data[1] = periph_name
+        self.data[2] = periph_typedef
+        self.data[3] = periph_descr
+        self.data[4] = periph_reg_list
+
+    def set_data(self, reg_data):
+        self.data = reg_data
+
+    def get_data(self):
+        return self.data
+
+
+class microcontroller:
+    def __init__(self, uc_name, uc_descr, uc_periph_list):
+        self.data = ['', '', []]
+        self.data[0] = uc_name
+        self.data[1] = uc_descr
+        self.data[2] = uc_periph_list
+
+    def set_data(self, uc_data):
+        self.data = uc_data
+
+    def get_data(self):
+        return self.data
+
+
+bits = []
+
+
 def get_irq_list(s):
     m = re.findall(r'(\w*_IRQn).*=.*?([- ]\d+).*/\*(.*)\*/', s, re.MULTILINE)
     irq = []
@@ -808,6 +893,18 @@ if __name__ == '__main__':
         print(args)
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
+
+    periph_data = []
+    for x_per in peripheral:
+        px = []
+        for y_per in x_per:
+            px.append(y_per)
+        px.append([])
+        periph_data.append(px)
+
+    uc = microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
+
+    ot = uc.get_data()
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
