@@ -40,7 +40,7 @@ init_macro_name = set()     # set of generated macro names
 irq_list = []
 
 
-class bit:
+class Bit:
     """Microcontroller's peripheral register bit class"""
 
     def __init__(self, bit_name, bit_descr, bit_mask):
@@ -78,11 +78,11 @@ class bit:
         return self.data
 
 
-class register:
+class Register:
     def __init__(self, reg):
 
         self.address = reg[0]
-        self.typedef = reg[1]
+        self.size = reg[1]
         self.description = reg[2]
         self.bit = reg[3]
 
@@ -93,7 +93,7 @@ class register:
         return self.bit
 
 
-class peripheral:
+class Peripheral:
     def __init__(self, periph):
         self.address = periph[0]
         self.typedef = periph[1]
@@ -104,10 +104,10 @@ class peripheral:
         self.register = reg_data
 
     def get_data(self):
-        return self.data
+        return self.register
 
 
-class microcontroller:
+class Microcontroller:
     def __init__(self, uc_name, uc_descr, periph_list):
         self.name = uc_name
         self.description = uc_descr
@@ -907,13 +907,20 @@ if __name__ == '__main__':
                 dic_key = y_per
 
         px.append([])
-        periph_data[dic_key] = peripheral(px)
+        periph_data[dic_key] = Peripheral(px)
 
-    uc = microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
+    uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
 
-    x7 = register_dic[uc.peripheral['TIM2'].typedef[:-1]]
+    for p_ndx in uc.peripheral.keys():
+        r_sorted = sorted(list(get_peripheral_register_list(p_ndx)), key=sort_peripheral_by_num)
+        r = {}
+        for name, lst, in r_sorted:
+            for rg in lst:
+                r[rg[0]] = Register([rg[2], 0, rg[1], []])
 
-    ot = uc.get_data()
+        uc.peripheral[p_ndx].register = r
+
+    x8 = uc.peripheral['TIM6'].register['CR2'].address
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
