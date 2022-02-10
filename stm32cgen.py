@@ -43,11 +43,10 @@ irq_list = []
 class Bit:
     """Microcontroller's peripheral register bit class"""
 
-    def __init__(self, bit_name, bit_descr, bit_mask):
-        self.data = ['', '', -1]
-        self.data[0] = bit_name
-        self.data[1] = bit_descr
-        self.data[2] = bit_mask
+    def __init__(self, bit):
+        self.mask1 = bit[0]
+        self.mask2 = bit[1]
+        self.descr = bit[2]
 
     def set_name(self, bit_name):
         self.data[0] = bit_name
@@ -911,16 +910,40 @@ if __name__ == '__main__':
 
     uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
 
+    strict = args.strict
+    args.strict = True
     for p_ndx in uc.peripheral.keys():
         r_sorted = sorted(list(get_peripheral_register_list(p_ndx)), key=sort_peripheral_by_num)
         r = {}
         for name, lst, in r_sorted:
-            for rg in lst:
-                r[rg[0]] = Register([rg[2], 0, rg[1], []])
+            reg1 = list(lst)
+            for rg in reg1:
+                # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
+                iname = [name + '->' + rg[0]]
+                ib = list(get_init_block(s_data, iname))[0]
+                bf_dic = {}
+                for bf in ib:
+                    bit_key = bf[0].split('_')[2:][0]
+                    bf_dic[bit_key] = Bit([bf[1], bf[3], bf[2]])
+
+                r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
 
         uc.peripheral[p_ndx].register = r
 
+    b01 = []
+    s_temp = ''
+    for x1 in uc.peripheral.keys():
+        s_temp += x1 + '\n'
+        for x2 in uc.peripheral[x1].register.keys():
+            s_temp += f'          {x2}@{uc.peripheral[x1].register[x2].address}\n'
     x8 = uc.peripheral['TIM6'].register['CR2'].address
+
+    #p15_3 = list(uc.peripheral)[16]
+    #r15_3 = list(uc.peripheral[p15_3].register)[3]
+    #r2 = uc.peripheral[key5].register.keys()
+    #for x3 in get_init_block(s_data, uc.peripheral[k15_3] + '->' + r2):
+        #pass
+
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
