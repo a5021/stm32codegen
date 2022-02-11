@@ -44,37 +44,34 @@ class Bit:
     """Microcontroller's peripheral register bit class"""
 
     def __init__(self, bit):
-        self.mask1 = bit[0]
-        self.mask2 = bit[1]
-        self.descr = bit[2]
+        bl = len(bit)
+        if bl > 0:
+            self.mask1 = bit[0]
+        else:
+            self.mask1 = ''
 
-    def set_name(self, bit_name):
-        self.data[0] = bit_name
+        if bl > 1:
+            self.mask2 = bit[1]
+        else:
+            self.mask2 = ''
+
+        if bl > 2:
+            self.descr = bit[2]
+        else:
+            self.descr = ''
+
+        if bl > 3:
+            self.value = bit[3]
+        else:
+            self.value = ''
+
+    def set_bit(self):
+        self.value = '1'
         return self
 
-    def get_name(self):
-        return self.data[0]
-
-    def set_description(self, bit_descr):
-        self.data[1] = bit_descr
+    def reset_bit(self):
+        self.value = '0'
         return self
-
-    def get_description(self):
-        return self.data[1]
-
-    def set_position(self, bit_mask):
-        self.data[2] = bit_mask
-        return self
-
-    def get_position(self):
-        return self.data[2]
-
-    def set_data(self, bit_data):
-        self.data = bit_data
-        return self
-
-    def get_data(self):
-        return self.data
 
 
 class Register:
@@ -922,15 +919,16 @@ if __name__ == '__main__':
                 iname = [name + '->' + rg[0]]
                 ib = list(get_init_block(s_data, iname))[0]
                 bf_dic = {}
-                for bf in ib:
-                    bit_key = bf[0].split('_')[2:][0]
-                    bf_dic[bit_key] = Bit([bf[1], bf[3], bf[2]])
+                for bif in ib:
+                    bit_key = bif[0].split('_')[2:][0]
+                    bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
                 r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
 
         uc.peripheral[p_ndx].register = r
 
-    b01 = []
+    args.strict = strict
+
     s_temp = ''
     for x1 in uc.peripheral.keys():
         s_temp += x1 + '\n'
@@ -938,12 +936,13 @@ if __name__ == '__main__':
             s_temp += f'          {x2}@{uc.peripheral[x1].register[x2].address}\n'
     x8 = uc.peripheral['TIM6'].register['CR2'].address
 
-    #p15_3 = list(uc.peripheral)[16]
-    #r15_3 = list(uc.peripheral[p15_3].register)[3]
-    #r2 = uc.peripheral[key5].register.keys()
-    #for x3 in get_init_block(s_data, uc.peripheral[k15_3] + '->' + r2):
-        #pass
-
+    '''
+    p15_3 = list(uc.peripheral)[16]
+    r15_3 = list(uc.peripheral[p15_3].register)[3]
+    r2 = uc.peripheral[key5].register.keys()
+    for x3 in get_init_block(s_data, uc.peripheral[k15_3] + '->' + r2):
+        pass
+    '''
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
