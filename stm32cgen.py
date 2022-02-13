@@ -828,7 +828,7 @@ def sort_def_block(definition_block):
 if __name__ == '__main__':
 
     if '-V' in sys.argv or '--version' in sys.argv:
-        print('0.08c\n')
+        print('0.081a\n')
         exit()
 
     import argparse
@@ -890,42 +890,25 @@ if __name__ == '__main__':
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
-    periph_data = {}
-    for x_per in peripheral_data:
-        px = []
-        dic_key = ''
-        r = []
-        for nx, y_per in enumerate(x_per):
-
-            if nx != 1:
-                px.append(y_per)
-            else:
-                dic_key = y_per
-
-        px.append([])
-        periph_data[dic_key] = Peripheral(px)
-
-    uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
-
     strict = args.strict
     args.strict = True
-    for p_ndx in uc.peripheral.keys():
-        r_sorted = sorted(list(get_peripheral_register_list(p_ndx)), key=sort_peripheral_by_num)
+
+    periph_data = {}
+    for x_per in peripheral_data:
         r = {}
-        for name, lst, in r_sorted:
-            reg1 = list(lst)
-            for rg in reg1:
+        for name, lst, in sorted(list(get_peripheral_register_list(x_per[1])), key=sort_peripheral_by_num):
+            for rg in lst:
                 # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
-                iname = [name + '->' + rg[0]]
-                ib = list(get_init_block(s_data, iname))[0]
                 bf_dic = {}
-                for bif in ib:
+                for bif in list(get_init_block(s_data, [f'{name}->{rg[0]}']))[0]:
                     bit_key = bif[0].split('_')[2:][0]
                     bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
                 r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
 
-        uc.peripheral[p_ndx].register = r
+        periph_data[x_per[1]] = Peripheral([x_per[0], x_per[2], x_per[3], r])
+
+    uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
 
     args.strict = strict
 
@@ -934,15 +917,6 @@ if __name__ == '__main__':
         s_temp += x1 + '\n'
         for x2 in uc.peripheral[x1].register.keys():
             s_temp += f'          {x2}@{uc.peripheral[x1].register[x2].address}\n'
-    x8 = uc.peripheral['TIM6'].register['CR2'].address
-
-    '''
-    p15_3 = list(uc.peripheral)[16]
-    r15_3 = list(uc.peripheral[p15_3].register)[3]
-    r2 = uc.peripheral[key5].register.keys()
-    for x3 in get_init_block(s_data, uc.peripheral[k15_3] + '->' + r2):
-        pass
-    '''
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
