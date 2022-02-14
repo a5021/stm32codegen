@@ -617,9 +617,14 @@ def get_type_list(src):
     for gx in type_def:
         t_list = []
         for gy in gx[0].replace(';/', '; /').split('\n'):
+
+            if 30 * ' ' == gy[:30]:
+                # do not parse multiline comments
+                continue
+
             gs = gy.strip()
-            if '' == gs or '//' == gs[:2] or 'AND triple modes' in gs:
-                # do not parse some strings (empty, commented out, etc.)
+            if '' == gs or '//' == gs[:2]:
+                # do not parse empty or commented out strings
                 continue
 
             while ' ;' in gs:
@@ -732,6 +737,7 @@ def get_register_property(reg_name):
     left_bracket = reg_name[0].find('[')
     right_bracket = reg_name[0].find(']')
     arr_size = reg_name[0][left_bracket + 1:right_bracket]
+
     if all([sg.isdigit() for sg in arr_size]):
         for x_ndx in range(int(arr_size)):
             yield reg_name[0][:left_bracket + 1] + str(x_ndx) + ']', get_register_size(reg_name[1])
