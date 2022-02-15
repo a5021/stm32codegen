@@ -866,6 +866,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
     parser.add_argument('-q', '--irq', action="store_true", help="irq property")
     parser.add_argument('-r', '--register', nargs='+', help="process the registers specified")
+    parser.add_argument('-t', '--test', action="store_true", help="test experimental feature")
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
     parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
     parser.add_argument('-X', '--exclude', nargs='+', help="exclude the registers from processing")
@@ -896,33 +897,34 @@ if __name__ == '__main__':
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
-    strict = args.strict
-    args.strict = True
+    if args.test:
+        strict = args.strict
+        args.strict = True
 
-    periph_data = {}
-    for x_per in peripheral_data:
-        r = {}
-        for name, lst, in sorted(list(get_peripheral_register_list(x_per[1])), key=sort_peripheral_by_num):
-            for rg in lst:
-                # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
-                bf_dic = {}
-                for bif in list(get_init_block(s_data, [f'{name}->{rg[0]}']))[0]:
-                    bit_key = bif[0].split('_')[2:][0]
-                    bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
+        periph_data = {}
+        for x_per in peripheral_data:
+            r = {}
+            for name, lst, in sorted(list(get_peripheral_register_list(x_per[1])), key=sort_peripheral_by_num):
+                for rg in lst:
+                    # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
+                    bf_dic = {}
+                    for bif in list(get_init_block(s_data, [f'{name}->{rg[0]}']))[0]:
+                        bit_key = bif[0].split('_')[2:][0]
+                        bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
-                r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
+                    r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
 
-        periph_data[x_per[1]] = Peripheral([x_per[0], x_per[2], x_per[3], r])
+            periph_data[x_per[1]] = Peripheral([x_per[0], x_per[2], x_per[3], r])
 
-    uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
+        uc = Microcontroller(args.cpu, "STM32 Microcontroller", periph_data)
 
-    args.strict = strict
+        args.strict = strict
 
-    s_temp = ''
-    for x1 in uc.peripheral.keys():
-        s_temp += x1 + '\n'
-        for x2 in uc.peripheral[x1].register.keys():
-            s_temp += f'          {x2}@{uc.peripheral[x1].register[x2].address}\n'
+        s_temp = ''
+        for x1 in uc.peripheral.keys():
+            s_temp += x1 + '\n'
+            for x2 in uc.peripheral[x1].register.keys():
+                s_temp += f'          {x2}@{uc.peripheral[x1].register[x2].address}\n'
 
     adcen = 'ENR_ADCEN' in s_data
     dmaen = 'ENR_DMAEN' in s_data
