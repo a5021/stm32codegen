@@ -903,12 +903,14 @@ if __name__ == '__main__':
 
         periph_data = {}
         for x_per in peripheral_data:
+            # x_per is the peripheral data like this: ['0x40000000', 'TIM2', 'TIM_TypeDef*', 'Timer peripheral']
             r = {}
             for name, lst, in sorted(list(get_peripheral_register_list(x_per[1])), key=sort_peripheral_by_num):
                 for rg in lst:
                     # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
                     bf_dic = {}
                     for bif in list(get_init_block(s_data, [f'{name}->{rg[0]}']))[0]:
+                        # bif is the set of bitfield data like this: "['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001']"
                         bit_key = bif[0].split('_')[2:][0]
                         bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
