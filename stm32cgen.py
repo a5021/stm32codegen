@@ -943,6 +943,7 @@ if __name__ == '__main__':
 
     code_block_def = []
     code_block_ini = []
+    irqlist = []
     if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
@@ -959,6 +960,7 @@ if __name__ == '__main__':
                         continue
 
                     sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
+
                     if sa:
                         code_block_def.append(sa)
                         code_block_ini.append(sb)
@@ -1037,6 +1039,10 @@ if __name__ == '__main__':
 
                 tblock.append(x_out)
 
+            for xirq in irq_list:
+                if p in xirq[0]:
+                    irqlist.append(xirq)
+
         def_block = init_block = ''
         n = '\n'
 
@@ -1057,6 +1063,17 @@ if __name__ == '__main__':
 
         def_block = def_block.strip('\n')
         init_block = init_block.strip('\n')
+
+        irqstr = f''
+        for xirq in irqlist:
+            irqstr += f'\n#if 0\n{indent}NVIC_SetPriority('
+            irqstr += f'{xirq[0]}, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));\n'
+            irqstr += f'{indent}NVIC_ClearPendingIRQ({xirq[0]});\n'
+            irqstr += f'{indent}NVIC_EnableIRQ(ADC1_2_IRQn);\n'
+            irqstr += f'#endif\n'
+
+        if irqstr:
+            init_block += '\n' + irqstr
 
         if args.function:
             fheader = ffooter = []
