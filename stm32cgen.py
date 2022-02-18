@@ -965,6 +965,10 @@ if __name__ == '__main__':
                         code_block_def.append(sa)
                         code_block_ini.append(sb)
 
+                for xirq in irq_list:
+                    if name == xirq[0].split('_')[0]:
+                        irqlist.append(xirq)
+
                 if args.undef is False:
                     x_out = f'( \\\n{indent}'
                     for cnt, ds in enumerate(sorted(init_macro_name), start=1):
@@ -1039,10 +1043,6 @@ if __name__ == '__main__':
 
                 tblock.append(x_out)
 
-            for xirq in irq_list:
-                if p in xirq[0]:
-                    irqlist.append(xirq)
-
         def_block = init_block = ''
         n = '\n'
 
@@ -1069,7 +1069,7 @@ if __name__ == '__main__':
             irqstr += f'\n#if 0\n{indent}NVIC_SetPriority('
             irqstr += f'{xirq[0]}, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));\n'
             irqstr += f'{indent}NVIC_ClearPendingIRQ({xirq[0]});\n'
-            irqstr += f'{indent}NVIC_EnableIRQ(ADC1_2_IRQn);\n'
+            irqstr += f'{indent}NVIC_EnableIRQ({xirq[0]});\n'
             irqstr += f'#endif\n'
 
         if irqstr:
