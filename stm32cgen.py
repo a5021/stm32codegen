@@ -81,12 +81,21 @@ class Register:
         self.size = reg[1]
         self.description = reg[2]
         self.bit = reg[3]
+        if len(reg) < 5:
+            self.value = '0'
+        else:
+            self.value = reg[4]
 
     def set_data(self, reg_data):
         self.bit = reg_data
+        return self
 
     def get_data(self):
         return self.bit
+
+    def set_value(self, value):
+        self.value = value
+        return self
 
 
 class Peripheral:
@@ -910,11 +919,18 @@ if __name__ == '__main__':
                     # here rg is the list in form of ['REGISTER_NAME', 'Register description', 'Register address']
                     bf_dic = {}
                     for bif in list(get_init_block(s_data, [f'{name}->{rg[0]}']))[0]:
-                        # bif is the set of bitfield data like this: "['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001']"
+                        # bif is the set of bitfield data like this:
+                        #                               ['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001']
                         bit_key = bif[0].split('_')[2:][0]
                         bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
-                    r[rg[0]] = Register([rg[2], 0, rg[1], bf_dic])
+                    reg_size = 0
+                    for x_reg in register_dic[x_per[2][:-1]]:
+                        if rg[0] == x_reg[0]:
+                            reg_size = x_reg[1]
+                            break
+
+                    r[rg[0]] = Register([rg[2], reg_size, rg[1], bf_dic])
 
             periph_data[x_per[1]] = Peripheral([x_per[0], x_per[2], x_per[3], r])
 
