@@ -641,7 +641,7 @@ def get_type_list(src):
 
             w = gs.split()
 
-            register_size = get_reg_size(gs)
+            reg_size = get_reg_size(gs)
 
             rname = ''
             for gz in w:  # for every word in the string...
@@ -654,13 +654,13 @@ def get_type_list(src):
             else:
                 register_name = w[1][:-1]
 
-            if register_size == 'X':
-                register_size = w[0]
+            if reg_size == 'X':
+                reg_size = w[0]
 
             gc = re.findall(r'/\*\s*(.*?)\s*\*/', gs)
             register_comment = gc[0].lstrip('!').lstrip('<').lstrip() if len(gc) > 0 else ''
 
-            t_list.append([register_name, register_size, register_comment])
+            t_list.append([register_name, reg_size, register_comment])
 
         yield [gx[1], '0x' + '0' * 8, t_list]
 
@@ -852,6 +852,7 @@ if __name__ == '__main__':
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
+    parser.add_argument('--dummy', nargs='+', help="dummy parameter(s)")
     parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
     parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
     parser.add_argument('-E', '--peripheral-enable', nargs='+', help="add _EN MACRO to the footer")
@@ -924,13 +925,13 @@ if __name__ == '__main__':
                         bit_key = bif[0].split('_')[2:][0]
                         bf_dic[bit_key] = Bit([bif[1], bif[3], bif[2]])
 
-                    reg_size = 0
+                    register_size = 0
                     for x_reg in register_dic[x_per[2][:-1]]:
                         if rg[0] == x_reg[0]:
-                            reg_size = x_reg[1]
+                            register_size = x_reg[1]
                             break
 
-                    r[rg[0]] = Register([rg[2], reg_size, rg[1], bf_dic])
+                    r[rg[0]] = Register([rg[2], register_size, rg[1], bf_dic])
 
             periph_data[x_per[1]] = Peripheral([x_per[0], x_per[2], x_per[3], r])
 
