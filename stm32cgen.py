@@ -65,18 +65,15 @@ class Bit:
         else:
             self.value = ''
 
-    def set_bit(self):
-        self.value = '1'
-        return self
-
-    def reset_bit(self):
-        self.value = '0'
+    def set_value(self, value):
+        self.value = value
         return self
 
 
 class Register:
-    def __init__(self, reg):
+    """Microcontroller's peripheral register class"""
 
+    def __init__(self, reg):
         self.address = reg[0]
         self.size = reg[1]
         self.description = reg[2]
@@ -99,6 +96,8 @@ class Register:
 
 
 class Peripheral:
+    """Microcontroller's peripheral class"""
+
     def __init__(self, periph):
         self.address = periph[0]
         self.typedef = periph[1]
@@ -113,6 +112,8 @@ class Peripheral:
 
 
 class Microcontroller:
+    """Microcontroller class"""
+
     def __init__(self, uc_name, uc_descr, periph_list):
         self.name = uc_name
         self.description = uc_descr
@@ -586,9 +587,10 @@ def make_init_func(func_name, func_body, header='', footer=''):
     if header:
         hdr = f'{indent}\n'.join(header) + '\n\n'
     if footer:
-        ftr = f'\n\n{indent}\n'.join(footer) + '\n'
+        ftr = f'\n{indent}'.join(footer) + '\n'
+        ftr = f'\n{indent}{ftr}'
 
-    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}{func_body}{ftr}\n}}'
+    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}}'
 
 
 def make_h_module(module_name, module_body):
