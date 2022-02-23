@@ -1148,7 +1148,7 @@ if __name__ == '__main__':
                 break
 
         stout += f'{n * 2}'
-        if not args.direct:
+        if not args.direct and tblock:
             stout += f'{n.join(tblock)}{n}'
 
         if args.peripheral_enable:
