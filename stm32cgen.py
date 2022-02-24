@@ -1125,7 +1125,7 @@ if __name__ == '__main__':
                 if args.define[ndx] != '' and args.define[ndx].strip() == '':
                     def_str = def_str.rstrip() + '\n'
                 else:
-                    def_str += indent * 4 + args.define[ndx] + '\n'
+                    def_str += f'{indent * 4}{args.define[ndx]}\n'
                 ndx += 1
 
             stout = def_str + '\n' + stout
