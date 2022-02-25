@@ -1083,16 +1083,17 @@ if __name__ == '__main__':
         def_block = def_block.strip('\n')
         init_block = init_block.strip('\n')
 
-        irqstr = f''
+        irqstr = ''
+        ind = f'{indent}NVIC_'
         for xirq in irqlist:
-            irqstr += f'\n#if 0\n{indent}NVIC_SetPriority('
+            irqstr += f'\n#if 0\n{ind}SetPriority('
             irqstr += f'{xirq[0]}, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));\n'
-            irqstr += f'{indent}NVIC_ClearPendingIRQ({xirq[0]});\n'
-            irqstr += f'{indent}NVIC_EnableIRQ({xirq[0]});\n'
+            irqstr += f'{ind}ClearPendingIRQ({xirq[0]});\n'
+            irqstr += f'{ind}EnableIRQ({xirq[0]});\n'
             irqstr += f'#endif\n'
 
         if irqstr:
-            init_block += '\n' + irqstr
+            init_block += f'\n{irqstr}'
 
         if args.function:
             fheader = ffooter = []
