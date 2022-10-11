@@ -24,7 +24,7 @@ typedef_list = []
 # ['0x40000000',   'TIM2',   'TIM_TypeDef*',  'Timer peripheral']
 peripheral_data = []
 
-# peripheral registers dictionary: { "TypeDef" : [['REGISTER NAME', 'LENGTH', 'COMMENT' ],[...], ... }
+# peripheral register's dictionary: { "TypeDef" : [['REGISTER NAME', 'LENGTH', 'COMMENT' ],[...], ... }
 # {'I2C_TypeDef': [['CR1', '4', ''], ['CR2', '4', ''], ['OAR1', '4', ''], ['OAR2', '4', ''], ['DR', '4', '']...]...}
 #
 register_dic = {}
@@ -283,7 +283,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
 
         if '_IRQn' not in lx[0]:
             # lx[1] = re.sub(r'([0-9a-fA-F])[U]|[L]', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
-            lx[1] = re.sub(r'([0-9a-fA-F])U|L', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
+            lx[1] = re.sub(r'([\da-fA-F])U|L', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
 
         lx[1] = re.sub(r'\((\d{1,2})\)', '\\1', lx[1], 0)  # strip parentheses: '(21)' --> '21'
 
@@ -422,6 +422,10 @@ def get_init_block(src, target):
 
         if 'DMA' in r_name[0] and '_CHANNEL' in r_name[0]:
             r_name[0] = 'DMA'
+
+        if 'DMA' in r_name[0] and '_STREAM' in r_name[0]:
+            r_name[0] = 'DMA'
+            r_name[1] = 'Sx' + r_name[1]
 
         # bitfield data is a list like this: [['TIM_CR1_CEN', '(1 << 0)', 'Counter enable', '0x00000001'] ... [ ... ]]
         bitfield_data = list(get_reg_set(f'{r_name[0]}_{r_name[1]}_', macro_definition))
@@ -1134,8 +1138,13 @@ if __name__ == '__main__':
 
         h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-        stout = f'{n}/* This code was created using stm32cgen and ' \
-                f'is intended to run on {args.cpu} microcontroller.' \
+        cmd_line = ''
+        for sn, zarg in enumerate(sys.argv):
+            if sn != 0:
+                cmd_line += zarg + ' '
+
+        stout = f'{n}/* This code is intended to run on {args.cpu}'\
+                f'microcontroller. Created by stm32cgen python 3 script.'\
                 f' */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
