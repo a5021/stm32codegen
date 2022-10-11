@@ -282,7 +282,8 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
                     lx[1] = es
 
         if '_IRQn' not in lx[0]:
-            lx[1] = re.sub(r'([0-9a-fA-F])[U]|[L]', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
+            # lx[1] = re.sub(r'([0-9a-fA-F])[U]|[L]', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
+            lx[1] = re.sub(r'([0-9a-fA-F])U|L', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
 
         lx[1] = re.sub(r'\((\d{1,2})\)', '\\1', lx[1], 0)  # strip parentheses: '(21)' --> '21'
 
