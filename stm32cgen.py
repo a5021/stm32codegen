@@ -1143,9 +1143,9 @@ if __name__ == '__main__':
             if sn != 0:
                 cmd_line += zarg + ' '
 
-        stout = f'{n}/* This code is intended to run on {args.cpu}'\
+        stout = f'{n}/* This code is intended to run on {args.cpu} '\
                 f'microcontroller. Created by stm32cgen python 3 script.'\
-                f' */{n * 2}{h_indent}{stout.strip()}'
+                f' */{n}/* {cmd_line} */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
