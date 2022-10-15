@@ -501,7 +501,8 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                         if bit_mnem == bf:
                             bitfield_enable = '1'
 
-            if not args.disable_rcc_macro and bitfield_enable == '0':
+            #  if not args.disable_rcc_macro and bitfield_enable == '0':
+            if not args.no_macro and bitfield_enable == '0':
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                     bf = lx[0].split('_')
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
@@ -877,6 +878,8 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--indent', type=int, default=2, help="set the indentation for code in spaces")
     parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
     parser.add_argument('-m', '--module', help="produce output in form of a header file")
+    parser.add_argument('-n', '--no-macro', action="store_true", default=False,
+                        help="disable peripheral-specific macros")
     parser.add_argument('-f', '--function', help="place code into a function")
     parser.add_argument('--function-header', nargs='+', help="add string to the top of function")
     parser.add_argument('--function-footer', nargs='+', help="add string to the bottom of function")
