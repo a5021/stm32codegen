@@ -812,7 +812,7 @@ def_sort_list = [
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
-    ('EGR', 'AS0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
+    ('EGR', 'AP0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
     ('AHB3ENR', 'A40'), ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'),
     ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'), ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'),
     ('DMAR', 'U40'), ('BDTR', 'U60'), ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
