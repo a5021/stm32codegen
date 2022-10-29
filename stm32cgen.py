@@ -743,7 +743,7 @@ def get_register_size(struct_name):
     reg_size = 0
 
     if struct_name == 'AND':
-        return reg_size;
+        return reg_size
 
     if not struct_name.isdigit():
         for xr in register_dic[struct_name]:
@@ -1152,7 +1152,7 @@ if __name__ == '__main__':
 
         stout = f'{n}/* This code is intended to run on {args.cpu} '\
                 f'microcontroller. Created by stm32cgen python 3 script.'\
-                f' */{n}/* {cmd_line} */{n * 2}{h_indent}{stout.strip()}'
+                f' */{n}/* Script arguments used: {cmd_line} */{n * 2}{h_indent}{stout.strip()}'
 
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
