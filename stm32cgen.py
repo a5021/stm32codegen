@@ -741,6 +741,10 @@ def get_register_set(periph_name):
 
 def get_register_size(struct_name):
     reg_size = 0
+
+    if struct_name == 'AND':
+        return reg_size;
+
     if not struct_name.isdigit():
         for xr in register_dic[struct_name]:
             reg_size += get_register_size(xr[1])
