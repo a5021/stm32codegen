@@ -1,5 +1,2 @@
-# stm32codegen
-
-The python script to generate C source code from CMSIS header files. Very handy to make blocks of C code, functions or even complete header files for purposes of STM32 peripherals initialization.
-
-Just run `stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM` and see what will happen. :-)
+# STM32 Code Generator
+`stm32cgen.py` is a tool written in Python that helps generate C code for STM32 microcontrollers from CMSIS header files. The generated code can be used to initialize various peripherals such as timers, UARTs, and ADCs, among others. By running the stm32cgen.py script with specific options, you can generate different blocks of C code or complete header files quickly and easily. For example, you could use the command stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM to generate code that initializes a timer on an STM32F103C8 microcontroller.
