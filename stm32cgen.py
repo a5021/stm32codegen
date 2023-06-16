@@ -1,4 +1,4 @@
-###  #!/usr/bin/env python3
+#  #!/usr/bin/env python3
 
 import re
 import sys
@@ -179,30 +179,22 @@ def copyright_message(cname):
 
     h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-    cmd_line = ''
-    for sn, zarg in enumerate(sys.argv):
-        if sn != 0:
-            cmd_line += zarg + ' '
+    cmd_line = ' '.join(f'"{arg}"' if " " in arg else arg for arg in sys.argv[1:])
 
-    s1 = f'/* This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool. */'
-    l1 = len(s1)
-    s0 = ''.center(l1 - 6, '*')
-    s0 = f'/**{s0}**/'
-    s2 = 'https://github.com/a5021/stm32codegen'.center(l1-6)
-    s2 = f'/* {s2} */'
+    s1 = f'  This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool.'
+    l1 = len(s1) + 2
+    s0 = ''.ljust(l1, '*') + '\n'
+    s2 = 'https://github.com/a5021/stm32codegen'.center(l1)
 
-    s3 = f'Arguments used:'
+    s3 = 'Arguments used:'
     s4 = ''
     if len(cmd_line) > 58:
-        s3 = '/* ' + s3.ljust(l1 - 6) + ' */'
-        for cln in wrap_string(cmd_line, l1 - 6):
-            s4 += '/* ' + cln.center(l1 - 6) + ' */\n'
+        for cln in wrap_string(cmd_line, l1 - 8):
+            s4 += cln.center(l1) + '\n'
     else:
         s3 += f' {cmd_line}'
-        s3 = s3.ljust(l1 - 6)
-        s3 = '/* ' + s3 + ' */'
 
-    return s0 + '\n' + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '\n\n' + h_indent
+    return '#if 0\n' + s0 + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '#endif\n\n' + h_indent
 
 
 def get_cmsis_header_file(hdr_name, fetch=True, save=False):
@@ -968,7 +960,7 @@ if __name__ == '__main__':
     parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
     parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
     parser.add_argument('-E', '--peripheral-enable', nargs='+', help="add _EN MACRO to the footer")
-    parser.add_argument('-F', '--footer', nargs='+', help="add strings to the footer")
+    parser.add_argument('-F', '--footer', action='append', help="add strings to the footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
@@ -1330,25 +1322,19 @@ if __name__ == '__main__':
         print('#ifndef __MAIN_H__')
         print('#define __MAIN_H__')
         print()
-        print('#ifdef __cplusplus')
+        print('#ifdef __cplusplus /* provide compatibility between C and C++ */')
         print('  extern "C" {')
         print('#endif')
         print()
         print(copyright_message(compose_cmsis_header_file_name(args.cpu)).strip())
-        print(make_definition_block())
 
-        '''
-        print('#define NO                 0')
-        print('#define NONE               NO')
-        print('#define YES                (!NO)')
-        print()
-        print('#define ON                 YES')
-        print('#define OFF                NO')
-        '''
+        if args.define:
+            print(make_definition_block())
 
         print()
-        print(f'#include "{compose_cmsis_header_file_name(args.cpu)}"')
+        print(f'#include "{compose_cmsis_header_file_name(args.cpu)}" /* Include CMSIS header file */')
         print()
+        print('/* Uncomment corresponding line if using the peripheral is intended. */')
 
         s = ''
 
@@ -1381,16 +1367,18 @@ if __name__ == '__main__':
         print(f'#include "rcc.h"')
 
         print('\n')
+
+        print('/* Initialize all the required peripherals */')
         print('__STATIC_INLINE void init(void) {')
         print()
         print(s[:-1])
         print('}')
         print()
+
+        print('\n'.join(args.footer))
+
         print()
-        print('__STATIC_FORCEINLINE void idle(void) {')
-        print('  /* intentionally left empty */')
-        print('}')
-        print()
+
         print('#ifdef __cplusplus')
         print('  }')
         print('#endif /* __cplusplus */')
