@@ -1,13 +1,14 @@
 ### #!/usr/bin/env python3
 
 import sys
+import requests
 
-try:
-    import requests
-except ImportError:
-    print('Could not import REQUESTS library')
-    print('pip install requests')
-    sys.exit(1)
+# try:
+#    import requests
+# except ImportError:
+#    print('Could not import REQUESTS library')
+#    print('pip install requests')
+#    sys.exit(1)
 
 
 f0 = {

@@ -1298,26 +1298,31 @@ if __name__ == '__main__':
         print(f'Extra: {len(list(set(typedef_list) - set(uniq_type)))} {list(set(typedef_list) - set(uniq_type))}')
 
     elif args.cpu != '' and args.main_module:
+
+        #
+        # Create main.h source file
+        #
+
         xp = {}
 
         for x in peripheral_data:
-            a = x[2].strip('*')
+            if x[2] not in xp:
+                xp[x[2]] = []
 
-            if a not in xp:
-                xp[a] = []
+            xp[x[2]].append(x[1])
 
-            xp[a].append(x[1])
-
-        td = 'PWR_TypeDef'
+        td = 'PWR_TypeDef*'
         xp = {td: xp.pop(td), **xp}
 
-        td = 'RCC_TypeDef'
+        td = 'RCC_TypeDef*'
         xp = {td: xp.pop(td), **xp}
 
-        td = 'FLASH_TypeDef'
+        td = 'FLASH_TypeDef*'
         xp = {td: xp.pop(td), **xp}
 
-        f_list = []
+        td = 'GPIO_TypeDef*'
+        tp = xp.pop(td)
+        xp = {**xp, td: tp}
 
         print('#ifndef __MAIN_H__')
         print('#define __MAIN_H__')
@@ -1337,45 +1342,43 @@ if __name__ == '__main__':
         print('/* Uncomment corresponding line if using the peripheral is intended. */')
 
         s = ''
+        func_list = []
+        essential_peripheral = ['flash', 'gpio', 'rcc']
 
         for x in xp:
-            if len(xp[x]) > 1:
-                pass
+
             xp[x].sort(key=sort_peripheral_by_suffix)
-            func_name = x.split("_")[0].lower()
-            if func_name not in f_list:
-                if func_name == 'gpio' or func_name == 'rcc':
-                    s += f'{indent}/* {func_name.upper()} should always be initialized as it is ' \
+            periph_name = x.split("_")[0].lower()
+
+            if periph_name not in func_list:
+
+                func_list.append(periph_name)
+
+                if periph_name in essential_peripheral[1:]:
+                    s += f'{indent}/* {periph_name.upper()} should always be initialized as it is ' \
                          f'essential peripheral for the functioning of the system. */\n'
 
-                    s += f'{indent}init_{func_name}();\n\n'
+                    s += f'{indent}init_{periph_name}();\n\n'
                 else:
                     s += f'#if'
                     for y in xp[x]:
                         s += f'(defined({y}_EN) && {y}_EN)' + (' || ' if y != xp[x][-1] else '\n')
-                    s += f'{indent}init_{func_name}();\n#endif\n\n'
+                    s += f'{indent}init_{periph_name}();\n#endif\n\n'
 
-                if ('gpio' == func_name) or ('rcc' == func_name) or ('flash' == func_name):
-                    pass
-                else:
-                    print(f'// #include "{func_name}.h"')
+                if periph_name not in essential_peripheral:
+                    print(f'// #include "{periph_name}.h"')
 
-                f_list.append(func_name)
+        print('// ' + '\n'.join([f'#include "{p}.h"' for p in essential_peripheral]).replace('\n', '\n\n', 1))
 
-        print(f'// #include "flash.h"\n')
-        print(f'#include "gpio.h"')
-        print(f'#include "rcc.h"')
-
-        print('\n')
-
-        print('/* Initialize all the required peripherals */')
+        print('\n/* Initialize all the required peripherals */')
         print('__STATIC_INLINE void init(void) {')
         print()
         print(s[:-1])
         print('}')
         print()
 
-        print('\n'.join(args.footer))
+        if args.footer:
+            print('\n'.join(args.footer))
 
         print()
 
