@@ -652,8 +652,20 @@ def make_init_func(func_name, func_body, header='', footer=''):
     hdr = ftr = ''
     if header:
         hdr = f'{indent}\n'.join(header) + '\n\n'
+
+    if args.pre_init:
+        hdr += f'{indent}/* Perform pre-configuration of the hardware */\n'
+
+        for f_name in args.pre_init:
+            hdr += f'{indent}{f_name}();\n'
+
+    if args.post_init:
+        ftr = f'\n{indent}/* Perform additional setup after initialization */\n'
+        for f_name in args.post_init:
+            ftr += f'{indent}{f_name}();\n'
+
     if footer:
-        ftr = f'\n{indent}'.join(footer) + '\n'
+        ftr += f'\n{indent}'.join(footer) + '\n'
         ftr = f'\n{indent}{ftr}'
 
     return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}}'
@@ -927,7 +939,7 @@ def make_definition_block():
     dstr = '\n'
     while len(args.define) > indx:
         if args.define[indx] != '':
-            dstr += f'#define {args.define[indx]}'.ljust(22)
+            dstr += f'#define {args.define[indx]}'.ljust(31)
         else:
             dstr += '\n'
             indx += 1
@@ -975,6 +987,9 @@ if __name__ == '__main__':
     parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
     parser.add_argument('-m', '--module', help="produce output in the form of a header file")
     parser.add_argument('-M', '--main-module', action="store_true", help="create main.h content")
+    parser.add_argument('--pre-init', nargs=1, default=False, help="add pre_init() function")
+    parser.add_argument('--post-init', nargs=1, default=False, help="add post_init() function")
+    parser.add_argument('--uncomment', nargs='+', default=False, help="enable commented out #include directive(s)")
     parser.add_argument('-n', '--no-macro', action="store_true", default=False,
                         help="disable peripheral-specific macros")
     parser.add_argument('-f', '--function', help="place code into a function")
@@ -1211,6 +1226,15 @@ if __name__ == '__main__':
         else:
             stout = f'{def_block}{n * 2}{init_block}'
 
+        xstr = '\n'
+        if args.pre_init:
+            xstr += f'__STATIC_INLINE void {args.pre_init[0]}(void);\n'
+        if args.post_init:
+            xstr += f'__STATIC_INLINE void {args.post_init[0]}(void);\n'
+
+        if xstr != '\n':
+            stout = xstr + '\n\n' + stout
+
         if args.header:
             stout = f'{n.join(args.header)}{n * 2}{stout}'
 
@@ -1366,14 +1390,45 @@ if __name__ == '__main__':
                     s += f'{indent}init_{periph_name}();\n#endif\n\n'
 
                 if periph_name not in essential_peripheral:
-                    print(f'// #include "{periph_name}.h"')
+                    comment_out_mark = '// '
+                    if args.uncomment and periph_name in args.uncomment:
+                        comment_out_mark = ''
+                    print(f'{comment_out_mark}#include "{periph_name}.h"')
 
-        print('// ' + '\n'.join([f'#include "{p}.h"' for p in essential_peripheral]).replace('\n', '\n\n', 1))
+        comment_out_mark = '// '
+        if args.uncomment and 'flash' in args.uncomment:
+            comment_out_mark = ''
 
-        print('\n/* Initialize all the required peripherals */')
+        print(comment_out_mark + '\n'.join([f'#include "{p}.h"' for p in essential_peripheral]).replace('\n', '\n\n', 1))
+        print()
+        print()
+
+        linefeed = ''
+        if args.pre_init:
+            linefeed = '\n\n'
+            print(f'__STATIC_INLINE void {args.pre_init[0]}(void);')
+        if args.post_init:
+            linefeed = '\n\n'
+            print(f'__STATIC_INLINE void {args.post_init[0]}(void);')
+
+        print(linefeed, end='')
+
+        print('/* Initialize all the required peripherals */')
         print('__STATIC_INLINE void init(void) {')
         print()
+
+        if args.pre_init:
+            print(f'{indent}/* Perform pre-configuration of the system */')
+            print(f'{indent}{args.pre_init[0]}();')
+            print()
+
         print(s[:-1])
+
+        if args.post_init:
+            print(f'{indent}/* Perform additional setup after initialization */')
+            print(f'{indent}{args.post_init[0]}();')
+            print()
+
         print('}')
         print()
 
