@@ -230,8 +230,8 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
 
 def get_peripheral_description(src):
     m = re.findall(r'Peripheral_registers_structures(.*?)Peripheral_memory_map', src, re.MULTILINE | re.DOTALL)
-    td = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
-    for ix in td:
+    type_def = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
+    for ix in type_def:
         pg = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
         yield ix[1], pg[0] if pg else ''
 
@@ -243,14 +243,14 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
             lx[1] = re.sub(r'([()+\-|~&*/])', ' \\1 ', lx[1], 0)  # separate some chars by spaces: '(' --> ' ( '
 
             es = ''
-            for y in lx[1].split():
-                if y in macro_def_dict:
-                    d, xc = macro_def_dict[y]
+            for y_num in lx[1].split():
+                if y_num in macro_def_dict:
+                    d, xc = macro_def_dict[y_num]
                     if xc and '_BASE' not in lx[0]:
                         lx[3] = xc
                     replaced += 1
                 else:
-                    d = y
+                    d = y_num
                 es += d
             lx[1] = es
 
@@ -780,9 +780,9 @@ def is_hex(num_str):
         return False
 
 
-def strip_suffix(periph_name):
+def strip_suffix(peripheral_name):
     """ Strip number from peripheral name. Example: 'TIM10' ==> 'TIM' or 'GPIOC' ==> 'GPIO' """
-    pn = periph_name
+    pn = peripheral_name
     while True:
         if pn[-1] in '0123456789' or pn[:-1] == 'GPIO':
             pn = pn[:-1]
@@ -791,9 +791,9 @@ def strip_suffix(periph_name):
     return pn
 
 
-def find_peripheral(periph_name):
+def find_peripheral(peripheral_name):
     """ return address and typedef name of the peripheral. Example: ('TIM3', '0x40000400', 'TIM_TypeDef') """
-    pn = periph_name.strip()
+    pn = peripheral_name.strip()
     for xc in peripheral_data:
         if args.strict is False:
             if pn in xc[1]:
@@ -803,8 +803,8 @@ def find_peripheral(periph_name):
                 yield xc[1], xc[0], xc[2][:-1]
 
 
-def get_register_set(periph_name):
-    pn = strip_suffix(periph_name)
+def get_register_set(peripheral_name):
+    pn = strip_suffix(peripheral_name)
     dict_key = f'{pn}_TypeDef'
     if dict_key in register_dic:
         return register_dic[dict_key]
@@ -848,12 +848,12 @@ def get_register_list(peripheral_property):
             register_address += int(reg_offs)
 
 
-def get_peripheral_register_list(periph_name):
-    for pe in find_peripheral(periph_name):  #
+def get_peripheral_register_list(peripheral_name):
+    for pe in find_peripheral(peripheral_name):  #
         if is_hex(pe[1]):
             yield pe[0], get_register_list(pe)
 
-    if periph_name == 'USART':
+    if peripheral_name == 'USART':
         for pe in find_peripheral('UART'):  #
             if is_hex(pe[1]):
                 yield pe[0], get_register_list(pe)
@@ -924,10 +924,10 @@ def sort_def_block(definition_block):
     return sort_code_block(definition_block, def_sort_list)
 
 
-def sort_peripheral_by_suffix(s):
+def sort_peripheral_by_suffix(peripheral_name):
     # Extract the digits from the string and return them as a number for comparison
     try:
-        sfx = int(''.join(filter(str.isdigit, s)))
+        sfx = int(''.join(filter(str.isdigit, peripheral_name)))
     except ValueError:
         sfx = 0
 
@@ -1390,16 +1390,16 @@ if __name__ == '__main__':
                     s += f'{indent}init_{periph_name}();\n#endif\n\n'
 
                 if periph_name not in essential_peripheral:
-                    comment_out_mark = '// '
+                    cmark = '// '
                     if args.uncomment and periph_name in args.uncomment:
-                        comment_out_mark = ''
-                    print(f'{comment_out_mark}#include "{periph_name}.h"')
+                        cmark = ''
+                    print(f'{cmark}#include "{periph_name}.h"')
 
-        comment_out_mark = '// '
+        cmark = '// '
         if args.uncomment and 'flash' in args.uncomment:
-            comment_out_mark = ''
+            cmark = ''
 
-        print(comment_out_mark + '\n'.join([f'#include "{p}.h"' for p in essential_peripheral]).replace('\n', '\n\n', 1))
+        print(cmark + '\n'.join([f'#include "{p}.h"' for p in essential_peripheral]).replace('\n', '\n\n', 1))
         print()
         print()
 
