@@ -543,6 +543,7 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 cn = ' ' + cn[1:]
 
             bitfield_enable = '0'
+            bitfield_indent = 13
 
             if set_bit_list:
                 if lx[0] in set_bit_list:
@@ -552,19 +553,19 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
                 if bf:
                     for bit_mnem in set_bit_list:
                         if bit_mnem == bf:
-                            bitfield_enable = '1'
+                            bitfield_enable = '1'.ljust(bitfield_indent) if 'ENR_' in lx[0] else '1'
 
             if not args.no_macro and bitfield_enable == '0':
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                     bf = lx[0].split('_')
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
                         bitfield_enable = f'{bf[-1][:-2]}_EN'
-                        # rcc_enabler.append(bitfield_enable)
+
                         rcc_enabler += f'#if !defined({bitfield_enable})\n'
                         rcc_enabler += f'{indent}#define {bitfield_enable} 0\n'
                         rcc_enabler += f'#endif\n\n'
 
-                        bitfield_enable = bitfield_enable.ljust(10, ' ')
+                        bitfield_enable = bitfield_enable.ljust(bitfield_indent)
 
             s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
                   f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
@@ -889,7 +890,7 @@ def_sort_list = [
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
     ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
-    ('EGR', 'AP0'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
+    ('EGR', 'ARS'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
     ('AHB3ENR', 'A40'), ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'),
     ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'), ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'),
     ('DMAR', 'U40'), ('BDTR', 'U60'), ('CR', 'ZZ0'), ('AWD', 'TTD'), ('CALFACT', 'TTF')
