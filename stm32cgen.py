@@ -181,20 +181,20 @@ def copyright_message(cname):
 
     cmd_line = ' '.join(f'"{arg}"' if " " in arg else arg for arg in sys.argv[1:])
 
-    s1 = f'  This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool.'
-    l1 = len(s1) + 2
-    s0 = ''.ljust(l1, '*') + '\n'
-    s2 = 'https://github.com/a5021/stm32codegen'.center(l1)
+    s1 = f'//  This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool.'
+    l1 = len(s1) + 4
+    s0 = l1 * '/' + '\n'
+    s2 = '// ' + 'https://github.com/a5021/stm32codegen'.center(l1)
 
-    s3 = 'Arguments used:'
+    s3 = '//  Arguments used:'
     s4 = ''
     if len(cmd_line) > 58:
         for cln in wrap_string(cmd_line, l1 - 8):
-            s4 += cln.center(l1) + '\n'
+            s4 += '// ' + cln.center(l1) + '\n'
     else:
         s3 += f' {cmd_line}'
 
-    return '#if 0\n' + s0 + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '#endif\n\n' + h_indent
+    return s0 + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '\n\n' + h_indent
 
 
 def get_cmsis_header_file(hdr_name, fetch=True, save=False):
@@ -982,7 +982,8 @@ if __name__ == '__main__':
                         help="mix definition and initialization blocks of code")
     parser.add_argument('--light', action="store_true", default=False,
                         help="use light initialization codeblocks")
-    parser.add_argument('--save-header-file', action="store_true", default=False, help='write fetched file to disk')
+    parser.add_argument('-s', '--save-header-file', action="store_true", default=False,
+                        help='save the retrieved CMSIS header file onto the disk')
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2, help="set the indentation for code in spaces")
     parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
@@ -1240,34 +1241,7 @@ if __name__ == '__main__':
             stout = f'{n.join(args.header)}{n * 2}{stout}'
 
         if args.define:
-            '''
-            ndx = 0
-            def_str = '\n'
-            while len(args.define) > ndx:
-                if args.define[ndx] != '':
-                    def_str += f'#define {args.define[ndx]}'.ljust(22)
-                else:
-                    def_str += '\n'
-                    ndx += 1
-                    continue
-
-                ndx += 1
-                if ndx == len(args.define):
-                    break
-                if args.define[ndx] != '' and args.define[ndx].strip() == '':
-                    def_str = def_str.rstrip() + '\n'
-                else:
-                    def_str += f'{indent * 4}{args.define[ndx]}\n'
-                ndx += 1
-                
-            stout = def_str + '\n' + stout
-            '''
             stout = make_definition_block() + '\n' + stout
-
-        '''
-        stout = f'{n}/* This code was created with stm32cgen for use with the {args.cpu} microcontroller.{n}'\
-                f' */{n}/* Arguments used: {cmd_line} */{n * 2}{h_indent}{stout.strip()}'
-        '''
 
         stout = f'{copyright_message(compose_cmsis_header_file_name(args.cpu))}{stout.strip()}'
 
