@@ -152,30 +152,6 @@ def get_irq_list(src):
     return irq
 
 
-def wrap_string(text, line_length):
-    """
-    Wrap string to specified line length and return list of wrapped strings.
-
-    Parameters:
-        text (str): The text to wrap.
-        line_length (int): The maximum line length.
-
-    Returns:
-        list: The wrapped text as a list of strings.
-    """
-    words = text.split()
-    lines = []
-    current_line = ""
-    for word in words:
-        if len(current_line) + len(word) <= line_length:
-            current_line += word + " "
-        else:
-            lines.append(current_line.strip())
-            current_line = word + " "
-    lines.append(current_line.strip())
-    return lines
-
-
 def copyright_message(cname):
 
     h_indent = indent if (args.mix or args.direct) and not args.function else ''
