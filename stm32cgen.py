@@ -2,6 +2,7 @@
 
 import re
 import sys
+import textwrap
 
 try:
     from stm32cmsis import read_cmsis_header_file, compose_cmsis_header_file_name
@@ -179,7 +180,9 @@ def copyright_message(cname):
 
     h_indent = indent if (args.mix or args.direct) and not args.function else ''
 
-    cmd_line = ' '.join(f'"{arg}"' if " " in arg else arg for arg in sys.argv[1:])
+    # cmd_line = sys.argv[1:]
+
+    cmd_line = ' '.join(f'"{arg}"' if " " in arg or arg == '' else arg for arg in sys.argv[1:])
 
     s1 = f'//  This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool.'
     l1 = len(s1) + 4
@@ -189,8 +192,8 @@ def copyright_message(cname):
     s3 = '//  Arguments used:'
     s4 = ''
     if len(cmd_line) > 58:
-        for cln in wrap_string(cmd_line, l1 - 8):
-            s4 += '// ' + cln.center(l1) + '\n'
+        for cln in textwrap.wrap(cmd_line, l1 - 8):
+            s4 += '//    ' + cln + '\n'
     else:
         s3 += f' {cmd_line}'
 
@@ -1273,7 +1276,7 @@ if __name__ == '__main__':
                 ndx += 1
 
         if args.footer:
-            stout = f'{stout}{n.join(args.footer)}'
+            stout = f'{stout}\n{n.join(args.footer)}\n\n'
 
         if args.module:
             stout = make_h_module(args.module, stout)
