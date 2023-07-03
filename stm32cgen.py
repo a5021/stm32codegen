@@ -173,7 +173,7 @@ def copyright_message(cname):
     else:
         s3 += f' {cmd_line}'
 
-    return s0 + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '\n\n' + h_indent
+    return s0 + s1 + '\n' + s2 + '\n' + s3 + '\n' + s4 + s0 + '\n'  # + '\n' + h_indent
 
 
 def get_cmsis_header_file(hdr_name, fetch=True, save=False):
@@ -640,7 +640,7 @@ def make_init_func(func_name, func_body, header='', footer=''):
             hdr += f'{indent}{f_name}();\n'
 
     if args.post_init:
-        ftr = f'\n{indent}/* Perform additional setup after initialization */\n'
+        ftr = f'\n{indent}/* Proceed with additional actions */\n'
         for f_name in args.post_init:
             ftr += f'{indent}{f_name}();\n'
 
@@ -955,6 +955,8 @@ if __name__ == '__main__':
     parser.add_argument('-F', '--footer', action='append', help="add strings to the footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
     parser.add_argument('-l', '--no-fetch', action="store_true", default=False, help="Do not fetch header file")
+    parser.add_argument('--no-def', action="store_true", default=False,
+                        help="disable definitions block of code")
     parser.add_argument('-u', '--undef', action="store_true", default=False,
                         help="place #undef for each initialization definition")
     parser.add_argument('--mix', action="store_true", default=False,
@@ -1181,7 +1183,11 @@ if __name__ == '__main__':
 
             init_block += ci[0] + '\n'
 
-        def_block = def_block.strip('\n')
+        if not args.no_def:
+            def_block = def_block.strip('\n')
+        else:
+            def_block = ''
+
         init_block = init_block.strip('\n')
 
         irqstr = ''
@@ -1222,8 +1228,6 @@ if __name__ == '__main__':
         if args.define:
             stout = make_definition_block() + '\n' + stout
 
-        stout = f'{copyright_message(compose_cmsis_header_file_name(args.cpu))}{stout.strip()}'
-
         # delete all '#if 0' strings from the list except the last
         tb = [st for st in tblock if st.startswith('#if 0')]
 
@@ -1253,6 +1257,9 @@ if __name__ == '__main__':
 
         if args.footer:
             stout = f'{stout}\n{n.join(args.footer)}\n\n'
+
+        # stout = f'{stout.strip()}{copyright_message(compose_cmsis_header_file_name(args.cpu))}'
+        stout = f'{stout}\n{copyright_message(compose_cmsis_header_file_name(args.cpu))}'
 
         if args.module:
             stout = make_h_module(args.module, stout)
@@ -1308,8 +1315,6 @@ if __name__ == '__main__':
         print('#ifdef __cplusplus /* provide compatibility between C and C++ */')
         print('  extern "C" {')
         print('#endif')
-        print()
-        print(copyright_message(compose_cmsis_header_file_name(args.cpu)).strip())
 
         if args.define:
             print(make_definition_block())
@@ -1389,6 +1394,9 @@ if __name__ == '__main__':
         if args.footer:
             print('\n'.join(args.footer))
 
+        print()
+        print(copyright_message(compose_cmsis_header_file_name(args.cpu)).strip())
+        print()
         print()
 
         print('#ifdef __cplusplus')
