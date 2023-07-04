@@ -950,7 +950,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
     parser.add_argument('--dummy', nargs='+', help="dummy parameter(s)")
     parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
-    parser.add_argument('-H', '--header', nargs='+', help="add strings to header")
+    parser.add_argument('-H', '--header', action='append', help="add strings to header")
     parser.add_argument('-E', '--peripheral-enable', nargs='+', help="add _EN MACRO to the footer")
     parser.add_argument('-F', '--footer', action='append', help="add strings to the footer")
     parser.add_argument('-R', '--disable-rcc-macro', action="store_true", default=False)
