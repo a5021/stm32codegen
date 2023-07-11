@@ -648,7 +648,7 @@ def make_init_func(func_name, func_body, header='', footer=''):
         ftr += f'\n{indent}'.join(footer) + '\n'
         ftr = f'\n{indent}{ftr}'
 
-    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}}'
+    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}} /* {func_name}() */'
 
 
 def make_h_module(module_name, module_body):
@@ -1384,11 +1384,11 @@ if __name__ == '__main__':
         print(s[:-1])
 
         if args.post_init:
-            print(f'{indent}/* Perform additional setup after initialization */')
+            print(f'{indent}/* Perform additional steps after initialization */')
             print(f'{indent}{args.post_init[0]}();')
             print()
 
-        print('}')
+        print('} /* init() */')
         print()
 
         if args.footer:
