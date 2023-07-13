@@ -4,9 +4,9 @@
 
 The generated code can be used to initialize various peripherals such as timers, UARTs, and ADCs, among others. 
 
-By running the stm32cgen.py script with specific options, you can generate different blocks of C code or complete header files quickly and easily. 
+By running the stm32cgen.py script with specific options, you can generate different blocks of C code, functions or complete header files. 
 
-For example, you could use the command 
+Just try
 
 `stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM`
 

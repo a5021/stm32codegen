@@ -130,6 +130,7 @@ class Microcontroller:
 
 
 bits = []
+modifier = ''
 
 
 def get_irq_list(src):
@@ -154,9 +155,8 @@ def get_irq_list(src):
 
 def copyright_message(cname):
 
-    h_indent = indent if (args.mix or args.direct) and not args.function else ''
-
-    # cmd_line = sys.argv[1:]
+    #  h_indent = indent if (args.mix or args.direct) and not args.function else ''
+    #  cmd_line = sys.argv[1:]
 
     cmd_line = ' '.join(f'"{arg}"' if " " in arg or arg == '' else arg for arg in sys.argv[1:])
 
@@ -492,7 +492,20 @@ def ch_def_name(def_name):
     return d_name
 
 
-def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
+def find_bit_tag(bit_name):
+    if args.tag_bit:
+        for tags in args.tag_bit:
+            if bit_name in tags[1:]:
+                return tags[0]
+
+    if args.tag_bit:
+        if bit_name in args.set_bit:
+            return '1'
+
+    return ''
+
+
+def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
     s0 = bit_def_base = bitfield_block = assign_block = rcc_enabler = ''
     global init_macro_name
 
@@ -524,15 +537,27 @@ def compose_reg_init_block(reg_name, bit_def, set_bit_list, comment=('', '')):
             bitfield_enable = '0'
             bitfield_indent = 13
 
-            if set_bit_list:
-                if lx[0] in set_bit_list:
-                    bitfield_enable = '1'
+            # if set_bit_list:
 
-                bf = lx[0].replace(bit_def_base, '')
+            bf = lx[0].replace(bit_def_base, '')
+            if args.set_bit:
+                if lx[0] in args.set_bit:
+                    bitfield_enable = '1'.ljust(bitfield_indent) if 'ENR_' in lx[0] else '1'
+
                 if bf:
-                    for bit_mnem in set_bit_list:
+                    for bit_mnem in args.set_bit:
                         if bit_mnem == bf:
                             bitfield_enable = '1'.ljust(bitfield_indent) if 'ENR_' in lx[0] else '1'
+
+            if args.tag_bit:
+                for tags in args.tag_bit:
+                    if lx[0] in tags[1:]:
+                        bitfield_enable = tags[0].ljust(bitfield_indent) if 'ENR_' in lx[0] else tags[0]
+
+                    if bf:
+                        for bit_mnem in tags:
+                            if bit_mnem == bf:
+                                bitfield_enable = tags[0].ljust(bitfield_indent) if 'ENR_' in lx[0] else tags[0]
 
             if not args.no_macro and bitfield_enable == '0':
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
@@ -648,7 +673,7 @@ def make_init_func(func_name, func_body, header='', footer=''):
         ftr += f'\n{indent}'.join(footer) + '\n'
         ftr = f'\n{indent}{ftr}'
 
-    return f'__STATIC_INLINE void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}} /* {func_name}() */'
+    return f'{modifier} void {func_name}(void) {{\n\n{hdr}\n{func_body}{indent}{ftr}\n}} /* {func_name}() */'
 
 
 def make_h_module(module_name, module_body):
@@ -657,12 +682,12 @@ def make_h_module(module_name, module_body):
            f'{module_body}\n#ifdef __cplusplus\n  }}\n#endif /* __cplusplus */\n' + f'#endif /* __{mn}_H__ */\n'
 
 
-def compose_init_block(src, reg_set, set_bit_list, comment=('', '')):
+def compose_init_block(src, reg_set, comment=('', '')):
     fx = list(get_init_block(src, reg_set))
     block_a = []
     block_b = []
     for lx in range(len(fx)):
-        bl_a, bl_b = compose_reg_init_block(reg_set[lx], fx[lx], set_bit_list, comment)
+        bl_a, bl_b = compose_reg_init_block(reg_set[lx], fx[lx], comment)
         block_a.append(bl_a)
         block_b.append(bl_b)
 
@@ -965,6 +990,7 @@ if __name__ == '__main__':
                         help="use light initialization codeblocks")
     parser.add_argument('-s', '--save-header-file', action="store_true", default=False,
                         help='save the retrieved CMSIS header file onto the disk')
+    parser.add_argument('--force-inline', action="store_true", default=False, help="use __STATIC_FORCEINLINE modifier")
     parser.add_argument('--strict', action="store_true", default=False, help="strict matching only")
     parser.add_argument('-i', '--indent', type=int, default=2, help="set the indentation for code in spaces")
     parser.add_argument('-I', '--direct-init', nargs='+', help="init the registers by instant values")
@@ -981,8 +1007,9 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--peripheral', nargs='+', help="use specified peripheral(s)")
     parser.add_argument('-q', '--irq', action="store_true", help="irq property")
     parser.add_argument('-r', '--register', nargs='+', help="process the registers specified")
-    parser.add_argument('-t', '--test', action="store_true", help="test experimental feature")
+    parser.add_argument('--test', action="store_true", help="test experimental feature")
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
+    parser.add_argument('-t', '--tag-bit', action='append', nargs='+', help="tag bits with specified mark")
     parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
     parser.add_argument('-X', '--exclude', nargs='+', help="exclude the registers from processing")
 
@@ -1009,6 +1036,11 @@ if __name__ == '__main__':
     if args.verbose:
         print('Parameters passed', len(sys.argv))
         print(args)
+
+    if args.force_inline:
+        modifier = '__STATIC_FORCEINLINE'
+    else:
+        modifier = '__STATIC_INLINE'
 
     s_data = get_cmsis_header_file(args.cpu, fetch=not args.no_fetch, save=args.save_header_file)
 
@@ -1081,7 +1113,7 @@ if __name__ == '__main__':
                         # do not process register outside the list
                         continue
 
-                    sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], args.set_bit, (rg[1], rg[2]))
+                    sa, sb = compose_init_block(s_data, [name + '->' + rg[0]], (rg[1], rg[2]))
 
                     if sa:
                         code_block_def.append(sa)
@@ -1215,9 +1247,9 @@ if __name__ == '__main__':
 
         xstr = '\n'
         if args.pre_init:
-            xstr += f'__STATIC_INLINE void {args.pre_init[0]}(void);\n'
+            xstr += f'{modifier} void {args.pre_init[0]}(void);\n'
         if args.post_init:
-            xstr += f'__STATIC_INLINE void {args.post_init[0]}(void);\n'
+            xstr += f'{modifier} void {args.post_init[0]}(void);\n'
 
         if xstr != '\n':
             stout = xstr + '\n\n' + stout
@@ -1319,7 +1351,11 @@ if __name__ == '__main__':
         if args.define:
             print(make_definition_block())
 
-        print()
+        #  print('\n')
+
+        if args.header:
+            print('\n'.join(args.header), '\n\n')
+
         print(f'#include "{compose_cmsis_header_file_name(args.cpu)}" /* Include CMSIS header file */')
         print()
         print('/* Uncomment corresponding line if using the peripheral is intended. */')
@@ -1365,15 +1401,15 @@ if __name__ == '__main__':
         linefeed = ''
         if args.pre_init:
             linefeed = '\n\n'
-            print(f'__STATIC_INLINE void {args.pre_init[0]}(void);')
+            print(f'{modifier} void {args.pre_init[0]}(void);')
         if args.post_init:
             linefeed = '\n\n'
-            print(f'__STATIC_INLINE void {args.post_init[0]}(void);')
+            print(f'{modifier} void {args.post_init[0]}(void);')
 
         print(linefeed, end='')
 
         print('/* Initialize all the required peripherals */')
-        print('__STATIC_INLINE void init(void) {')
+        print(f'{modifier} void init(void)', '{')
         print()
 
         if args.pre_init:
