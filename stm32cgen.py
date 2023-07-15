@@ -964,7 +964,7 @@ def make_definition_block():
 if __name__ == '__main__':
 
     if '-V' in sys.argv or '--version' in sys.argv:
-        print('0.083a\n')
+        print('0.086\n')
         exit()
 
     import argparse
@@ -1124,14 +1124,15 @@ if __name__ == '__main__':
                         irqlist.append(xirq)
 
                 if args.undef is False:
-                    x_out = f'( \\\n{indent}'
+                    extra_lf = False
+                    x_out = f'#if '
                     for cnt, ds in enumerate(sorted(init_macro_name), start=1):
                         x_out += f'({ds} != 0) || '
                         if cnt % 5 == 0:
-                            x_out += f'\\\n{indent}'
+                            extra_lf = True
+                            x_out += f'\\\n    '
 
-                    if len(init_macro_name) % 5 == 0:
-                        x_out = x_out[:-4]
+                    x_out = x_out.strip().strip('\\').strip().strip('|').strip()
 
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
@@ -1146,7 +1147,16 @@ if __name__ == '__main__':
                         pass
                     else:
                         enabler.append(f'{name}_EN')
-                        x_out = f'#define {enabler[-1]} {x_out[:-3]}'.strip() + ' \\\n)\n'
+
+                        if extra_lf:
+                            x_out += '\n'
+
+                        x_out += f'\n' \
+                                 f'{indent}#define {enabler[-1]} (!0)' \
+                                 f'\n#else\n' \
+                                 f'{indent}#define {enabler[-1]} 0\n' \
+                                 f'#endif\n'
+
                         tblock.append(x_out)
 
                 init_macro_name = set()
@@ -1157,7 +1167,7 @@ if __name__ == '__main__':
                     x_out += f'({en} != 0) || '
                     if cnt % 5 == 0:
                         x_out += f'\\\n{indent * 3}'
-
+                x_out = x_out.strip().strip('\\').strip().strip('|').strip()
                 if 'DMA' in enabler[0]:
 
                     dma_register = [[], [], [], [], [], [], [], []]
@@ -1193,7 +1203,7 @@ if __name__ == '__main__':
 
                     x_out += '   '
 
-                x_out = f'#if 0\n{indent}#if {x_out[:-3]}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
+                x_out = f'#if 0\n{indent}#if {x_out}\n{indent * 2}{args.function}();\n{indent}#endif\n#endif\n'
 
                 tblock.append(x_out)
 
@@ -1290,7 +1300,6 @@ if __name__ == '__main__':
         if args.footer:
             stout = f'{stout}\n{n.join(args.footer)}\n\n'
 
-        # stout = f'{stout.strip()}{copyright_message(compose_cmsis_header_file_name(args.cpu))}'
         stout = f'{stout}\n{copyright_message(compose_cmsis_header_file_name(args.cpu))}'
 
         if args.module:
