@@ -242,7 +242,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
         if 'TypeDef*)' in lx[1]:
             q = re.findall(r'(\([A-Za-z].*TypeDef\*\))', lx[1])
             if q:
-                lx[2] = q[0].strip('(').strip(')').strip()
+                lx[2] = q[0].strip('() ')
                 for ly in per_desc:
                     if ly[0] == lx[2][:-1]:
                         # insert peripheral description
@@ -345,7 +345,8 @@ def parse_macro_def(macro_def_data):
         pc = ''
         len_k = len(k)
         if len_k > 1:
-            pc = k[1].strip('!<').strip()
+            #  pc = k[1].strip('!< ').strip()
+            pc = k[1].strip('!< ')
             pb = k[0].strip()
         elif len_k > 0:
             pb = k[0].strip()
@@ -743,7 +744,8 @@ def get_type_list(src):
                 reg_size = w[0]
 
             gc = re.findall(r'/\*\s*(.*?)\s*\*/', gs)
-            register_comment = gc[0].lstrip('!').lstrip('<').lstrip() if len(gc) > 0 else ''
+            # register_comment = gc[0].lstrip('!').lstrip('<').lstrip() if len(gc) > 0 else ''
+            register_comment = gc[0].lstrip('!< ') if len(gc) > 0 else ''
 
             t_list.append([register_name, reg_size, register_comment])
 
@@ -1132,7 +1134,8 @@ if __name__ == '__main__':
                             extra_lf = True
                             x_out += f'\\\n    '
 
-                    x_out = x_out.strip().strip('\\').strip().strip('|').strip()
+                    #x_out = x_out.strip().strip('\\').strip().strip('|').strip()
+                    x_out = x_out.rstrip(' \\|')
 
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'
@@ -1167,7 +1170,10 @@ if __name__ == '__main__':
                     x_out += f'({en} != 0) || '
                     if cnt % 5 == 0:
                         x_out += f'\\\n{indent * 3}'
-                x_out = x_out.strip().strip('\\').strip().strip('|').strip()
+
+                #  x_out = x_out.strip().strip('\\').strip().strip('|').strip()
+                x_out = x_out.strip().rstrip('\\| ')
+
                 if 'DMA' in enabler[0]:
 
                     dma_register = [[], [], [], [], [], [], [], []]
