@@ -1,4 +1,4 @@
-# STM32 Code Generator
+# STM32 Bare-Metal Code Generator
 
 `stm32cgen.py` is a Python script for generating C code for STM32 microcontrollers from CMSIS header files.
 
