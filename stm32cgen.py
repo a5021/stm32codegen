@@ -1134,7 +1134,7 @@ if __name__ == '__main__':
                             extra_lf = True
                             x_out += f'\\\n    '
 
-                    #x_out = x_out.strip().strip('\\').strip().strip('|').strip()
+                    #  x_out = x_out.strip().strip('\\').strip().strip('|').strip()
                     x_out = x_out.rstrip(' \\|')
 
                     if 'DMA' == name[:3] and len(name) < 6:
