@@ -47,7 +47,7 @@ $py_gen $opt 030f4 -M\
        YES                    \(\!NO\)\
        ON                     YES\
        ""\
-       HCLK                   "8    /* 8 to 64 (MHz) with a step of 4 */"\
+       HCLK                   "8    /* 8 to 68 (MHz) with a step of 4 */"\
        ""\
        SYSTICK_CLOCK_SOURCE   "0    /* 0 = HCLK / 8; 1 = HCLK         */"\
        SYSTICK_EN             YES\
@@ -365,7 +365,7 @@ create_file() {
 
 
 create_file "Makefile" "`cat << EOF
-/Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4A5oBphdABGIBQgxtnU5LikPV1IlBndbIkGoimb05iJr
+/Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4BMQB/FdABGIBQgxtnU5LikPV1IlBndbIkGoimb05iJr
 /iRLx/AWAAOe17gI2g/zBp4jGM9fawFw7aLRdP27/ajuHmyoujmcbmyTT7UgpEOMdYfmQFSdesi8
 v1T56RjOZRRT/3otmUSykmlEPdVYSWObVPyi6UBrcahOcrUbDYdfr6ZfnemZFkmMdscERX7NW6NZ
 yogThumIxyuEHicL7P89fYIUl3kO9gTEf9KiLwn9S337iwI/Wb9PqIdzIyWgAhQPfZ9ghbATquMC
@@ -386,16 +386,22 @@ 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
-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
+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
 EOF`"
 
 
@@ -496,6 +502,26 @@ AAAAAARZWg==
 EOF
 `"
 
+create_file "stm32f030x6.jflash" "`cat << EOF
+/Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4AewAwZdABBhAOGFYzOihg56UIqKCKQrnqKasrAxa6gW
+aeZG86Pk+G/iEId5CVjqnEwXAprd+mfglT4i426SWo/xS7YaD+CzdQCIqK5WCRH/2RwmT8+YuwJB
+PpqcRsdUYfOKkq4h0s3MNcWVwMPOzcra1Mz2E7c/ufx7PcVXHoKnnAGUMvm4KmD9CsTR2PmMFFMl
+H3wr484iM7+vJvsy8EiQQ1nbBIoLenldsybldPbO95PH68xcmlmXJYuhcKYKQVFjBWAmswQvjVHT
+2Fwde7zHqLfzQa9KvCPkWbD/ALiUhL4Dum0p3xlKrgWSUlBInXyh6b0TsLznCs9ZlguX3w11Xmdh
+G4uPslLk3mxej0M67O3QE/SUKTJU9He8ODHT5mZjCFMhqDzCfeHu7lVBpoL8TSqwEaUlJYxA30zM
+B13OUSfdRLd7v20DJJyH0+HTKlmlzkOD5DDabNTQJZheesSnHSv8D4iWlPFyWW5Vv67JsOKSl2IR
+0THA1JU9FqiIMc7/c4NOFKY/9FSx5Sgyjwwa2TUzIgZhFm+mRwzA+Nzy1tK+u4Ac7lls+XJCO9rM
+nvTcCTMekBCML3hIafYXD42NJL5PMJneUB4zgDfFrK9SpGeBgNF9LoVMRzbds6oFd6wRDrWYYNnW
+51nprNpt/BMDR/6SXIMvRGgSYoKk99bjro7arWKE3dJeZOAs5dwhT6PdJzCKG+yZYdi7FMPQj5Gw
+xTrRZt7Ka+b18UDLbiqZs+A2sT4VPZSKVRKtoxJY7HWiJptU2y2DnGqGN1kxb/laHZBSlzVEV4hN
+FoZpFwm7M8SwTQXihAEUaETdGzfRuTpHyaFC2PAlaCUtatXYrHEC3s6CkFiQms3MUtLvVceYRNRG
+vco7dIA+2/qZmA1WsJDKTICUUSC5ZmPdc7ENYrHAT6QRPWo5KdWABP1oYFM3/qjhLwfThmskNpyz
+IOU9+h6SYul8rdVD1wxV7r1aXmc+I40sp8iqQ6TwTQizzBhxtH1ZsVMsEEQswRF86CtJurIxSrrV
+7gPl2QkPAAAAAN+3R7rS5jhmAAGiBrEPAABa/1O2scRn+wIAAAAABFla
+EOF
+`"
+
+
 # Create main.c file in src directory from embedded data using Here Document
 main_c_file="${directories[1]}/main.c"
 if [ ! -f "$main_c_file" ]; then
@@ -511,18 +537,13 @@ int main(void) {
 }
 
 
-__STATIC_FORCEINLINE __SYSTICK_VOLATILE uint32_t * get_uptime(void) {
-  extern __SYSTICK_VOLATILE uint32_t uptime;
-  return &uptime;
+__STATIC_FORCEINLINE __SYSTICK_VOLATILE uint64_t * uptime(void) {
+  extern __SYSTICK_VOLATILE uint64_t system_uptime;
+  return &system_uptime;
 }
 
 
-__STATIC_FORCEINLINE void set_uptime(uint32_t t) {
-  extern __SYSTICK_VOLATILE uint32_t uptime;
-  uptime = t;
-}
-
-
+/* a trick to use the same code in function and interrupt service routine */
 #if YES == SYSTICK_IRQ_EN
 
 __STATIC_FORCEINLINE void process_systick_event(void) {}
@@ -538,14 +559,10 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
   
 #endif
 
-  {
-    static uint32_t cnt;
-  
-    if (++cnt == 1000) {
-      cnt = 0;
-      set_uptime(*get_uptime() + 1);
-    }
-  }
+  /* ### Share code between a regular function and an interrupt service routine ### */
+
+  /* This line implements a simple blink function + uptime counting */
+  GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
 
 }
 
@@ -558,7 +575,7 @@ __STATIC_FORCEINLINE void idle(void) {
 } /* idle() */
 
 
-__SYSTICK_VOLATILE uint32_t uptime = 0;
+__SYSTICK_VOLATILE uint64_t system_uptime = 0;
 
 EOF
   echo "File $main_c_file created."
