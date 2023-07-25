@@ -1,4 +1,4 @@
-#  #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 import re
 import sys
@@ -419,7 +419,7 @@ def get_init_block(src, target):
 
         r_name = lx.upper().split('->')
 
-        if args.exclude and r_name[1] in args.exclude:
+        if args.exclude_register and r_name[1] in args.exclude_register:
             continue
 
         r_name[0] = strip_suffix(r_name[0])
@@ -1013,7 +1013,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', '--set-bit', nargs='+', help="set the bits ON")
     parser.add_argument('-t', '--tag-bit', action='append', nargs='+', help="tag bits with specified mark")
     parser.add_argument('-v', '--verbose', action="store_true", help="produce verbose output")
-    parser.add_argument('-X', '--exclude', nargs='+', help="exclude the registers from processing")
+    parser.add_argument('-x', '--exclude-register', nargs='+', help="exclude the registers from processing")
 
     args = parser.parse_args()
 
@@ -1107,7 +1107,7 @@ if __name__ == '__main__':
                 for rg in lst:
                     # 'rg' is a list of register attributes in the form of ['REGISTER_NAME', 'DESCR', 'ADDRESS']
 
-                    if args.exclude and rg[0] in args.exclude:
+                    if args.exclude_register and rg[0] in args.exclude_register:
                         # do not process register if it is in exclude list
                         continue
 
