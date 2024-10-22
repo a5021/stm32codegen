@@ -1,6 +1,7 @@
 #!/bin/bash
 
 base_dir=$(basename "$0" .sh)
+
 # Array with directory names
 directories=("inc" "src" "MDK-ARM")
 op_counter=0
@@ -36,9 +37,35 @@ else
     opt=-s
 fi
 
+py_name=''
+
+case $(uname | tr '[:upper:]' '[:lower:]') in
+  linux*)
+    py_name='python3'
+    # export OS_NAME=linux
+    ;;
+  darwin*)
+    py_name='python3'
+    # export OS_NAME=osx
+    ;;
+  msys*)
+    py_name='python'
+    # export OS_NAME=windows/msys
+    ;;
+  cygwin*)
+    py_name='python'
+    #export OS_NAME=windows/cygwin
+    ;;
+  *)
+    py_name='python'
+    #export OS_NAME=notset
+    ;;
+esac
+
+
 force_inline=--force-inline
 func_name=init_systick
-py_gen="python3 $PY_GEN/stm32cgen.py"
+py_gen="$py_name $PY_GEN/stm32cgen.py"
 
 $py_gen $opt 030f4 -M\
     -D NO                     0\
@@ -71,10 +98,17 @@ $py_gen $opt 030f4 -M\
     -F ""\
     -F ""\
     -F "__STATIC_FORCEINLINE void idle(void); // {"\
-    -F "  /* The body of the main program loop follows here */"\
+    -F "  /* Routine to handle idle state (waiting for an event) */"\
     -F ""\
     -F ""\
     -F "//} /* idle() */"\
+    -F ""\
+    -F ""\
+    -F "__STATIC_FORCEINLINE unsigned process(void); // {"\
+    -F "  /* Routine to perform main loop operations */"\
+    -F ""\
+    -F ""\
+    -F "//} /* process() */"\
     -F ""\
     -F "#if YES == SYSTICK_IRQ_EN"\
     -F "  #define __SYSTICK_VOLATILE volatile"\
@@ -535,7 +569,7 @@ if [ ! -f "$main_c_file" ]; then
 
 int main(void) {
 
-  for(init();;idle());
+  for (init(); process(); idle());
 
 }
 
@@ -571,11 +605,19 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
 
 
 __STATIC_FORCEINLINE void idle(void) {
-  /* The body of the main program loop follows here */
+  /* Routine to handle idle state (waiting for an event) */
   
   process_systick_event();
   
 } /* idle() */
+
+
+__STATIC_FORCEINLINE unsigned process(void) {
+  /* Routine to perform main loop operations */
+  
+  return !0;
+  
+} /* process() */
 
 
 __SYSTICK_VOLATILE uint64_t system_uptime = 0;
@@ -621,8 +663,8 @@ fname3=("cmsis_compiler.h" "cmsis_armclang.h" "cmsis_gcc.h" "cmsis_iccarm.h" "cm
 
 raw_github="https://raw.githubusercontent.com/"
 
-url1="${raw_github}STMicroelectronics/cmsis_device_f0/master"
-url2="${raw_github}ARM-software/CMSIS_6/main/CMSIS/Core/Include/"
+url1="${raw_github}STMicroelectronics/cmsis-device-f0/refs/heads/master"
+url2="${raw_github}ARM-software/CMSIS_5/refs/heads/develop/CMSIS/Core/Include/"
 url3="${raw_github}posborne/cmsis-svd/master/data/STMicro/STM32F031x.svd"
 
 # Function to check if a file exists and download it if it doesn't

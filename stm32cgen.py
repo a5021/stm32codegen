@@ -1373,7 +1373,7 @@ if __name__ == '__main__':
 
         print(f'#include "{compose_cmsis_header_file_name(args.cpu)}" /* Include CMSIS header file */')
         print()
-        print('/* Uncomment corresponding line if using the peripheral is intended. */')
+        print('/* Uncomment the corresponding line if using the peripheral is intended. */')
 
         s = ''
         func_list = []
