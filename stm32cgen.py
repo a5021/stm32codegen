@@ -219,7 +219,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
     while True:
         replaced = 0
         for lx in macro_def_list:
-            lx[1] = re.sub(r'([()+\-|~&*/])', ' \\1 ', lx[1], 0)  # separate some chars by spaces: '(' --> ' ( '
+            lx[1] = re.sub(r'([()+\-|~&*/])', ' \\1 ', lx[1])  # separate some chars by spaces: '(' --> ' ( '
 
             es = ''
             for y_num in lx[1].split():
@@ -302,7 +302,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
                         else:
                             lx[3] = ly[1].replace('_', ' ').strip()
 
-                es = re.sub(r'(\([A-Za-z].*TypeDef\*\))', '', lx[1], 0)
+                es = re.sub(r'(\([A-Za-z].*TypeDef\*\))', '', lx[1])
                 if es:
                     lx[1] = es
 
@@ -310,7 +310,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
             # lx[1] = re.sub(r'([0-9a-fA-F])[U]|[L]', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
             lx[1] = re.sub(r'([\da-fA-F])U|L', '\\1', lx[1], flags=re.I)  # strip suffixes: '0x1FUL' --> '0x1F'
 
-        lx[1] = re.sub(r'\((\d{1,2})\)', '\\1', lx[1], 0)  # strip parentheses: '(21)' --> '21'
+        lx[1] = re.sub(r'\((\d{1,2})\)', '\\1', lx[1])  # strip parentheses: '(21)' --> '21'
 
         es = ''
         if '<<' not in lx[1] and not lx[0].endswith('_Pos'):
@@ -324,7 +324,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
             lx[1] = f'0x{q[1].upper().rjust(8, "0")}'
 
         if '<<' in lx[1]:
-            lx[1] = re.sub(r'0x(\d<<)', '\\1', lx[1], 0).replace('<<', ' << ')  # strip hex prefix: '0x1' --> '1'
+            lx[1] = re.sub(r'0x(\d<<)', '\\1', lx[1]).replace('<<', ' << ')  # strip hex prefix: '0x1' --> '1'
 
     return macro_def_list
 
