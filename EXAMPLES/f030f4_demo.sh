@@ -660,8 +660,10 @@ fi
 #    https://raw.githubusercontent.com/ARM-software/CMSIS_6/main/CMSIS/Core/Include/core_cm0.h
 #    https://raw.githubusercontent.com/ARM-software/CMSIS_6/main/CMSIS/Core/Include/cmsis_armcc.h
 #
-#    https://raw.githubusercontent.com/posborne/cmsis-svd/master/data/STMicro/STM32F030.svd
-#    https://raw.githubusercontent.com/posborne/cmsis-svd/master/data/STMicro/STM32F031x.svd
+#    https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/refs/heads/main/data/STMicro/STM32F030.svd 
+#    https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/refs/heads/main/data/STMicro/STM32F031x.svd
+     
+     
 
 fname1=("system_stm32f0xx.c" "startup_stm32f030x6.s")
 fname2=("system_stm32f0xx.h" "stm32f0xx.h" "stm32f030x6.h")
@@ -671,7 +673,7 @@ raw_github="https://raw.githubusercontent.com/"
 
 url1="${raw_github}STMicroelectronics/cmsis-device-f0/refs/heads/master"
 url2="${raw_github}ARM-software/CMSIS_5/refs/heads/develop/CMSIS/Core/Include/"
-url3="${raw_github}posborne/cmsis-svd/master/data/STMicro/STM32F031x.svd"
+url3="${raw_github}cmsis-svd/cmsis-svd-data/refs/heads/main/data/STMicro/STM32F031x.svd"
 
 # Function to check if a file exists and download it if it doesn't
 download_file() {
