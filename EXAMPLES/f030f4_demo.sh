@@ -134,7 +134,7 @@ else
     echo "Creation of main.h failed with status $status"
 fi
 
-func_name=wait_for_clock_settles
+func_name=wait_for_clock_stable
 tag=R
 $py_gen -l 030f4 -p RCC -m rcc -f init_rcc\
     \
@@ -184,9 +184,9 @@ else
 fi
 
 $py_gen -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
-    -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFALUT 1\
+    -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
-       GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFALUT * UINT32_MAX)"\
+       GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\
        PIN_XOR "(GPIO_MODE & 3UL)"\
        ""\
        PIN_MODE_INPUT "(0x00UL ^ PIN_XOR)"\
