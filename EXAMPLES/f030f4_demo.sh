@@ -401,7 +401,7 @@ create_file() {
   fi
 }
 
-
+# Base64-encoded xz-compressed Makefile (generated with: cat Makefile | xz -9c | base64)
 create_file "Makefile" "`cat << EOF
 /Td6WFoAAATm1rRGBMDnEt8sIQEcAAAAAAAAAMq6kDzgFl4JX10AEYgFCDG2dTkuKQ9XUiUGd1si
 QaiKZvTmImv+JEvH8BYAA57XuAjaD/MGniMYz19rAXDtotF0/bv9qO4ebKi6OZxubJNPtSCkQ4x1
