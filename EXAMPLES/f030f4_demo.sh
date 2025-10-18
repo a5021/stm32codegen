@@ -3,33 +3,38 @@
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 IFS=$'\n\t'        # Safer field splitting
 
-# === Error Handling ===
 ORIGINAL_DIR="$(pwd)"
 
+# === Error Handling ===
 cleanup() {
     local exit_code=$?
+    
+    # Capture ERR context if available
+    if [[ ${__err_line:-} ]]; then
+        echo "ERROR at line $__err_line: $__err_command failed" >&2
+    fi
     
     if [ $exit_code -ne 0 ]; then
         echo "" >&2
         echo "====================================" >&2
-        echo "Script failed at line $BASH_LINENO" >&2
-        echo "Returning to $ORIGINAL_DIR" >&2
+        echo "Script failed - returning to $ORIGINAL_DIR" >&2
         echo "====================================" >&2
     fi
     
-    # Always try to return to original directory
     cd "$ORIGINAL_DIR" 2>/dev/null || true
-    
     exit $exit_code
 }
 
+# Store ERR context for cleanup
+trap '__err_line=$LINENO; __err_command=$BASH_COMMAND' ERR
 trap cleanup EXIT
-trap 'echo "ERROR at line $LINENO: $BASH_COMMAND failed" >&2' ERR
 
 VERBOSE="${VERBOSE:-0}"
 DEBUG="${DEBUG:-0}"
 
 [ "$VERBOSE" = "1" ] && set -x
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 base_dir=$(basename "$0" .sh)
 
@@ -70,7 +75,7 @@ create_directory() {
     local dir="$1"
     if [ ! -d "$dir" ]; then
         if mkdir "$dir"; then
-            ((op_counter++))
+            ((++op_counter))
             echo "Directory $dir created."
         else
             echo "Error: Failed to create directory $dir" >&2
@@ -89,8 +94,7 @@ done
 
 cd "${directories[0]}"
 
-# Set default values for variables
-PY_GEN="${PY_GEN:-../../..}"
+PY_GEN="$(realpath "${PY_GEN:-../../..}")"
 
 if [ -e stm32f030x6.h ]; then
     # File exists
@@ -108,16 +112,15 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
     *)               py_name='python' ;;  # Windows and others
 esac
 
-force_inline=--force-inline
-func_name=init_systick
-#py_gen="$py_name $PY_GEN/stm32cgen.py"
-py_gen=("$py_name" "$PY_GEN/stm32cgen.py")
-
 # Verify Python works
 if ! command -v "$py_name" &>/dev/null; then
     echo "Error: $py_name not found" >&2
     exit 1
 fi
+
+force_inline=--force-inline
+func_name=init_systick
+py_gen=("$py_name" "$PY_GEN/stm32cgen.py")
 
 # Validate stm32cgen.py exists and is readable
 if [ ! -f "$PY_GEN/stm32cgen.py" ]; then
@@ -132,6 +135,7 @@ generate_header() {
     
     if "${py_gen[@]}" "$@" > "$output_file"; then
         echo "File $output_file created."
+        ((++op_counter))
     else
         echo "Error: Failed to generate $output_file" >&2
         exit 1
@@ -433,25 +437,13 @@ generate_header "gpio.h" -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
 
 cd ..
 
-# Function to check for the existence of a file and create it if it doesn't exist
-#create_file() {
-#  local filename="$1"
-#  if [ ! -f "$filename" ]; then
-#    # Read from stdin (here-doc)
-#    base64 -d | xz -qdc > "$filename"
-#    ((op_counter++))
-#    echo "File $filename created."
-#  fi
-#}
-
-
 create_file() {
     local filename="$1"
     
     if [ ! -f "$filename" ]; then
         if base64 -d | xz -qdc > "$filename"; then
             if [ -s "$filename" ]; then  # Check file is not empty
-                ((op_counter++))
+                ((++op_counter))
                 echo "File $filename created."
             else
                 echo "Error: $filename is empty after creation" >&2
@@ -638,7 +630,7 @@ EOF
 main_c_file="${directories[1]}/main.c"
 if [ ! -f "$main_c_file" ]; then
   op_counter=$((op_counter + 1))
-  cat << EOF > "$main_c_file"
+  cat << 'EOF' > "$main_c_file"
 #include "main.h"
 
 
@@ -762,7 +754,7 @@ download_file() {
     if [ ! -f "$dest" ]; then
         if curl -fsSL "$url" | tr -cd '\11\12\15\40-\176' > "$dest"; then
             if [ -s "$dest" ]; then  # Check file is not empty
-                ((op_counter++))
+                ((++op_counter))
                 echo "File $dest downloaded."
             else
                 echo "Error: Downloaded file $dest is empty" >&2
@@ -779,7 +771,7 @@ download_file() {
 download_file "${url1}/Source/Templates/${fname1[0]}" "${directories[1]}/${fname1[0]}"
 download_file "${url1}/Source/Templates/gcc/${fname1[1]}" "${directories[1]}/${fname1[1]}"
 download_file "${url1}/Source/Templates/arm/${fname1[1]}" "${directories[2]}/${fname1[1]}"
-download_file "${url3}" STM32F031x.svd
+download_file "${url3}" "STM32F031x.svd"
 
 # Download files
 for filename in "${fname2[@]}"
