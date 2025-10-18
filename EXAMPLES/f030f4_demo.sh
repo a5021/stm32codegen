@@ -1,18 +1,82 @@
 #!/bin/bash
 
+set -euo pipefail  # Exit on error, undefined vars, pipe failures
+IFS=$'\n\t'        # Safer field splitting
+
+# === Error Handling ===
+ORIGINAL_DIR="$(pwd)"
+
+cleanup() {
+    local exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
+        echo "" >&2
+        echo "====================================" >&2
+        echo "Script failed at line $BASH_LINENO" >&2
+        echo "Returning to $ORIGINAL_DIR" >&2
+        echo "====================================" >&2
+    fi
+    
+    # Always try to return to original directory
+    cd "$ORIGINAL_DIR" 2>/dev/null || true
+    
+    exit $exit_code
+}
+
+trap cleanup EXIT
+trap 'echo "ERROR at line $LINENO: $BASH_COMMAND failed" >&2' ERR
+
+VERBOSE="${VERBOSE:-0}"
+DEBUG="${DEBUG:-0}"
+
+[ "$VERBOSE" = "1" ] && set -x
+
 base_dir=$(basename "$0" .sh)
 
 # Array with directory names
 directories=("inc" "src" "MDK-ARM")
 op_counter=0
 
+check_dependencies() {
+    local missing=()
+    
+    for cmd in curl arm-none-eabi-gcc base64 xz; do
+        if ! command -v "$cmd" &>/dev/null; then
+            missing+=("$cmd")
+        fi
+    done
+    
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "Error: Missing required tools: ${missing[*]}" >&2
+        echo "" >&2
+        echo "Installation instructions:" >&2
+        echo "  Debian/Ubuntu: sudo apt-get install ${missing[*]}" >&2
+        echo "  Red Hat/CentOS: sudo yum install ${missing[*]}" >&2
+        exit 1
+    fi
+}
+
+press_any_key() {
+    echo -n "Press any key to continue..."
+    # read one character of input and discard it
+    read -n 1 -s -r
+    echo ""
+}
+
+check_dependencies
+
 # Function to check for the existence of a directory and create it if it doesn't exist
 create_directory() {
-  if [ ! -d "$1" ]; then
-    mkdir "$1"
-    op_counter=$(expr $op_counter + 1)
-    echo "Directory $1 created."
-  fi
+    local dir="$1"
+    if [ ! -d "$dir" ]; then
+        if mkdir "$dir"; then
+            ((op_counter++))
+            echo "Directory $dir created."
+        else
+            echo "Error: Failed to create directory $dir" >&2
+            exit 1
+        fi
+    fi
 }
 
 # Create directories
@@ -23,11 +87,10 @@ do
   create_directory "$dir"
 done
 
-cd ${directories[0]}
+cd "${directories[0]}"
 
-if [ -z "$PY_GEN" ]; then
-    PY_GEN=../../..
-fi
+# Set default values for variables
+PY_GEN="${PY_GEN:-../../..}"
 
 if [ -e stm32f030x6.h ]; then
     # File exists
@@ -39,35 +102,43 @@ fi
 
 py_name=''
 
-case $(uname | tr '[:upper:]' '[:lower:]') in
-  linux*)
-    py_name='python3'
-    # export OS_NAME=linux
-    ;;
-  darwin*)
-    py_name='python3'
-    # export OS_NAME=osx
-    ;;
-  msys*)
-    py_name='python'
-    # export OS_NAME=windows/msys
-    ;;
-  cygwin*)
-    py_name='python'
-    #export OS_NAME=windows/cygwin
-    ;;
-  *)
-    py_name='python'
-    #export OS_NAME=notset
-    ;;
+# Detect Python
+case $(uname -s | tr '[:upper:]' '[:lower:]') in
+    linux*|darwin*)  py_name='python3' ;;
+    *)               py_name='python' ;;  # Windows and others
 esac
-
 
 force_inline=--force-inline
 func_name=init_systick
-py_gen="$py_name $PY_GEN/stm32cgen.py"
+#py_gen="$py_name $PY_GEN/stm32cgen.py"
+py_gen=("$py_name" "$PY_GEN/stm32cgen.py")
 
-$py_gen $opt 030f4 -M\
+# Verify Python works
+if ! command -v "$py_name" &>/dev/null; then
+    echo "Error: $py_name not found" >&2
+    exit 1
+fi
+
+# Validate stm32cgen.py exists and is readable
+if [ ! -f "$PY_GEN/stm32cgen.py" ]; then
+    echo "Error: stm32cgen.py not found at $PY_GEN" >&2
+    echo "Current PY_GEN=$PY_GEN" >&2
+    exit 1
+fi
+
+generate_header() {
+    local output_file="$1"
+    shift  # Remove first argument
+    
+    if "${py_gen[@]}" "$@" > "$output_file"; then
+        echo "File $output_file created."
+    else
+        echo "Error: Failed to generate $output_file" >&2
+        exit 1
+    fi
+}
+
+generate_header "main.h" $opt 030f4 -M\
     -D NO                     0\
        NONE                   NO\
        OFF                    NO\
@@ -122,21 +193,11 @@ $py_gen $opt 030f4 -M\
     -F ""\
     -F "#if defined(__GNUC__) && ! defined(__clang__)" \
     -F "  void _close_r(void){} void _close(void){} void _lseek_r(void){} void _lseek(void){} void _read_r(void){} void _read(void){} void _write_r(void){}" \
-    -F \#endif\
-    > main.h
-
-# Check if the previous command was successful
-status=$?
-if [ $status -eq 0 ]
-then
-    echo "File main.h created."
-else
-    echo "Creation of main.h failed with status $status"
-fi
+    -F \#endif
 
 func_name=wait_for_clock_stable
 tag=R
-$py_gen -l 030f4 -p RCC -m rcc -f init_rcc\
+generate_header "rcc.h" -l 030f4 -p RCC -m rcc -f init_rcc\
     \
     -D $tag '(HCLK >= 12)'\
        XMUL "(HCLK / 4 - 2)     /* Calculate PLL multiplication factor      */"\
@@ -171,19 +232,9 @@ $py_gen -l 030f4 -p RCC -m rcc -f init_rcc\
     -F "#undef B"\
     -F "#undef C"\
     -F "#undef D"\
-    -F "#undef $tag"\
-    > rcc.h
+    -F "#undef $tag"
 
-# Check if the previous command was successful
-status=$?
-if [ $status -eq 0 ]
-then
-    echo "File rcc.h created."
-else
-    echo "Creation of rcc.h failed with status $status"
-fi
-
-$py_gen -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
+generate_header "gpio.h" -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
     -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
        GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\
@@ -378,31 +429,44 @@ $py_gen -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
     -H ")"\
     \
     $force_inline\
-    --no-def\
-    > gpio.h
-
-# Check if the previous command was successful
-status=$?
-if [ $status -eq 0 ]
-then
-    echo "File gpio.h created."
-else
-    echo "Creation of gpio.h failed with status $status"
-fi
+    --no-def
 
 cd ..
 
 # Function to check for the existence of a file and create it if it doesn't exist
+#create_file() {
+#  local filename="$1"
+#  if [ ! -f "$filename" ]; then
+#    # Read from stdin (here-doc)
+#    base64 -d | xz -qdc > "$filename"
+#    ((op_counter++))
+#    echo "File $filename created."
+#  fi
+#}
+
+
 create_file() {
-  if [ ! -f "$1" ]; then
-    echo "$2" | base64 -d | xz -qdc >$1
-    op_counter=$(expr $op_counter + 1)
-    echo "File $1 created."
-  fi
+    local filename="$1"
+    
+    if [ ! -f "$filename" ]; then
+        if base64 -d | xz -qdc > "$filename"; then
+            if [ -s "$filename" ]; then  # Check file is not empty
+                ((op_counter++))
+                echo "File $filename created."
+            else
+                echo "Error: $filename is empty after creation" >&2
+                rm -f "$filename"
+                return 1
+            fi
+        else
+            echo "Error: Failed to decode/decompress $filename" >&2
+            return 1
+        fi
+    fi
 }
 
 # Base64-encoded xz-compressed Makefile (generated with: cat Makefile | xz -9c | base64)
-create_file "Makefile" "`cat << EOF
+create_file "Makefile" << 'EOF'
 /Td6WFoAAATm1rRGBMC7Fdc4IQEcAAAAAAAAAJUnPlTgHFYKs10AEYgFCDG2dTkuKQ9XUiUGd1si
 QaiKZvTmImv+JEvH8BYAA57XuAjaD/MGniMYz19rAXDtotF0/bv9qO4ebKi6OZxubJNPtSCkQ4x1
 h+ZAVJ16yJICV8KKuRWQDQJWC7YgellXsQiJfK4ZRSdyG4ksgiozBzSiCf1xkiNizDowOM42LAru
@@ -453,10 +517,10 @@ L6A8HyutEF8kCXOYqjDDRQevztqkF0SmV+AwWWUjJyUJWPmrCmyqvgynO1lHP4JcR3zk6iw7/4SK
 1nx+nKaxLhOOwgewjKr+KOEtAIDOo5FYqGYlpEkDPHnnDUZzXpPy8hiRvz2EtPmyOTPTLoIPw2+s
 RcbgiA3DAE+FYudEkKh3aJ850ypVAUFdc7yOsaCRDuiOWKhG2qhO2VSnAABGSMlFq4fPxgAB1xXX
 OAAAsNWV9bHEZ/sCAAAAAARZWg==
-EOF`"
+EOF
 
 
-create_file "stm32f030x6_flash.ld" "`cat << EOF
+create_file "stm32f030x6_flash.ld" << 'EOF'
 /Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4A6qBH5dABeKgCRDWZigxFgAKUhK1Ev7lGr397uylF5a
 pw3JtGOkunwCrQw36ueYGMJ64IlgXXIHXcVuvo7tX3vVNCUZPW5pf5syFAc/CsV4iOQIQVz0kNFL
 R3HL1SnsLdgkSUn9yVIp+J/dOgDe4tPCn0+OXHPAJaXKCfr0fULwZG3+QzkUjlHeFtpJfwP3tqbz
@@ -480,9 +544,8 @@ hLFpe6hcjo+QsJNhHG6PPkJwd3mTffBp3tBaGFo+CC9gNRsierY5h+87HTV8q2Zmqfex9rNIoOsK
 sqLrolOVYm8nd5KzDmM54vs/sWIvg8s/uv93TtFJdiEoP/622rOb5roAAAC5teH6yPxNUAABmgmr
 HQAAri0s/LHEZ/sCAAAAAARZWg==
 EOF
-`"
 
-create_file "MDK-ARM/Project.uvprojx" "`cat << EOF
+create_file "MDK-ARM/Project.uvprojx" << 'EOF'
 /Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4G2pC3ZdAB4Py4cR2M5mkQ+DHsr9ezPUf+m32igxdiVm
 IE0qCW1q9ylwOEETlQiK0Fsdk0viUoZ92uXkJZdrXbmrxKDkwmK705hqnQ3yIR69E1FArqvCOU8q
 v5a36yIWQfCkc+WMTyk4bKKI/mdJPTotNOR8qPrEENsEUWO4+xS4ihTPj52L+tl9UTQ0G+P/sRQ9
@@ -537,9 +600,8 @@ DU2LPKyNQc9Mb+QV4jiGLNRrMp000+P3pdYqfGgsP9uWLOatoEev9kyQl6dHQgs++E+KolWK6iek
 jMXG0Xckns4I1AIlHy7yATF/hdcqvdEv56Bzu1MOb8tESf73/X+O7ZvXcvONBiuGo3bEib0zLLbY
 AAAAAPEfWjwVejuAAAGSF6rbAQD2Oir7scRn+wIAAAAABFla
 EOF
-`"
 
-create_file "project.jdebug" "`cat << EOF
+create_file "project.jdebug" << 'EOF'
 /Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4AQDAcVdADsbyWDW/2zquwwHdYzOwgOvw6pB2bhQyE04
 OSxh7dKJxtJXcx+WPS32SgPuOcnCfpkhAX/lVcg5iFIlp044hAJI94cGdeK+X7XT2CORKAR7ioXC
 4O9qB1xgm+XxQAt1Y1hPTgFJJMUpVQ4DCrhjxKOhK1fzR1DRej23syL4IuZvhqSMBkOw6C3u8red
@@ -551,9 +613,8 @@ Mouci8kSjeVyDTnG1oTPv4K6RdWHFNs1oR3/s6Z3rhdW4iVe10ke7DoUFXIfR/T6v9PWObqC8MMZ
 4mtSQoh2kNhHHnzEF4WOoFAF9IUfjPJZPTZZvQAAAACgpA/87yNf9wAB4QOECAAA/hbFNbHEZ/sC
 AAAAAARZWg==
 EOF
-`"
 
-create_file "stm32f030x6.jflash" "`cat << EOF
+create_file "stm32f030x6.jflash" << 'EOF'
 /Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4AewAwZdABBhAOGFYzOihg56UIqKCKQrnqKasrAxa6gW
 aeZG86Pk+G/iEId5CVjqnEwXAprd+mfglT4i426SWo/xS7YaD+CzdQCIqK5WCRH/2RwmT8+YuwJB
 PpqcRsdUYfOKkq4h0s3MNcWVwMPOzcra1Mz2E7c/ufx7PcVXHoKnnAGUMvm4KmD9CsTR2PmMFFMl
@@ -570,13 +631,13 @@ vco7dIA+2/qZmA1WsJDKTICUUSC5ZmPdc7ENYrHAT6QRPWo5KdWABP1oYFM3/qjhLwfThmskNpyz
 IOU9+h6SYul8rdVD1wxV7r1aXmc+I40sp8iqQ6TwTQizzBhxtH1ZsVMsEEQswRF86CtJurIxSrrV
 7gPl2QkPAAAAAN+3R7rS5jhmAAGiBrEPAABa/1O2scRn+wIAAAAABFla
 EOF
-`"
+
 
 
 # Create main.c file in src directory from embedded data using Here Document
 main_c_file="${directories[1]}/main.c"
 if [ ! -f "$main_c_file" ]; then
-  op_counter=$(expr $op_counter + 1)
+  op_counter=$((op_counter + 1))
   cat << EOF > "$main_c_file"
 #include "main.h"
 
@@ -659,14 +720,6 @@ EOF
 fi
 
 
-if ! command -v curl &> /dev/null; then
-    echo "curl is not installed. Please install curl and try again."
-    echo "For Debian/Ubuntu users: sudo apt-get install curl"
-    echo "For Red Hat/CentOS users: sudo yum install curl"
-    press_any_key
-    exit 1
-fi
-
 # URLs for files
 #    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_f0/master/Source/Templates/system_stm32f0xx.c
 #    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_f0/master/Source/Templates/gcc/startup_stm32f030x6.s
@@ -703,11 +756,24 @@ url3="${raw_github}cmsis-svd/cmsis-svd-data/refs/heads/main/data/STMicro/STM32F0
 
 # Function to check if a file exists and download it if it doesn't
 download_file() {
-  if [ ! -f "$2" ]; then
-    curl -s "$1" | tr -cd '\11\12\15\40-\176' > "$2"
-    op_counter=$(expr $op_counter + 1)
-    echo "File $2 downloaded."
-  fi
+    local url="$1"
+    local dest="$2"
+    
+    if [ ! -f "$dest" ]; then
+        if curl -fsSL "$url" | tr -cd '\11\12\15\40-\176' > "$dest"; then
+            if [ -s "$dest" ]; then  # Check file is not empty
+                ((op_counter++))
+                echo "File $dest downloaded."
+            else
+                echo "Error: Downloaded file $dest is empty" >&2
+                rm -f "$dest"
+                return 1
+            fi
+        else
+            echo "Error: Failed to download $url" >&2
+            return 1
+        fi
+    fi
 }
 
 download_file "${url1}/Source/Templates/${fname1[0]}" "${directories[1]}/${fname1[0]}"
@@ -726,22 +792,25 @@ do
   download_file "${url2}${filename}" "${directories[0]}/${filename}"
 done
 
-if ! command -v arm-none-eabi-gcc &> /dev/null; then
-    echo "GCC is not installed. Please install arm-none-eabi-gcc and try again."
-    echo "For Debian/Ubuntu users: sudo apt-get install gcc"
-    echo "For Red Hat/CentOS users: sudo yum install gcc"
-    press_any_key
+echo -e "\nBuilding sources..\n"
+
+if make debug; then
+    echo ""
+    echo "====================================="
+    echo "Project setup complete!"
+    echo "  Operations performed: $op_counter"
+    echo "  Project directory: $base_dir"
+    echo "  Build: SUCCESS"
+    echo "====================================="
+    echo ""
+else
+    echo ""
+    echo "====================================="
+    echo "Build FAILED!"
+    echo "  Check error messages above"
+    echo "====================================="
+    echo ""
     exit 1
 fi
-
-echo -e "\nBuilding sources..\n"
-make debug
-
-function press_any_key {
-    echo -n "Press any key to continue..."
-    # read one character of input and discard it
-    read -n 1 -s -r
-    echo ""
-}
 
 press_any_key
