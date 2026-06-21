@@ -1,5 +1,7 @@
 # STM32 Bare-Metal Code Generator
 
+[![Build](https://github.com/a5021/stm32codegen/actions/workflows/build.yml/badge.svg)](https://github.com/a5021/stm32codegen/actions/workflows/build.yml) [![Python](https://img.shields.io/badge/Python-3.x-00A9E0)]() [![License](https://img.shields.io/badge/License-MIT-yellow)]()
+
 **CMSIS-based initialization code generator for STM32 microcontrollers**
 
 `stm32cgen.py` automates the generation of bare-metal peripheral initialization code for STM32 microcontrollers directly from CMSIS header files. Eliminate manual register configuration and reduce initialization errors with auto-generated, CMSIS-compliant C code for timers, UARTs, ADCs, GPIO, and other peripherals.
@@ -137,7 +139,7 @@ Contributions are welcome. When submitting pull requests:
 
 ## License
 
-This project is open source. Please check the repository for license details.
+[MIT License](LICENSE)
 
 ## Related Projects
 
