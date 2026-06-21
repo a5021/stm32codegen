@@ -59,11 +59,13 @@ jobs:
         VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
         rc=${PIPESTATUS[0]}
         if [ $rc -ne 0 ]; then
-          last=$(tail -20 "$tmpf" | head -15 | tr '\n' '|')
-          echo "::error title=G031F8 build failed::$last"
-          echo "::group::G031F8 build log tail"
-          tail -60 "$tmpf"
-          echo "::endgroup::"
+          {
+            echo "## G031F8 build failed (exit $rc)"
+            echo
+            echo '```'
+            cat "$tmpf"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
         fi
         rm -f "$tmpf"
         exit $rc
