@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+venv/
+EXAMPLES/*/inc/
+EXAMPLES/*/src/
+EXAMPLES/*/MDK-ARM/
+EXAMPLES/*/_build/
+EXAMPLES/*/Makefile
+EXAMPLES/*/*.ld
+EXAMPLES/*/*.svd
+EXAMPLES/*/*.jdebug
+EXAMPLES/*/*.jflash
+EXAMPLES/*/project.jdebug

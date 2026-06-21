@@ -64,7 +64,7 @@ check_dependencies() {
 press_any_key() {
     echo -n "Press any key to continue..."
     # read one character of input and discard it
-    read -n 1 -s -r
+    read -n 1 -s -r || true
     echo ""
 }
 
@@ -120,7 +120,15 @@ fi
 
 force_inline=--force-inline
 func_name=init_systick
-py_gen=("$py_name" "$PY_GEN/stm32cgen.py")
+PY_GEN_PY="$PY_GEN"
+if command -v cygpath &>/dev/null; then
+    py_path="$(command -v "$py_name")"
+    case "$py_path" in
+        /usr/bin/*|/bin/*) ;;  # Cygwin Python — keep cygwin path
+        *) PY_GEN_PY="$(cygpath -w "$PY_GEN")" ;;  # Windows Python — convert
+    esac
+fi
+py_gen=("$py_name" "$PY_GEN_PY/stm32cgen.py")
 
 # Validate stm32cgen.py exists and is readable
 if [ ! -f "$PY_GEN/stm32cgen.py" ]; then
