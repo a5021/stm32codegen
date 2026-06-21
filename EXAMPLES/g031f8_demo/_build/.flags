@@ -1,3 +1,0 @@
-FLG=-mcpu=cortex-m0plus -mthumb -DSTM32G031xx -I./inc -std=gnu11 -Wall -Werror -Wextra -Wpedantic -fdata-sections -ffunction-sections -fverbose-asm -MMD -MP -fno-common -D WIN32 -D AMD64
-LDF=-mcpu=cortex-m0plus -mthumb -specs=nano.specs -Tstm32g031x8_flash.ld -lc -lm -lnosys -Wl,-Map=_build/Project.map -Wl,--cref,--gc-sections,--print-memory-usage -Wl,--no-warn-rwx-segments
-OPT=-Og -g3 -gdwarf

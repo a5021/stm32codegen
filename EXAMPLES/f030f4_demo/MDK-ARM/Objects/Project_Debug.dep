@@ -1,16 +1,0 @@
-Dependencies for Project 'Project', Target 'Debug': (DO NOT MODIFY !)
-CompilerVersion: 6220000::V6.22::ARMCLANG
-F (..\src\main.c)(0x67ECBB6B)(-xc -std=gnu11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -flto -Werror -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -Omax -ffunction-sections -Wall -Wextra -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../inc -Wpedantic -Wextra-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32F0xx_DFP/2.1.1/Drivers/CMSIS/Device/ST/STM32F0xx/Include-D__UVISION_VERSION="541" -DSTM32F030x6 -DDEBUG-o ./objects/main.o -MMD)
-I (..\inc\main.h)(0x67EC435C)
-I (..\inc\stm32f030x6.h)(0x67E7AEF0)
-I (..\inc\core_cm0.h)(0x67E7AEFA)
-I (..\inc\system_stm32f0xx.h)(0x67E7AEF6)
-I (..\inc\gpio.h)(0x67E7AEF2)
-I (..\inc\rcc.h)(0x67E7AEF1)
-I (..\inc\tim14.h)(0x67ECBB49)
-F (..\MDK-ARM\startup_stm32f030x6.s)(0x67E7AEF5)(--target=arm-arm-none-eabi -mcpu=cortex-m0 -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4 -Wa,armasm,--pd,"__MICROLIB SETA 1"-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32F0xx_DFP/2.1.1/Drivers/CMSIS/Device/ST/STM32F0xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 541" -Wa,armasm,--pd,"STM32F030x6 SETA 1"-o ./objects/startup_stm32f030x6.o)
-F (..\src\system_stm32f0xx.c)(0x67E7AEF4)(-xc -std=gnu11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -flto -Werror -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -Omax -ffunction-sections -Wall -Wextra -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../inc -Wpedantic -Wextra-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32F0xx_DFP/2.1.1/Drivers/CMSIS/Device/ST/STM32F0xx/Include-D__UVISION_VERSION="541" -DSTM32F030x6 -DDEBUG-o ./objects/system_stm32f0xx.o -MMD)
-I (..\inc\stm32f0xx.h)(0x67E7AEF7)
-I (..\inc\stm32f030x6.h)(0x67E7AEF0)
-I (..\inc\core_cm0.h)(0x67E7AEFA)
-I (..\inc\system_stm32f0xx.h)(0x67E7AEF6)

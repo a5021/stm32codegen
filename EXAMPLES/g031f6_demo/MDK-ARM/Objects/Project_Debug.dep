@@ -1,15 +1,0 @@
-Dependencies for Project 'Project', Target 'Debug': (DO NOT MODIFY !)
-CompilerVersion: 6220000::V6.22::ARMCLANG
-F (..\src\main.c)(0x67EEE639)(-xc -std=gnu11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -Werror -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wall -Wextra -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../inc -Wpedantic -Wextra-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="541" -DSTM32G031xx -DDEBUG-o ./objects/main.o -MMD)
-I (..\inc\main.h)(0x67ED93D2)
-I (..\inc\stm32g031xx.h)(0x67ED855F)
-I (..\inc\core_cm0plus.h)(0x67ED8568)
-I (..\inc\system_stm32g0xx.h)(0x67ED8564)
-I (..\inc\gpio.h)(0x67EEE66E)
-I (..\inc\rcc.h)(0x67ED93D3)
-F (..\MDK-ARM\startup_stm32g031xx.s)(0x67ED8563)(--target=arm-arm-none-eabi -mcpu=cortex-m0 -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4 -Wa,armasm,--pd,"__MICROLIB SETA 1"-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 541" -Wa,armasm,--pd,"STM32G031xx SETA 1"-o ./objects/startup_stm32g031xx.o)
-F (..\src\system_stm32g0xx.c)(0x67ED8562)(-xc -std=gnu11 --target=arm-arm-none-eabi -mcpu=cortex-m0 -c-fno-rtti -Werror -funsigned-char -fshort-enums -fshort-wchar-D__MICROLIB -gdwarf-4 -O0 -ffunction-sections -Wall -Wextra -Wno-packed -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../inc -Wpedantic -Wextra-IC:/Users/mr.smith/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="541" -DSTM32G031xx -DDEBUG-o ./objects/system_stm32g0xx.o -MMD)
-I (..\inc\stm32g0xx.h)(0x67ED8565)
-I (..\inc\stm32g031xx.h)(0x67ED855F)
-I (..\inc\core_cm0plus.h)(0x67ED8568)
-I (..\inc\system_stm32g0xx.h)(0x67ED8564)
