@@ -1,4 +1,4 @@
-name: Python CI
+name: Build
 
 on:
   push:
@@ -12,6 +12,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Cache ARM GCC toolchain
+      id: cache-toolchain
+      uses: actions/cache@v4
+      with:
+        path: /home/runner/arm-gcc-toolchain
+        key: arm-gcc-9-2020-q2-update
+
+    - name: Install ARM GCC toolchain
+      if: steps.cache-toolchain.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xz-utils wget
+        mkdir -p /home/runner/arm-gcc-toolchain
+        wget -qO- "https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2" \
+          | tar -xjf - -C /home/runner/arm-gcc-toolchain --strip=1
+
+    - name: Add toolchain to PATH
+      run: echo "/home/runner/arm-gcc-toolchain/bin" >> $GITHUB_PATH
 
     - name: Set up Python 3
       uses: actions/setup-python@v5
@@ -27,13 +46,6 @@ jobs:
     - name: Install dependencies
       run: pip install requests
 
-    - name: Syntax check
-      run: |
-        python -m py_compile stm32cgen.py
-        python -m py_compile stm32cmsis.py
-
-    - name: Run help
-      run: python stm32cgen.py --help
-
-    - name: Generate code for STM32F103C8
-      run: python stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM > generated.c
+    - name: Generate project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash f030f4_demo.sh
