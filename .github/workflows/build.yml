@@ -46,6 +46,10 @@ jobs:
     - name: Install dependencies
       run: pip install requests
 
-    - name: Generate project and build
+    - name: Generate F030F4 project and build
       working-directory: EXAMPLES
       run: printf '\n' | bash f030f4_demo.sh
+
+    - name: Generate G031F8 project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash g031f8_demo.sh
