@@ -1101,6 +1101,8 @@ if __name__ == '__main__':
     code_block_ini = []
     irqlist = []
     if args.peripheral:
+        args.peripheral = [p for item in args.peripheral for p in item.split(',')]
+    if args.peripheral:
         for p in args.peripheral:
             j_sorted = sorted(list(get_peripheral_register_list(p)), key=sort_peripheral_by_num)
             for name, lst, in j_sorted:
