@@ -229,10 +229,10 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -F "__STATIC_FORCEINLINE void configure_flash(void) {"\
     -F "  #if (HCLK > 48)"\
     -F "    /* G0: 2 wait states for >48MHz */"\
-    -F "    FLASH->ACR = FLASH_ACR_LATENCY_2WS;"\
+    -F "    FLASH->ACR = FLASH_ACR_LATENCY_2;"\
     -F "  #elif (HCLK > 24)"\
     -F "    /* G0: 1 wait state for 24-48MHz */"\
-    -F "    FLASH->ACR = FLASH_ACR_LATENCY_1WS;"\
+    -F "    FLASH->ACR = FLASH_ACR_LATENCY_1;"\
     -F "  #endif"\
     -F "}"\
     -F ""\
@@ -245,7 +245,7 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -F "    | RCC_PLLCFGR_PLLREN"\
     -F "    | (PLLN_VAL << RCC_PLLCFGR_PLLN_Pos)"\
     -F "    );"\
-    -F "    while(RCC_CFGR_SWS_PLL != (RCC->CFGR & RCC_CFGR_SWS)) {}"\
+    -F "    while(RCC_CFGR_SWS_PLLRCLK != (RCC->CFGR & RCC_CFGR_SWS)) {}"\
     -F "  #endif"\
     -F "} /* $func_name() */"\
     -F ""\
@@ -663,7 +663,7 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
    * When bit 9 of uptime is set: turn LED on (BSRR BS4)
    * When bit 9 of uptime is clear: turn LED off (BSRR BR4)
    * This creates a blink period of 2^10 = 1024 ticks */
-  GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+  GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS4 : GPIO_BSRR_BR4;
 
 }
 
