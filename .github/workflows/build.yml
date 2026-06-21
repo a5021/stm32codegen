@@ -52,4 +52,14 @@ jobs:
 
     - name: Generate G031F8 project and build
       working-directory: EXAMPLES
-      run: printf '\n' | bash g031f8_demo.sh
+      run: |
+        VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee /tmp/g031_build.log
+        exit ${PIPESTATUS[0]}
+      shell: bash
+
+    - name: Upload build log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: g031-build-log
+        path: /tmp/g031_build.log

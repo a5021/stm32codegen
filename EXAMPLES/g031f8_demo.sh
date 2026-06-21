@@ -214,7 +214,7 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
        PLLN_5    "((PLLN_VAL >> 5) & 1)"\
        PLLN_6    "((PLLN_VAL >> 6) & 1)"\
     \
-    --tag-bit R PLLON HSION16\
+    --tag-bit R PLLON HSION\
     --tag-bit PLLN_0 PLLN_0\
     --tag-bit PLLN_1 PLLN_1\
     --tag-bit PLLN_2 PLLN_2\
@@ -240,7 +240,8 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -F "  #if $tag"\
     -F "    /* PLLM=1, PLLR=4 => PLL output = HSI16 * PLLN / 4 = HCLK */"\
     -F "    RCC->PLLCFGR = ("\
-    -F "      RCC_PLLCFGR_PLLM_0"\
+    -F "      RCC_PLLCFGR_PLLSRC_HSI"\
+    -F "    | RCC_PLLCFGR_PLLM_0"\
     -F "    | RCC_PLLCFGR_PLLR_1"\
     -F "    | RCC_PLLCFGR_PLLREN"\
     -F "    | (PLLN_VAL << RCC_PLLCFGR_PLLN_Pos)"\
