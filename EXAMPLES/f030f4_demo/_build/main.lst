@@ -1,0 +1,2467 @@
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.arch armv6s-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1	@ Tag_ABI_FP_denormal
+   5              		.eabi_attribute 21, 1	@ Tag_ABI_FP_exceptions
+   6              		.eabi_attribute 23, 3	@ Tag_ABI_FP_number_model
+   7              		.eabi_attribute 24, 1	@ Tag_ABI_align8_needed
+   8              		.eabi_attribute 25, 1	@ Tag_ABI_align8_preserved
+   9              		.eabi_attribute 26, 1	@ Tag_ABI_enum_size
+  10              		.eabi_attribute 30, 2	@ Tag_ABI_optimization_goals
+  11              		.eabi_attribute 34, 0	@ Tag_CPU_unaligned_access
+  12              		.eabi_attribute 18, 4	@ Tag_ABI_PCS_wchar_t
+  13              		.file	"main.c"
+  14              	@ GNU C11 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) version 14.2.1 20241119 (arm-none-eabi)
+  15              	@	compiled by GNU C version 9.3-win32 20200320, GMP version 6.2.1, MPFR version 3.1.6, MPC version 
+  16              	
+  17              	@ GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+  18              	@ options passed: -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -march=armv6s-m -g3 -gdwarf -O3 -std=gnu
+  19              		.text
+  20              	.Ltext0:
+  21              		.cfi_sections	.debug_frame
+  22              		.file 1 "./src/main.c"
+  23              		.section	.text._close_r,"ax",%progbits
+  24              		.align	1
+  25              		.p2align 2,,3
+  26              		.global	_close_r
+  27              		.syntax unified
+  28              		.code	16
+  29              		.thumb_func
+  31              	_close_r:
+  32              	.LFB48:
+  33              		.file 2 "./inc/main.h"
+   1:./inc/main.h  **** #ifndef __MAIN_H__
+   2:./inc/main.h  **** #define __MAIN_H__
+   3:./inc/main.h  **** 
+   4:./inc/main.h  **** #ifdef __cplusplus /* provide compatibility between C and C++ */
+   5:./inc/main.h  ****   extern "C" {
+   6:./inc/main.h  **** #endif
+   7:./inc/main.h  **** 
+   8:./inc/main.h  **** #define NO                             0
+   9:./inc/main.h  **** #define NONE                           NO
+  10:./inc/main.h  **** #define OFF                            NO
+  11:./inc/main.h  **** #define YES                            (!NO)
+  12:./inc/main.h  **** #define ON                             YES
+  13:./inc/main.h  **** 
+  14:./inc/main.h  **** #define HCLK                           8    /* 8 to 68 (MHz) with a step of 4 */
+  15:./inc/main.h  **** 
+  16:./inc/main.h  **** #define SYSTICK_CLOCK_SOURCE           0    /* 0 = HCLK / 8; 1 = HCLK         */
+  17:./inc/main.h  **** #define SYSTICK_ENABLE                 YES
+  18:./inc/main.h  **** #define SYSTICK_IRQ_ENABLE             NO
+  19:./inc/main.h  **** 
+  20:./inc/main.h  **** #if HCLK < 8 || HCLK > 64 || (HCLK % 4 != 0)
+  21:./inc/main.h  ****   #error "Invalid HCLK value. Must be between 8 and 64 MHz with a step of 4 MHz."
+  22:./inc/main.h  **** #endif 
+  23:./inc/main.h  **** 
+  24:./inc/main.h  **** 
+  25:./inc/main.h  **** #include "stm32f030x6.h" /* Include CMSIS header file */
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 2
+
+
+  26:./inc/main.h  **** 
+  27:./inc/main.h  **** /* Uncomment the corresponding line if using the peripheral is intended. */
+  28:./inc/main.h  **** // #include "pwr.h"
+  29:./inc/main.h  **** // #include "ob.h"
+  30:./inc/main.h  **** // #include "tim.h"
+  31:./inc/main.h  **** // #include "rtc.h"
+  32:./inc/main.h  **** // #include "wwdg.h"
+  33:./inc/main.h  **** // #include "iwdg.h"
+  34:./inc/main.h  **** // #include "i2c.h"
+  35:./inc/main.h  **** // #include "syscfg.h"
+  36:./inc/main.h  **** // #include "exti.h"
+  37:./inc/main.h  **** // #include "adc.h"
+  38:./inc/main.h  **** // #include "spi.h"
+  39:./inc/main.h  **** // #include "usart.h"
+  40:./inc/main.h  **** // #include "dbgmcu.h"
+  41:./inc/main.h  **** // #include "dma.h"
+  42:./inc/main.h  **** // #include "crc.h"
+  43:./inc/main.h  **** // #include "flash.h"
+  44:./inc/main.h  **** 
+  45:./inc/main.h  **** #include "gpio.h"
+  46:./inc/main.h  **** #include "rcc.h"
+  47:./inc/main.h  **** #include "tim14.h"
+  48:./inc/main.h  **** 
+  49:./inc/main.h  **** __STATIC_FORCEINLINE void init_systick(void);
+  50:./inc/main.h  **** 
+  51:./inc/main.h  **** 
+  52:./inc/main.h  **** /* Initialize all the required peripherals */
+  53:./inc/main.h  **** __STATIC_FORCEINLINE void init(void) {
+  54:./inc/main.h  **** 
+  55:./inc/main.h  **** #if(defined(FLASH_EN) && FLASH_EN)
+  56:./inc/main.h  ****   init_flash();
+  57:./inc/main.h  **** #endif
+  58:./inc/main.h  **** 
+  59:./inc/main.h  ****   /* RCC should always be initialized as it is essential peripheral for the functioning of the syst
+  60:./inc/main.h  ****   init_rcc();
+  61:./inc/main.h  **** 
+  62:./inc/main.h  **** #if(defined(PWR_EN) && PWR_EN)
+  63:./inc/main.h  ****   init_pwr();
+  64:./inc/main.h  **** #endif
+  65:./inc/main.h  **** 
+  66:./inc/main.h  **** #if(defined(OB_EN) && OB_EN)
+  67:./inc/main.h  ****   init_ob();
+  68:./inc/main.h  **** #endif
+  69:./inc/main.h  **** 
+  70:./inc/main.h  **** #if(defined(TIM1_EN) && TIM1_EN) || (defined(TIM3_EN) && TIM3_EN) || (defined(TIM14_EN) && TIM14_EN
+  71:./inc/main.h  ****   init_tim();
+  72:./inc/main.h  **** #endif
+  73:./inc/main.h  **** 
+  74:./inc/main.h  **** #if(defined(RTC_EN) && RTC_EN)
+  75:./inc/main.h  ****   init_rtc();
+  76:./inc/main.h  **** #endif
+  77:./inc/main.h  **** 
+  78:./inc/main.h  **** #if(defined(WWDG_EN) && WWDG_EN)
+  79:./inc/main.h  ****   init_wwdg();
+  80:./inc/main.h  **** #endif
+  81:./inc/main.h  **** 
+  82:./inc/main.h  **** #if(defined(IWDG_EN) && IWDG_EN)
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 3
+
+
+  83:./inc/main.h  ****   init_iwdg();
+  84:./inc/main.h  **** #endif
+  85:./inc/main.h  **** 
+  86:./inc/main.h  **** #if(defined(I2C1_EN) && I2C1_EN)
+  87:./inc/main.h  ****   init_i2c();
+  88:./inc/main.h  **** #endif
+  89:./inc/main.h  **** 
+  90:./inc/main.h  **** #if(defined(SYSCFG_EN) && SYSCFG_EN)
+  91:./inc/main.h  ****   init_syscfg();
+  92:./inc/main.h  **** #endif
+  93:./inc/main.h  **** 
+  94:./inc/main.h  **** #if(defined(EXTI_EN) && EXTI_EN)
+  95:./inc/main.h  ****   init_exti();
+  96:./inc/main.h  **** #endif
+  97:./inc/main.h  **** 
+  98:./inc/main.h  **** #if(defined(ADC1_EN) && ADC1_EN)
+  99:./inc/main.h  ****   init_adc();
+ 100:./inc/main.h  **** #endif
+ 101:./inc/main.h  **** 
+ 102:./inc/main.h  **** #if(defined(SPI1_EN) && SPI1_EN)
+ 103:./inc/main.h  ****   init_spi();
+ 104:./inc/main.h  **** #endif
+ 105:./inc/main.h  **** 
+ 106:./inc/main.h  **** #if(defined(USART1_EN) && USART1_EN)
+ 107:./inc/main.h  ****   init_usart();
+ 108:./inc/main.h  **** #endif
+ 109:./inc/main.h  **** 
+ 110:./inc/main.h  **** #if(defined(DBGMCU_EN) && DBGMCU_EN)
+ 111:./inc/main.h  ****   init_dbgmcu();
+ 112:./inc/main.h  **** #endif
+ 113:./inc/main.h  **** 
+ 114:./inc/main.h  **** #if(defined(DMA1_EN) && DMA1_EN)
+ 115:./inc/main.h  ****   init_dma();
+ 116:./inc/main.h  **** #endif
+ 117:./inc/main.h  **** 
+ 118:./inc/main.h  **** #if(defined(CRC_EN) && CRC_EN)
+ 119:./inc/main.h  ****   init_crc();
+ 120:./inc/main.h  **** #endif
+ 121:./inc/main.h  **** 
+ 122:./inc/main.h  ****   /* GPIO should always be initialized as it is essential peripheral for the functioning of the sys
+ 123:./inc/main.h  ****   init_gpio();
+ 124:./inc/main.h  **** 
+ 125:./inc/main.h  ****   /* Perform additional steps after initialization */
+ 126:./inc/main.h  ****   init_systick();
+ 127:./inc/main.h  **** 
+ 128:./inc/main.h  **** } /* init() */
+ 129:./inc/main.h  **** 
+ 130:./inc/main.h  **** 
+ 131:./inc/main.h  **** __STATIC_FORCEINLINE void init_systick(void) {
+ 132:./inc/main.h  **** 
+ 133:./inc/main.h  ****   /* Initialize SysTick to 1 ms period */
+ 134:./inc/main.h  **** 
+ 135:./inc/main.h  ****   SysTick->LOAD = HCLK * 1000 / (8 - SYSTICK_CLOCK_SOURCE * 7) - 1;
+ 136:./inc/main.h  ****   SysTick->VAL  = SysTick->LOAD;
+ 137:./inc/main.h  ****   SysTick->CTRL = (
+ 138:./inc/main.h  ****     + SYSTICK_CLOCK_SOURCE * SysTick_CTRL_CLKSOURCE_Msk
+ 139:./inc/main.h  ****     + SYSTICK_IRQ_ENABLE   * SysTick_CTRL_TICKINT_Msk
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 4
+
+
+ 140:./inc/main.h  ****     + SYSTICK_ENABLE       * SysTick_CTRL_ENABLE_Msk
+ 141:./inc/main.h  ****   );
+ 142:./inc/main.h  **** } /* init_systick() */
+ 143:./inc/main.h  **** 
+ 144:./inc/main.h  **** 
+ 145:./inc/main.h  **** __STATIC_FORCEINLINE void idle(void); // {
+ 146:./inc/main.h  ****   /* Routine to handle idle state (waiting for an event) */
+ 147:./inc/main.h  **** 
+ 148:./inc/main.h  **** 
+ 149:./inc/main.h  **** //} /* idle() */
+ 150:./inc/main.h  **** 
+ 151:./inc/main.h  **** 
+ 152:./inc/main.h  **** __STATIC_FORCEINLINE unsigned process(void); // {
+ 153:./inc/main.h  ****   /* Routine to perform main loop operations */
+ 154:./inc/main.h  **** 
+ 155:./inc/main.h  **** 
+ 156:./inc/main.h  **** //} /* process() */
+ 157:./inc/main.h  **** 
+ 158:./inc/main.h  **** #if YES == SYSTICK_IRQ_ENABLE
+ 159:./inc/main.h  ****   #define __SYSTICK_VOLATILE volatile
+ 160:./inc/main.h  **** #else
+ 161:./inc/main.h  ****   #define __SYSTICK_VOLATILE
+ 162:./inc/main.h  **** #endif
+ 163:./inc/main.h  **** 
+ 164:./inc/main.h  **** #if defined(__GNUC__) && ! defined(__clang__)
+ 165:./inc/main.h  ****   void _close_r(void){} void _close(void){} void _lseek_r(void){} void _lseek(void){} void _read_r(
+  34              		.loc 2 165 22 view -0
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 0
+  37              		@ frame_needed = 0, uses_anonymous_args = 0
+  38              		@ link register save eliminated.
+  39              		.loc 2 165 23 view .LVU1
+  40              		@ sp needed	@
+  41 0000 7047     		bx	lr
+  42              		.cfi_endproc
+  43              	.LFE48:
+  45 0002 C046     		.section	.text._close,"ax",%progbits
+  46              		.align	1
+  47              		.p2align 2,,3
+  48              		.global	_close
+  49              		.syntax unified
+  50              		.code	16
+  51              		.thumb_func
+  53              	_close:
+  54              	.LFB64:
+  55              		.cfi_startproc
+  56              		.loc 2 165 30 view -0
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 0, uses_anonymous_args = 0
+  59              		@ link register save eliminated.
+  60              		@ sp needed	@
+  61 0000 7047     		bx	lr
+  62              		.cfi_endproc
+  63              	.LFE64:
+  65 0002 C046     		.section	.text._lseek_r,"ax",%progbits
+  66              		.align	1
+  67              		.p2align 2,,3
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 5
+
+
+  68              		.global	_lseek_r
+  69              		.syntax unified
+  70              		.code	16
+  71              		.thumb_func
+  73              	_lseek_r:
+  74              	.LFB66:
+  75              		.cfi_startproc
+  76              		.loc 2 165 50 view -0
+  77              		@ args = 0, pretend = 0, frame = 0
+  78              		@ frame_needed = 0, uses_anonymous_args = 0
+  79              		@ link register save eliminated.
+  80              		@ sp needed	@
+  81 0000 7047     		bx	lr
+  82              		.cfi_endproc
+  83              	.LFE66:
+  85 0002 C046     		.section	.text._lseek,"ax",%progbits
+  86              		.align	1
+  87              		.p2align 2,,3
+  88              		.global	_lseek
+  89              		.syntax unified
+  90              		.code	16
+  91              		.thumb_func
+  93              	_lseek:
+  94              	.LFB68:
+  95              		.cfi_startproc
+  96              		.loc 2 165 72 view -0
+  97              		@ args = 0, pretend = 0, frame = 0
+  98              		@ frame_needed = 0, uses_anonymous_args = 0
+  99              		@ link register save eliminated.
+ 100              		@ sp needed	@
+ 101 0000 7047     		bx	lr
+ 102              		.cfi_endproc
+ 103              	.LFE68:
+ 105 0002 C046     		.section	.text._read_r,"ax",%progbits
+ 106              		.align	1
+ 107              		.p2align 2,,3
+ 108              		.global	_read_r
+ 109              		.syntax unified
+ 110              		.code	16
+ 111              		.thumb_func
+ 113              	_read_r:
+ 114              	.LFB70:
+ 115              		.cfi_startproc
+ 116              		.loc 2 165 92 view -0
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119              		@ link register save eliminated.
+ 120              		@ sp needed	@
+ 121 0000 7047     		bx	lr
+ 122              		.cfi_endproc
+ 123              	.LFE70:
+ 125 0002 C046     		.section	.text._read,"ax",%progbits
+ 126              		.align	1
+ 127              		.p2align 2,,3
+ 128              		.global	_read
+ 129              		.syntax unified
+ 130              		.code	16
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 6
+
+
+ 131              		.thumb_func
+ 133              	_read:
+ 134              	.LFB72:
+ 135              		.cfi_startproc
+ 136              		.loc 2 165 113 view -0
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 0, uses_anonymous_args = 0
+ 139              		@ link register save eliminated.
+ 140              		@ sp needed	@
+ 141 0000 7047     		bx	lr
+ 142              		.cfi_endproc
+ 143              	.LFE72:
+ 145 0002 C046     		.section	.text._write_r,"ax",%progbits
+ 146              		.align	1
+ 147              		.p2align 2,,3
+ 148              		.global	_write_r
+ 149              		.syntax unified
+ 150              		.code	16
+ 151              		.thumb_func
+ 153              	_write_r:
+ 154              	.LFB74:
+ 155              		.cfi_startproc
+ 156              		.loc 2 165 132 view -0
+ 157              		@ args = 0, pretend = 0, frame = 0
+ 158              		@ frame_needed = 0, uses_anonymous_args = 0
+ 159              		@ link register save eliminated.
+ 160              		@ sp needed	@
+ 161 0000 7047     		bx	lr
+ 162              		.cfi_endproc
+ 163              	.LFE74:
+ 165 0002 C046     		.section	.text.init_tim_cr1,"ax",%progbits
+ 166              		.align	1
+ 167              		.p2align 2,,3
+ 168              		.global	init_tim_cr1
+ 169              		.syntax unified
+ 170              		.code	16
+ 171              		.thumb_func
+ 173              	init_tim_cr1:
+ 174              	.LVL0:
+ 175              	.LFB55:
+   1:./src/main.c  **** #include "main.h"
+   2:./src/main.c  **** #include "stdint.h"
+   3:./src/main.c  **** 
+   4:./src/main.c  **** //#include "stm32f0xx.h"  // STM32F0xx header
+   5:./src/main.c  **** 
+   6:./src/main.c  **** /**
+   7:./src/main.c  ****   * @brief TIM1 Control Register 1 (TIM1_CR1) structure definition
+   8:./src/main.c  ****   * @details This union provides type-safe access to the TIM1 control register bits.
+   9:./src/main.c  ****   *          It exactly mirrors the hardware register layout described in the STM32
+  10:./src/main.c  ****   *          reference manual (RM0360 section 13.4.1 for STM32F030xx timers).
+  11:./src/main.c  ****   *          
+  12:./src/main.c  ****   *          Using uint32_t ensures proper memory alignment despite the register
+  13:./src/main.c  ****   *          being 16-bit, which is critical for atomic operations on Cortex-M0.
+  14:./src/main.c  ****   * 
+  15:./src/main.c  ****   * @note Register characteristics:
+  16:./src/main.c  ****   *       - Physical size: 16 bits (using 32-bit storage for compatibility)
+  17:./src/main.c  ****   *       - Bit order: Little-endian (LSB at bit position 0)
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 7
+
+
+  18:./src/main.c  ****   *       - Reset state: 0x0000 (all bits cleared)
+  19:./src/main.c  ****   *       - Access: Read/write (except reserved bits)
+  20:./src/main.c  ****   */
+  21:./src/main.c  **** typedef union {
+  22:./src/main.c  ****   uint32_t r; // Combined register access for atomic operations
+  23:./src/main.c  ****   struct {
+  24:./src/main.c  ****     /* Bitfield layout matches hardware exactly - do not reorder */
+  25:./src/main.c  ****     uint32_t CEN  : 1;  // [0]     Counter enable control
+  26:./src/main.c  ****                         //         0: Timer disabled
+  27:./src/main.c  ****                         //         1: Timer enabled
+  28:./src/main.c  ****     uint32_t UDIS : 1;  // [1]     Update event disable
+  29:./src/main.c  ****                         //         0: Update events enabled
+  30:./src/main.c  ****                         //         1: Update events disabled
+  31:./src/main.c  ****     uint32_t URS  : 1;  // [2]     Update request source selector
+  32:./src/main.c  ****                         //         0: Any of: Counter overflow/underflow, setting UG bit, trigger e
+  33:./src/main.c  ****                         //         1: Only counter overflow/underflow
+  34:./src/main.c  ****     uint32_t OPM  : 1;  // [3]     One-pulse mode control
+  35:./src/main.c  ****                         //         0: Continuous mode
+  36:./src/main.c  ****                         //         1: One-pulse mode (stops after next update)
+  37:./src/main.c  ****     uint32_t DIR  : 1;  // [4]     Counting direction
+  38:./src/main.c  ****                         //         0: Upcounter (incrementing)
+  39:./src/main.c  ****                         //         1: Downcounter (decrementing)
+  40:./src/main.c  ****     uint32_t CMS  : 2;  // [6:5]   Counter alignment mode
+  41:./src/main.c  ****                         //         00: Edge-aligned mode
+  42:./src/main.c  ****                         //         01: Center-aligned mode 1
+  43:./src/main.c  ****                         //         10: Center-aligned mode 2
+  44:./src/main.c  ****                         //         11: Center-aligned mode 3
+  45:./src/main.c  ****     uint32_t ARPE : 1;  // [7]     Auto-reload preload enable
+  46:./src/main.c  ****                         //         0: ARR register not buffered
+  47:./src/main.c  ****                         //         1: ARR register buffered
+  48:./src/main.c  ****     uint32_t CKD  : 2;  // [9:8]   Clock division factor
+  49:./src/main.c  ****                         //         00: tDTS = tCK_INT (no division)
+  50:./src/main.c  ****                         //         01: tDTS = 2 × tCK_INT
+  51:./src/main.c  ****                         //         10: tDTS = 4 × tCK_INT
+  52:./src/main.c  ****                         //         11: Reserved
+  53:./src/main.c  ****     uint32_t      : 22; // [31:10] Reserved bits - must maintain reset value
+  54:./src/main.c  ****   };
+  55:./src/main.c  **** } TIM1_CR1_t;
+  56:./src/main.c  **** 
+  57:./src/main.c  **** 
+  58:./src/main.c  **** /**
+  59:./src/main.c  ****   * @brief Timer instance dereference macro
+  60:./src/main.c  ****   * @note Provides cleaner syntax when accessing registers through pointers
+  61:./src/main.c  ****   *       Example: T1.CR1 instead of (*TIM1).CR1
+  62:./src/main.c  ****   */
+  63:./src/main.c  **** #define T1  (*TIM1)
+  64:./src/main.c  **** 
+  65:./src/main.c  **** /**
+  66:./src/main.c  ****   * @brief Peripheral type mapping system
+  67:./src/main.c  ****   * @details Creates a lookup system for peripheral base types, enabling generic
+  68:./src/main.c  ****   *          register access macros to work across all TIM instances uniformly.
+  69:./src/main.c  ****   *          This abstraction layer supports code reuse across the timer family.
+  70:./src/main.c  ****   */
+  71:./src/main.c  **** #define _PERIPHERAL_TIM1    TIM
+  72:./src/main.c  **** /* [...] Additional timer instance mappings follow same pattern [...] */
+  73:./src/main.c  **** #define _PERIPHERAL(NAME)   _PERIPHERAL_##NAME  // Macro concatenation helper
+  74:./src/main.c  **** 
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 8
+
+
+  75:./src/main.c  **** 
+  76:./src/main.c  **** /**
+  77:./src/main.c  ****   * @brief Type-safe register access macro
+  78:./src/main.c  ****   * @note This performs a controlled cast that:
+  79:./src/main.c  ****   *       - Ensures volatile access (critical for hardware registers)
+  80:./src/main.c  ****   *       - Provides bitfield access through TIM1_CR1_t structure
+  81:./src/main.c  ****   *       - Maintains strict type checking
+  82:./src/main.c  ****   *       - Generates optimal machine code
+  83:./src/main.c  ****   */
+  84:./src/main.c  **** #define TIM1_CR1  (*(volatile TIM1_CR1_t*)&TIM1->CR1)
+  85:./src/main.c  **** 
+  86:./src/main.c  **** 
+  87:./src/main.c  **** /**
+  88:./src/main.c  ****   * @brief Bitfield initialization utilities
+  89:./src/main.c  ****   * @{
+  90:./src/main.c  ****   */
+  91:./src/main.c  **** #define BIT_INIT(type, ...)        ((type){__VA_ARGS__}.r)  // Creates initialized register value f
+  92:./src/main.c  **** #define REG_INIT(periph, reg, ...) (periph->reg = ((periph##_##reg##_t){__VA_ARGS__}.r))  // Direct
+  93:./src/main.c  **** /** @} */
+  94:./src/main.c  **** 
+  95:./src/main.c  **** 
+  96:./src/main.c  **** /**
+  97:./src/main.c  ****   * @brief Initializes TIMx CR1 register through type-safe function
+  98:./src/main.c  ****   * @param TIMx: Target timer peripheral (TIM1, TIM2, etc.)
+  99:./src/main.c  ****   * @param config: Fully populated configuration structure
+ 100:./src/main.c  ****   * 
+ 101:./src/main.c  ****   * @note Benefits of this approach:
+ 102:./src/main.c  ****   *       - Atomic register update
+ 103:./src/main.c  ****   *       - Runtime configurability
+ 104:./src/main.c  ****   *       - Type safety through structure parameter
+ 105:./src/main.c  ****   *       - Reusable across all TIMx instances
+ 106:./src/main.c  ****   *       - Readable self-documenting code
+ 107:./src/main.c  ****   *       - Compile-time checking of valid values
+ 108:./src/main.c  ****   */
+ 109:./src/main.c  **** void init_tim_cr1(TIM_TypeDef* TIMx, TIM1_CR1_t config) {
+ 176              		.loc 1 109 57 view -0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 0, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 110:./src/main.c  ****   *(volatile TIM1_CR1_t*)&TIMx->CR1 = config;
+ 181              		.loc 1 110 3 view .LVU9
+ 182              	@ ./src/main.c:110:   *(volatile TIM1_CR1_t*)&TIMx->CR1 = config;
+ 183              		.loc 1 110 37 is_stmt 0 view .LVU10
+ 184 0000 0160     		str	r1, [r0]	@ config, MEM[(volatile union TIM1_CR1_t *)TIMx_1(D)]
+ 185              	@ ./src/main.c:111: }
+ 111:./src/main.c  **** }
+ 186              		.loc 1 111 1 view .LVU11
+ 187              		@ sp needed	@
+ 188 0002 7047     		bx	lr
+ 189              		.cfi_endproc
+ 190              	.LFE55:
+ 192              		.section	.text.TIM_Configuration,"ax",%progbits
+ 193              		.align	1
+ 194              		.p2align 2,,3
+ 195              		.global	TIM_Configuration
+ 196              		.syntax unified
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 9
+
+
+ 197              		.code	16
+ 198              		.thumb_func
+ 200              	TIM_Configuration:
+ 201              	.LFB57:
+ 112:./src/main.c  **** 
+ 113:./src/main.c  **** 
+ 114:./src/main.c  **** // static inline void write_TIM1_CR1(uint32_t value) {
+ 115:./src/main.c  **** //     __asm__ volatile (
+ 116:./src/main.c  **** //         "LDR R1, =0x40012C00\n"  // Load TIM1_CR1 address
+ 117:./src/main.c  **** //         "STR %0, [R1]\n"         // Store value in TIM1->CR1
+ 118:./src/main.c  **** //         :                        // No output operands
+ 119:./src/main.c  **** //         : "r" (value)            // Input operand (%0) is 'value'
+ 120:./src/main.c  **** //         : "r1", "memory"         // Clobber list (R1 register is modified)
+ 121:./src/main.c  **** //     );
+ 122:./src/main.c  **** // }
+ 123:./src/main.c  **** 
+ 124:./src/main.c  **** 
+ 125:./src/main.c  **** 
+ 126:./src/main.c  **** static inline void write_reg(volatile uint32_t *reg, uint32_t value) {
+ 127:./src/main.c  ****   __asm__ volatile (
+ 128:./src/main.c  ****       "STR %1, [%0]\n"  // Store value (%1) at address in reg (%0)
+ 129:./src/main.c  ****       :                 // No output operands
+ 130:./src/main.c  ****       : "r" (reg), "r" (value)  // Inputs: reg (R0), value (R1)
+ 131:./src/main.c  ****       : "memory"        // Clobber: memory barrier (prevents optimization)
+ 132:./src/main.c  ****   );
+ 133:./src/main.c  **** }
+ 134:./src/main.c  **** 
+ 135:./src/main.c  **** /**
+ 136:./src/main.c  ****   * @brief TIM1 Configuration Demonstration
+ 137:./src/main.c  ****   * @details This function showcases 10 distinct methods for peripheral configuration,
+ 138:./src/main.c  ****   *          each demonstrating different approaches to the same task. In production,
+ 139:./src/main.c  ****   *          choose one consistent method based on:
+ 140:./src/main.c  ****   *          - Team preference
+ 141:./src/main.c  ****   *          - Code maintainability needs
+ 142:./src/main.c  ****   *          - Performance requirements
+ 143:./src/main.c  ****   *          - Compiler capabilities
+ 144:./src/main.c  ****   */
+ 145:./src/main.c  **** void TIM_Configuration(void) {
+ 202              		.loc 1 145 30 is_stmt 1 view -0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 146:./src/main.c  ****   
+ 147:./src/main.c  ****   T14.CR1 = (T14_CR1_t){
+ 206              		.loc 1 147 3 view .LVU13
+ 207              	@ ./src/main.c:145: void TIM_Configuration(void) {
+ 145:./src/main.c  ****   
+ 208              		.loc 1 145 30 is_stmt 0 view .LVU14
+ 209 0000 F0B5     		push	{r4, r5, r6, r7, lr}	@
+ 210              		.cfi_def_cfa_offset 20
+ 211              		.cfi_offset 4, -20
+ 212              		.cfi_offset 5, -16
+ 213              		.cfi_offset 6, -12
+ 214              		.cfi_offset 7, -8
+ 215              		.cfi_offset 14, -4
+ 216              	@ ./src/main.c:147:   T14.CR1 = (T14_CR1_t){
+ 217              		.loc 1 147 11 view .LVU15
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 10
+
+
+ 218 0002 0026     		movs	r6, #0	@ tmp115,
+ 219 0004 0121     		movs	r1, #1	@ tmp121,
+ 220 0006 2A4B     		ldr	r3, .L11	@ tmp114,
+ 221 0008 8020     		movs	r0, #128	@ tmp148,
+ 222 000a 1E60     		str	r6, [r3]	@ tmp115, MEM[(volatile struct T14_TypeDef *)1073750016B].CR1
+ 223 000c 1A88     		ldrh	r2, [r3]	@ tmp120,
+ 224 000e 0125     		movs	r5, #1	@ tmp122,
+ 225 0010 0A43     		orrs	r2, r1	@ tmp123, tmp121
+ 226 0012 0221     		movs	r1, #2	@ tmp130,
+ 227 0014 1A80     		strh	r2, [r3]	@ tmp123,
+ 228 0016 1A88     		ldrh	r2, [r3]	@ tmp129,
+ 229 0018 0424     		movs	r4, #4	@ tmp140,
+ 230 001a 0A43     		orrs	r2, r1	@ tmp132, tmp130
+ 231 001c 0421     		movs	r1, #4	@ tmp139,
+ 232 001e 1A80     		strh	r2, [r3]	@ tmp132,
+ 233 0020 1A88     		ldrh	r2, [r3]	@ tmp138,
+ 234 0022 0A43     		orrs	r2, r1	@ tmp141, tmp139
+ 235 0024 1A80     		strh	r2, [r3]	@ tmp141,
+ 236 0026 1A88     		ldrh	r2, [r3]	@ tmp147,
+ 237 0028 8021     		movs	r1, #128	@ tmp149,
+ 238 002a 0243     		orrs	r2, r0	@ tmp150, tmp148
+ 239 002c 1A80     		strh	r2, [r3]	@ tmp150,
+ 148:./src/main.c  ****     .CEN  = 1,  // Enable timer
+ 149:./src/main.c  ****     .URS  = 1,  // Only overflow updates
+ 150:./src/main.c  ****     .UDIS = 1,  // Update Disable
+ 151:./src/main.c  ****     .ARPE = 1   // Buffered reload
+ 152:./src/main.c  ****   };  
+ 153:./src/main.c  ****   
+ 154:./src/main.c  ****   write_reg(&TIM1->CR1, (TIM1_CR1_t){.DIR=1, .CEN=1, .OPM=1}.r);  // Write 0x81 to TIM1_CR1
+ 240              		.loc 1 154 3 is_stmt 1 view .LVU16
+ 241              	.LVL1:
+ 242              	.LBB32:
+ 243              	.LBI32:
+ 126:./src/main.c  ****   __asm__ volatile (
+ 244              		.loc 1 126 20 view .LVU17
+ 245              	.LBB33:
+ 127:./src/main.c  ****       "STR %1, [%0]\n"  // Store value (%1) at address in reg (%0)
+ 246              		.loc 1 127 3 view .LVU18
+ 247 002e 214B     		ldr	r3, .L11+4	@ tmp152,
+ 248 0030 1922     		movs	r2, #25	@ tmp153,
+ 249              		.syntax divided
+ 250              	@ 127 "./src/main.c" 1
+ 251 0032 1A60     		STR r2, [r3]	@ tmp153, tmp152
+ 252              	
+ 253              	@ 0 "" 2
+ 254              	.LVL2:
+ 127:./src/main.c  ****       "STR %1, [%0]\n"  // Store value (%1) at address in reg (%0)
+ 255              		.loc 1 127 3 is_stmt 0 view .LVU19
+ 256              		.thumb
+ 257              		.syntax unified
+ 258              	.LBE33:
+ 259              	.LBE32:
+ 155:./src/main.c  ****   
+ 156:./src/main.c  ****   /* METHOD 1: Traditional bitmask OR (STD Peripheral Library style)
+ 157:./src/main.c  ****    * Advantages:
+ 158:./src/main.c  ****    * - Most compact code size
+ 159:./src/main.c  ****    * - Minimal runtime overhead
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 11
+
+
+ 160:./src/main.c  ****    * - Familiar to experienced STM32 developers
+ 161:./src/main.c  ****    * 
+ 162:./src/main.c  ****    * Disadvantages:
+ 163:./src/main.c  ****    * - Magic numbers reduce readability
+ 164:./src/main.c  ****    * - Harder to maintain
+ 165:./src/main.c  ****    * - No compile-time checking
+ 166:./src/main.c  ****    */
+ 167:./src/main.c  ****   TIM1->CR1 = TIM_CR1_CEN | TIM_CR1_OPM;
+ 260              		.loc 1 167 3 is_stmt 1 view .LVU20
+ 261              	@ ./src/main.c:352: }
+ 168:./src/main.c  **** 
+ 169:./src/main.c  ****   /* METHOD 2: Explicit bit-weighted initialization
+ 170:./src/main.c  ****    * Advantages:
+ 171:./src/main.c  ****    * - Self-documenting through comments
+ 172:./src/main.c  ****    * - Explicit about each bit's value
+ 173:./src/main.c  ****    * 
+ 174:./src/main.c  ****    * Disadvantages:
+ 175:./src/main.c  ****    * - Verbose syntax
+ 176:./src/main.c  ****    */
+ 177:./src/main.c  ****   TIM1->CR1 = (
+ 178:./src/main.c  ****     1 * TIM_CR1_CEN      |   /* Enable counter */
+ 179:./src/main.c  ****     0 * TIM_CR1_UDIS     |   /* Allow update events */
+ 180:./src/main.c  ****     1 * TIM_CR1_URS      |   /* Only overflow triggers update */
+ 181:./src/main.c  ****     0 * TIM_CR1_OPM      |   /* Continuous counting mode */
+ 182:./src/main.c  ****     0 * TIM_CR1_DIR      |   /* Up-counting direction */
+ 183:./src/main.c  ****     1 * TIM_CR1_CMS_0    |   /* Center-aligned mode 1 */
+ 184:./src/main.c  ****     0 * TIM_CR1_CMS_1    |
+ 185:./src/main.c  ****     1 * TIM_CR1_ARPE     |   /* Enable auto-reload buffering */
+ 186:./src/main.c  ****     1 * TIM_CR1_CKD_0    |   /* Clock division = 2 */
+ 187:./src/main.c  ****     0 * TIM_CR1_CKD_1
+ 188:./src/main.c  ****   );
+ 189:./src/main.c  ****   
+ 190:./src/main.c  **** 
+ 191:./src/main.c  ****   /* METHOD 3: Compile-time configuration macro
+ 192:./src/main.c  ****    * Advantages:
+ 193:./src/main.c  ****    * - Configuration separated from code
+ 194:./src/main.c  ****    * - Conditional compilation possible
+ 195:./src/main.c  ****    * 
+ 196:./src/main.c  ****    * Disadvantages:
+ 197:./src/main.c  ****    * - Complex preprocessor usage
+ 198:./src/main.c  ****    * - Harder to debug
+ 199:./src/main.c  ****    */
+ 200:./src/main.c  ****   #define TIM1_CR1_INIT  (                                                      \
+ 201:./src/main.c  ****     0 * TIM_CR1_CEN      |   /* Counter enable                                */\
+ 202:./src/main.c  ****     0 * TIM_CR1_UDIS     |   /* Update disable                                */\
+ 203:./src/main.c  ****     0 * TIM_CR1_URS      |   /* Update request source                         */\
+ 204:./src/main.c  ****     0 * TIM_CR1_OPM      |   /* One pulse mode                                */\
+ 205:./src/main.c  ****     0 * TIM_CR1_DIR      |   /* Direction                                     */\
+ 206:./src/main.c  ****                                                                                 \
+ 207:./src/main.c  ****     0 * TIM_CR1_CMS      |   /* CMS[1:0] bits (Center-aligned mode selection) */\
+ 208:./src/main.c  ****     0 * TIM_CR1_CMS_0    |   /*  0x00000020                                   */\
+ 209:./src/main.c  ****     0 * TIM_CR1_CMS_1    |   /*  0x00000040                                   */\
+ 210:./src/main.c  ****                                                                                 \
+ 211:./src/main.c  ****     0 * TIM_CR1_ARPE     |   /* Auto-reload preload enable                    */\
+ 212:./src/main.c  ****                                                                                 \
+ 213:./src/main.c  ****     0 * TIM_CR1_CKD      |   /* CKD[1:0] bits (clock division)                */\
+ 214:./src/main.c  ****     0 * TIM_CR1_CKD_0    |   /*  0x00000100                                   */\
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 12
+
+
+ 215:./src/main.c  ****     0 * TIM_CR1_CKD_1        /*  0x00000200                                   */\
+ 216:./src/main.c  ****   )
+ 217:./src/main.c  ****   #if 0 != TIM1_CR1_INIT
+ 218:./src/main.c  ****     TIM1->CR1 = TIM1_CR1_INIT
+ 219:./src/main.c  ****   #endif
+ 220:./src/main.c  ****  
+ 221:./src/main.c  ****   
+ 222:./src/main.c  ****   /* METHOD 4: Direct bitfield member access
+ 223:./src/main.c  ****    * Advantages:
+ 224:./src/main.c  ****    * - Most explicit syntax
+ 225:./src/main.c  ****    * - No bitmask knowledge required
+ 226:./src/main.c  ****    * - Field names self-document
+ 227:./src/main.c  ****    * 
+ 228:./src/main.c  ****    * Disadvantages:
+ 229:./src/main.c  ****    * - Non-atomic access (multiple instructions)
+ 230:./src/main.c  ****    * - Larger code size
+ 231:./src/main.c  ****    */
+ 232:./src/main.c  ****   TIM1_CR1.CEN   = 1;  // Enable counter
+ 233:./src/main.c  ****   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 234:./src/main.c  ****   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 235:./src/main.c  ****   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 236:./src/main.c  ****   TIM1_CR1.DIR   = 0;  // Up-counting direction
+ 237:./src/main.c  ****   TIM1_CR1.CMS   = 0;  // Edge-aligned mode
+ 238:./src/main.c  ****   TIM1_CR1.ARPE  = 1;  // Buffer reload register
+ 239:./src/main.c  ****   TIM1_CR1.CKD   = 0;  // No clock division
+ 240:./src/main.c  **** 
+ 241:./src/main.c  **** 
+ 242:./src/main.c  ****   /* METHOD 5: Direct structure assignment (Recommended for clarity)
+ 243:./src/main.c  ****    * Advantages:
+ 244:./src/main.c  ****    * - Clean, readable syntax
+ 245:./src/main.c  ****    * - Atomic register update
+ 246:./src/main.c  ****    * - Partial initialization supported
+ 247:./src/main.c  ****    * 
+ 248:./src/main.c  ****    * Disadvantages:
+ 249:./src/main.c  ****    * - Requires C99 or later
+ 250:./src/main.c  ****    */
+ 251:./src/main.c  ****   TIM1_CR1 = (TIM1_CR1_t){
+ 252:./src/main.c  ****     .CEN  = 1,  // Enable timer
+ 253:./src/main.c  ****     .URS  = 1,  // Only overflow updates
+ 254:./src/main.c  ****     .CMS  = 1,  // Center-aligned mode 1
+ 255:./src/main.c  ****     .ARPE = 1   // Buffered reload
+ 256:./src/main.c  ****   };  
+ 257:./src/main.c  **** 
+ 258:./src/main.c  ****   /* METHOD 6: Compound literal with field designators
+ 259:./src/main.c  ****    * Advantages:
+ 260:./src/main.c  ****    * - Explicit about initialized fields
+ 261:./src/main.c  ****    * - Good for partial configurations
+ 262:./src/main.c  ****    * 
+ 263:./src/main.c  ****    * Disadvantages:
+ 264:./src/main.c  ****    * - Slightly more verbose
+ 265:./src/main.c  ****    */
+ 266:./src/main.c  ****   TIM1->CR1 = (TIM1_CR1_t){
+ 267:./src/main.c  ****     .CEN  = 1,  // Enable counter
+ 268:./src/main.c  ****     .ARPE = 1,  // Enable auto-reload
+ 269:./src/main.c  ****     .CKD  = 1   // Clock division = 2
+ 270:./src/main.c  ****   }.r;
+ 271:./src/main.c  ****   
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 13
+
+
+ 272:./src/main.c  ****   
+ 273:./src/main.c  ****   /* METHOD 7: Full structure initialization
+ 274:./src/main.c  ****    * Advantages:
+ 275:./src/main.c  ****    * - Most explicit configuration
+ 276:./src/main.c  ****    * - All fields documented
+ 277:./src/main.c  ****    * 
+ 278:./src/main.c  ****    * Disadvantages:
+ 279:./src/main.c  ****    * - Verbose for simple cases
+ 280:./src/main.c  ****    */
+ 281:./src/main.c  ****   T1.CR1 = (TIM1_CR1_t){
+ 282:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 283:./src/main.c  ****     .UDIS = 0,  // Update events enabled
+ 284:./src/main.c  ****     .URS  = 1,  // Only overflow triggers update
+ 285:./src/main.c  ****     .OPM  = 0,  // Continuous mode
+ 286:./src/main.c  ****     .DIR  = 0,  // Up-counting
+ 287:./src/main.c  ****     .CMS  = 2,  // Center-aligned mode 2
+ 288:./src/main.c  ****     .ARPE = 1,  // Auto-reload enabled
+ 289:./src/main.c  ****     .CKD  = 1   // Clock division = 2
+ 290:./src/main.c  ****   }.r;
+ 291:./src/main.c  **** 
+ 292:./src/main.c  ****   
+ 293:./src/main.c  ****   /* METHOD 8: BIT_INIT helper macro
+ 294:./src/main.c  ****    * Advantages:
+ 295:./src/main.c  ****    * - Compact yet readable
+ 296:./src/main.c  ****    * - Type-safe initialization
+ 297:./src/main.c  ****    * 
+ 298:./src/main.c  ****    * Disadvantages:
+ 299:./src/main.c  ****    * - Hidden macro complexity
+ 300:./src/main.c  ****    */
+ 301:./src/main.c  ****   TIM1->CR1 = BIT_INIT(TIM1_CR1_t,
+ 302:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 303:./src/main.c  ****     .UDIS = 0,  // Update events enabled
+ 304:./src/main.c  ****     .URS  = 0,  // Any event triggers update
+ 305:./src/main.c  ****     .OPM  = 0,  // Continuous mode
+ 306:./src/main.c  ****     .DIR  = 0,  // Up-counting
+ 307:./src/main.c  ****     .CMS  = 1,  // Center-aligned mode 1
+ 308:./src/main.c  ****     .ARPE = 1,  // Auto-reload enabled
+ 309:./src/main.c  ****     .CKD  = 0   // No clock division
+ 310:./src/main.c  ****   );
+ 311:./src/main.c  ****   
+ 312:./src/main.c  **** 
+ 313:./src/main.c  ****   /* METHOD 9: Configuration macro for production
+ 314:./src/main.c  ****    * Advantages:
+ 315:./src/main.c  ****    * - Centralized configuration
+ 316:./src/main.c  ****    * - Easy to modify
+ 317:./src/main.c  ****    * 
+ 318:./src/main.c  ****    * Disadvantages:
+ 319:./src/main.c  ****    * - Requires consistent style
+ 320:./src/main.c  ****    */
+ 321:./src/main.c  ****   #define TIM1_CR1_INIT_VAL (TIM1_CR1_t){ .CEN=1, .ARPE=1, .CMS=1 }.r
+ 322:./src/main.c  ****   TIM1->CR1 = TIM1_CR1_INIT_VAL;
+ 323:./src/main.c  ****   
+ 324:./src/main.c  ****   
+ 325:./src/main.c  ****   /* METHOD 10: REG_INIT macro (Most concise)
+ 326:./src/main.c  ****    * Advantages:
+ 327:./src/main.c  ****    * - Very compact syntax
+ 328:./src/main.c  ****    * - Maintains type safety
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 14
+
+
+ 329:./src/main.c  ****    * 
+ 330:./src/main.c  ****    * Disadvantages:
+ 331:./src/main.c  ****    * - Obfuscates the actual operation
+ 332:./src/main.c  ****    */
+ 333:./src/main.c  ****   REG_INIT(TIM1, CR1,
+ 334:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 335:./src/main.c  ****     .UDIS = 0,  // Update events enabled
+ 336:./src/main.c  ****     .URS  = 0,  // Any event triggers update
+ 337:./src/main.c  ****     .OPM  = 0,  // Continuous mode
+ 338:./src/main.c  ****     .DIR  = 1,  // Down-counting
+ 339:./src/main.c  ****     .CMS  = 3,  // Center-aligned mode 3
+ 340:./src/main.c  ****     .ARPE = 1,  // Auto-reload enabled
+ 341:./src/main.c  ****     .CKD  = 2   // Clock division = 4
+ 342:./src/main.c  ****   );
+ 343:./src/main.c  ****   
+ 344:./src/main.c  ****   // __asm__ volatile (
+ 345:./src/main.c  ****   //     "LDR r1, =0x40012C00\n"  // Load TIM1_CR1 address
+ 346:./src/main.c  ****   //     "MOV r0, #0x81\n"        // CEN (bit 0) and ARPE (bit 7)
+ 347:./src/main.c  ****   //     "STR r0, [r1]\n"         // Store in TIM1->CR1
+ 348:./src/main.c  ****   // );
+ 349:./src/main.c  **** 
+ 350:./src/main.c  ****   // write_TIM1_CR1(0x81);
+ 351:./src/main.c  ****   
+ 352:./src/main.c  **** }
+ 262              		.loc 1 352 1 is_stmt 0 view .LVU21
+ 263              		@ sp needed	@
+ 264              	@ ./src/main.c:167:   TIM1->CR1 = TIM_CR1_CEN | TIM_CR1_OPM;
+ 167:./src/main.c  **** 
+ 265              		.loc 1 167 13 view .LVU22
+ 266 0034 103A     		subs	r2, r2, #16	@ tmp155,
+ 267 0036 1A60     		str	r2, [r3]	@ tmp155, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 177:./src/main.c  ****     1 * TIM_CR1_CEN      |   /* Enable counter */
+ 268              		.loc 1 177 3 is_stmt 1 view .LVU23
+ 269              	@ ./src/main.c:177:   TIM1->CR1 = (
+ 177:./src/main.c  ****     1 * TIM_CR1_CEN      |   /* Enable counter */
+ 270              		.loc 1 177 13 is_stmt 0 view .LVU24
+ 271 0038 A622     		movs	r2, #166	@ tmp157,
+ 272              	@ ./src/main.c:233:   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 233:./src/main.c  ****   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 273              		.loc 1 233 18 view .LVU25
+ 274 003a 0220     		movs	r0, #2	@ tmp131,
+ 275              	@ ./src/main.c:177:   TIM1->CR1 = (
+ 177:./src/main.c  ****     1 * TIM_CR1_CEN      |   /* Enable counter */
+ 276              		.loc 1 177 13 view .LVU26
+ 277 003c FF32     		adds	r2, r2, #255	@ tmp157,
+ 278 003e 1A60     		str	r2, [r3]	@ tmp157, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 232:./src/main.c  ****   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 279              		.loc 1 232 3 is_stmt 1 view .LVU27
+ 280              	@ ./src/main.c:232:   TIM1_CR1.CEN   = 1;  // Enable counter
+ 232:./src/main.c  ****   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 281              		.loc 1 232 18 is_stmt 0 view .LVU28
+ 282 0040 1A68     		ldr	r2, [r3]	@ tmp159,
+ 283              	@ ./src/main.c:239:   TIM1_CR1.CKD   = 0;  // No clock division
+ 239:./src/main.c  **** 
+ 284              		.loc 1 239 18 view .LVU29
+ 285 0042 1D4F     		ldr	r7, .L11+8	@ tmp189,
+ 286              	@ ./src/main.c:232:   TIM1_CR1.CEN   = 1;  // Enable counter
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 15
+
+
+ 232:./src/main.c  ****   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 287              		.loc 1 232 18 view .LVU30
+ 288 0044 2A43     		orrs	r2, r5	@ tmp161, tmp122
+ 289 0046 1A60     		str	r2, [r3]	@ tmp161,
+ 233:./src/main.c  ****   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 290              		.loc 1 233 3 is_stmt 1 view .LVU31
+ 291              	@ ./src/main.c:233:   TIM1_CR1.UDIS  = 0;  // Allow update events
+ 233:./src/main.c  ****   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 292              		.loc 1 233 18 is_stmt 0 view .LVU32
+ 293 0048 1A68     		ldr	r2, [r3]	@ tmp163,
+ 294 004a 8243     		bics	r2, r0	@ tmp164, tmp131
+ 295 004c 1A60     		str	r2, [r3]	@ tmp164,
+ 234:./src/main.c  ****   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 296              		.loc 1 234 3 is_stmt 1 view .LVU33
+ 297              	@ ./src/main.c:234:   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 234:./src/main.c  ****   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 298              		.loc 1 234 18 is_stmt 0 view .LVU34
+ 299 004e 1A68     		ldr	r2, [r3]	@ tmp167,
+ 300              	@ ./src/main.c:235:   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 235:./src/main.c  ****   TIM1_CR1.DIR   = 0;  // Up-counting direction
+ 301              		.loc 1 235 18 view .LVU35
+ 302 0050 0630     		adds	r0, r0, #6	@ tmp173,
+ 303              	@ ./src/main.c:234:   TIM1_CR1.URS   = 1;  // Only overflow triggers update
+ 234:./src/main.c  ****   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 304              		.loc 1 234 18 view .LVU36
+ 305 0052 2243     		orrs	r2, r4	@ tmp169, tmp140
+ 306 0054 1A60     		str	r2, [r3]	@ tmp169,
+ 235:./src/main.c  ****   TIM1_CR1.DIR   = 0;  // Up-counting direction
+ 307              		.loc 1 235 3 is_stmt 1 view .LVU37
+ 308              	@ ./src/main.c:235:   TIM1_CR1.OPM   = 0;  // Continuous counting mode
+ 235:./src/main.c  ****   TIM1_CR1.DIR   = 0;  // Up-counting direction
+ 309              		.loc 1 235 18 is_stmt 0 view .LVU38
+ 310 0056 1A68     		ldr	r2, [r3]	@ tmp171,
+ 311 0058 8243     		bics	r2, r0	@ tmp172, tmp173
+ 312 005a 1A60     		str	r2, [r3]	@ tmp172,
+ 236:./src/main.c  ****   TIM1_CR1.CMS   = 0;  // Edge-aligned mode
+ 313              		.loc 1 236 3 is_stmt 1 view .LVU39
+ 314              	@ ./src/main.c:236:   TIM1_CR1.DIR   = 0;  // Up-counting direction
+ 236:./src/main.c  ****   TIM1_CR1.CMS   = 0;  // Edge-aligned mode
+ 315              		.loc 1 236 18 is_stmt 0 view .LVU40
+ 316 005c 1A68     		ldr	r2, [r3]	@ tmp175,
+ 317 005e 0830     		adds	r0, r0, #8	@ tmp177,
+ 318 0060 8243     		bics	r2, r0	@ tmp176, tmp177
+ 319 0062 1A60     		str	r2, [r3]	@ tmp176,
+ 237:./src/main.c  ****   TIM1_CR1.ARPE  = 1;  // Buffer reload register
+ 320              		.loc 1 237 3 is_stmt 1 view .LVU41
+ 321              	@ ./src/main.c:237:   TIM1_CR1.CMS   = 0;  // Edge-aligned mode
+ 237:./src/main.c  ****   TIM1_CR1.ARPE  = 1;  // Buffer reload register
+ 322              		.loc 1 237 18 is_stmt 0 view .LVU42
+ 323 0064 1A68     		ldr	r2, [r3]	@ tmp179,
+ 324 0066 5030     		adds	r0, r0, #80	@ tmp181,
+ 325 0068 8243     		bics	r2, r0	@ tmp180, tmp181
+ 326 006a 1A60     		str	r2, [r3]	@ tmp180,
+ 238:./src/main.c  ****   TIM1_CR1.CKD   = 0;  // No clock division
+ 327              		.loc 1 238 3 is_stmt 1 view .LVU43
+ 328              	@ ./src/main.c:238:   TIM1_CR1.ARPE  = 1;  // Buffer reload register
+ 238:./src/main.c  ****   TIM1_CR1.CKD   = 0;  // No clock division
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 16
+
+
+ 329              		.loc 1 238 18 is_stmt 0 view .LVU44
+ 330 006c 1A68     		ldr	r2, [r3]	@ tmp183,
+ 331 006e 0A43     		orrs	r2, r1	@ tmp185, tmp149
+ 332 0070 1A60     		str	r2, [r3]	@ tmp185,
+ 239:./src/main.c  **** 
+ 333              		.loc 1 239 3 is_stmt 1 view .LVU45
+ 334              	@ ./src/main.c:239:   TIM1_CR1.CKD   = 0;  // No clock division
+ 239:./src/main.c  **** 
+ 335              		.loc 1 239 18 is_stmt 0 view .LVU46
+ 336 0072 1A68     		ldr	r2, [r3]	@ tmp187,
+ 337 0074 3A40     		ands	r2, r7	@ tmp188, tmp189
+ 338 0076 1A60     		str	r2, [r3]	@ tmp188,
+ 251:./src/main.c  ****     .CEN  = 1,  // Enable timer
+ 339              		.loc 1 251 3 is_stmt 1 view .LVU47
+ 340              	@ ./src/main.c:251:   TIM1_CR1 = (TIM1_CR1_t){
+ 251:./src/main.c  ****     .CEN  = 1,  // Enable timer
+ 341              		.loc 1 251 12 is_stmt 0 view .LVU48
+ 342 0078 1E60     		str	r6, [r3]	@ tmp115, MEM[(volatile union TIM1_CR1_t *)1073818624B]
+ 343 007a 1A68     		ldr	r2, [r3]	@ tmp193,
+ 344 007c 2A43     		orrs	r2, r5	@ tmp195, tmp122
+ 345 007e 1A60     		str	r2, [r3]	@ tmp195,
+ 346 0080 1A68     		ldr	r2, [r3]	@ tmp197,
+ 347 0082 2243     		orrs	r2, r4	@ tmp199, tmp140
+ 348 0084 1A60     		str	r2, [r3]	@ tmp199,
+ 349 0086 1A68     		ldr	r2, [r3]	@ tmp201,
+ 350 0088 8243     		bics	r2, r0	@ tmp202, tmp181
+ 351 008a 4038     		subs	r0, r0, #64	@ tmp204,
+ 352 008c 0243     		orrs	r2, r0	@ tmp205, tmp204
+ 353 008e 1A60     		str	r2, [r3]	@ tmp205,
+ 354 0090 1A68     		ldr	r2, [r3]	@ tmp207,
+ 355 0092 0A43     		orrs	r2, r1	@ tmp209, tmp149
+ 356 0094 1A60     		str	r2, [r3]	@ tmp209,
+ 266:./src/main.c  ****     .CEN  = 1,  // Enable counter
+ 357              		.loc 1 266 3 is_stmt 1 view .LVU49
+ 358              	@ ./src/main.c:266:   TIM1->CR1 = (TIM1_CR1_t){
+ 266:./src/main.c  ****     .CEN  = 1,  // Enable counter
+ 359              		.loc 1 266 13 is_stmt 0 view .LVU50
+ 360 0096 8222     		movs	r2, #130	@ tmp211,
+ 361 0098 FF32     		adds	r2, r2, #255	@ tmp211,
+ 362 009a 1A60     		str	r2, [r3]	@ tmp211, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 281:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 363              		.loc 1 281 3 is_stmt 1 view .LVU51
+ 364              	@ ./src/main.c:281:   T1.CR1 = (TIM1_CR1_t){
+ 281:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 365              		.loc 1 281 10 is_stmt 0 view .LVU52
+ 366 009c C622     		movs	r2, #198	@ tmp213,
+ 367 009e FF32     		adds	r2, r2, #255	@ tmp213,
+ 368 00a0 1A60     		str	r2, [r3]	@ tmp213, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 301:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 369              		.loc 1 301 3 is_stmt 1 view .LVU53
+ 370              	@ ./src/main.c:301:   TIM1->CR1 = BIT_INIT(TIM1_CR1_t,
+ 301:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 371              		.loc 1 301 13 is_stmt 0 view .LVU54
+ 372 00a2 253A     		subs	r2, r2, #37	@ tmp215,
+ 373 00a4 FF3A     		subs	r2, r2, #255	@ tmp215,
+ 374 00a6 1A60     		str	r2, [r3]	@ tmp215, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 322:./src/main.c  ****   
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 17
+
+
+ 375              		.loc 1 322 3 is_stmt 1 view .LVU55
+ 376              	@ ./src/main.c:322:   TIM1->CR1 = TIM1_CR1_INIT_VAL;
+ 322:./src/main.c  ****   
+ 377              		.loc 1 322 13 is_stmt 0 view .LVU56
+ 378 00a8 1A60     		str	r2, [r3]	@ tmp215, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 333:./src/main.c  ****     .CEN  = 1,  // Counter enabled
+ 379              		.loc 1 333 3 is_stmt 1 view .LVU57
+ 380 00aa 044A     		ldr	r2, .L11+12	@ tmp219,
+ 381 00ac 1A60     		str	r2, [r3]	@ tmp219, MEM[(struct TIM_TypeDef *)1073818624B].CR1
+ 382              	@ ./src/main.c:352: }
+ 383              		.loc 1 352 1 is_stmt 0 view .LVU58
+ 384 00ae F0BD     		pop	{r4, r5, r6, r7, pc}
+ 385              	.L12:
+ 386              		.align	2
+ 387              	.L11:
+ 388 00b0 00200040 		.word	1073750016
+ 389 00b4 002C0140 		.word	1073818624
+ 390 00b8 FFFCFFFF 		.word	-769
+ 391 00bc F1020000 		.word	753
+ 392              		.cfi_endproc
+ 393              	.LFE57:
+ 395              		.section	.text.startup.main,"ax",%progbits
+ 396              		.align	1
+ 397              		.p2align 2,,3
+ 398              		.global	main
+ 399              		.syntax unified
+ 400              		.code	16
+ 401              		.thumb_func
+ 403              	main:
+ 404              	.LFB58:
+ 353:./src/main.c  **** 
+ 354:./src/main.c  **** int main(void) {
+ 405              		.loc 1 354 16 is_stmt 1 view -0
+ 406              		.cfi_startproc
+ 407              		@ Volatile: function does not return.
+ 408              		@ args = 0, pretend = 0, frame = 8
+ 409              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355:./src/main.c  **** 
+ 356:./src/main.c  ****   // R_INIT(TIM1, CR1, .CEN=1, .OPM=1);
+ 357:./src/main.c  ****   TIM_Configuration();
+ 410              		.loc 1 357 3 view .LVU60
+ 411              	@ ./src/main.c:354: int main(void) {
+ 354:./src/main.c  **** 
+ 412              		.loc 1 354 16 is_stmt 0 view .LVU61
+ 413 0000 F0B5     		push	{r4, r5, r6, r7, lr}	@
+ 414              		.cfi_def_cfa_offset 20
+ 415              		.cfi_offset 4, -20
+ 416              		.cfi_offset 5, -16
+ 417              		.cfi_offset 6, -12
+ 418              		.cfi_offset 7, -8
+ 419              		.cfi_offset 14, -4
+ 420 0002 4746     		mov	r7, r8	@,
+ 421 0004 CE46     		mov	lr, r9	@,
+ 422 0006 80B5     		push	{r7, lr}	@
+ 423              		.cfi_def_cfa_offset 28
+ 424              		.cfi_offset 8, -28
+ 425              		.cfi_offset 9, -24
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 18
+
+
+ 426 0008 83B0     		sub	sp, sp, #12	@,,
+ 427              		.cfi_def_cfa_offset 40
+ 428              	@ ./src/main.c:357:   TIM_Configuration();
+ 429              		.loc 1 357 3 view .LVU62
+ 430 000a FFF7FEFF 		bl	TIM_Configuration		@
+ 431              	.LVL3:
+ 358:./src/main.c  ****   //configure_timer();
+ 359:./src/main.c  **** 
+ 360:./src/main.c  ****   for (init(); process(); idle());
+ 432              		.loc 1 360 3 is_stmt 1 view .LVU63
+ 433              	.LBB34:
+ 434              	.LBI34:
+  53:./inc/main.h  **** 
+ 435              		.loc 2 53 27 view .LVU64
+ 436              	.LBB35:
+  60:./inc/main.h  **** 
+ 437              		.loc 2 60 3 view .LVU65
+ 438              	.LBB36:
+ 439              	.LBI36:
+ 440              		.file 3 "./inc/rcc.h"
+   1:./inc/rcc.h   **** #ifndef __RCC_H__
+   2:./inc/rcc.h   **** #define __RCC_H__
+   3:./inc/rcc.h   **** 
+   4:./inc/rcc.h   **** #ifdef __cplusplus
+   5:./inc/rcc.h   ****   extern "C" {
+   6:./inc/rcc.h   **** #endif
+   7:./inc/rcc.h   **** 
+   8:./inc/rcc.h   **** 
+   9:./inc/rcc.h   **** #define R                              (HCLK >= 12)
+  10:./inc/rcc.h   **** #define XMUL                           (HCLK / 4 - 2)     /* Calculate PLL multiplication factor   
+  11:./inc/rcc.h   **** #define A                              ((XMUL >> 0) & 1)  /* LSB or BIT0 of PLL multiplication fact
+  12:./inc/rcc.h   **** #define B                              ((XMUL >> 1) & 1)  /*        BIT1 of PLL multiplication fact
+  13:./inc/rcc.h   **** #define C                              ((XMUL >> 2) & 1)  /*        BIT2 of PLL multiplication fact
+  14:./inc/rcc.h   **** #define D                              ((XMUL >> 3) & 1)  /* MSB or BIT3 of PLL multiplication fact
+  15:./inc/rcc.h   **** 
+  16:./inc/rcc.h   **** 
+  17:./inc/rcc.h   **** __STATIC_FORCEINLINE void configure_flash(void);
+  18:./inc/rcc.h   **** __STATIC_FORCEINLINE void wait_for_clock_stable(void);
+  19:./inc/rcc.h   **** 
+  20:./inc/rcc.h   **** 
+  21:./inc/rcc.h   **** #define RCC_CFGR (                      \
+  22:./inc/rcc.h   ****   0 * RCC_CFGR_SW                       |  /* (3 << 0)     SW[1:0] bits (System clock Switch)      
+  23:./inc/rcc.h   ****   0 * RCC_CFGR_SW_0                     |  /* (1 << 0)       0x00000001                            
+  24:./inc/rcc.h   ****   0 * RCC_CFGR_SW_1                     |  /* (2 << 0)       0x00000002                            
+  25:./inc/rcc.h   ****   0 * RCC_CFGR_SW_HSI                   |  /* 0x00000000   HSI selected as system clock            
+  26:./inc/rcc.h   ****   0 * RCC_CFGR_SW_HSE                   |  /* 0x00000001   HSE selected as system clock            
+  27:./inc/rcc.h   ****   R * RCC_CFGR_SW_PLL                   |  /* 0x00000002   PLL selected as system clock            
+  28:./inc/rcc.h   ****   0 * RCC_CFGR_SWS                      |  /* (3 << 2)     SWS[1:0] bits (System Clock Switch Statu
+  29:./inc/rcc.h   ****   0 * RCC_CFGR_SWS_0                    |  /* (1 << 2)       0x00000004                            
+  30:./inc/rcc.h   ****   0 * RCC_CFGR_SWS_1                    |  /* (2 << 2)       0x00000008                            
+  31:./inc/rcc.h   ****   0 * RCC_CFGR_SWS_HSI                  |  /* 0x00000000   HSI oscillator used as system clock     
+  32:./inc/rcc.h   ****   0 * RCC_CFGR_SWS_HSE                  |  /* 0x00000004   HSE oscillator used as system clock     
+  33:./inc/rcc.h   ****   0 * RCC_CFGR_SWS_PLL                  |  /* 0x00000008   PLL used as system clock                
+  34:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE                     |  /* (0xF << 4)   HPRE[3:0] bits (AHB prescaler)          
+  35:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_0                   |  /* (1 << 4)       0x00000010                            
+  36:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_1                   |  /* (2 << 4)       0x00000020                            
+  37:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_2                   |  /* (4 << 4)       0x00000040                            
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 19
+
+
+  38:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_3                   |  /* (8 << 4)       0x00000080                            
+  39:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV1                |  /* 0x00000000   SYSCLK not divided                      
+  40:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV2                |  /* 0x00000080   SYSCLK divided by 2                     
+  41:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV4                |  /* 0x00000090   SYSCLK divided by 4                     
+  42:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV8                |  /* 0x000000A0   SYSCLK divided by 8                     
+  43:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV16               |  /* 0x000000B0   SYSCLK divided by 16                    
+  44:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV64               |  /* 0x000000C0   SYSCLK divided by 64                    
+  45:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV128              |  /* 0x000000D0   SYSCLK divided by 128                   
+  46:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV256              |  /* 0x000000E0   SYSCLK divided by 256                   
+  47:./inc/rcc.h   ****   0 * RCC_CFGR_HPRE_DIV512              |  /* 0x000000F0   SYSCLK divided by 512                   
+  48:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE                     |  /* (7 << 8)     PRE[2:0] bits (APB prescaler)           
+  49:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_0                   |  /* (1 << 8)       0x00000100                            
+  50:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_1                   |  /* (2 << 8)       0x00000200                            
+  51:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_2                   |  /* (4 << 8)       0x00000400                            
+  52:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_DIV1                |  /* 0x00000000   HCLK not divided                        
+  53:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_DIV2                |  /* (1 << 10)    HCLK divided by 2                       
+  54:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_DIV4                |  /* (5 << 8)     HCLK divided by 4                       
+  55:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_DIV8                |  /* (3 << 9)     HCLK divided by 8                       
+  56:./inc/rcc.h   ****   0 * RCC_CFGR_PPRE_DIV16               |  /* (7 << 8)     HCLK divided by 16                      
+  57:./inc/rcc.h   ****   0 * RCC_CFGR_ADCPRE                   |  /* (1 << 14)    ADCPRE bit (ADC prescaler)              
+  58:./inc/rcc.h   ****   0 * RCC_CFGR_ADCPRE_DIV2              |  /* 0x00000000   PCLK divided by 2                       
+  59:./inc/rcc.h   ****   0 * RCC_CFGR_ADCPRE_DIV4              |  /* 0x00004000   PCLK divided by 4                       
+  60:./inc/rcc.h   ****   0 * RCC_CFGR_PLLSRC                   |  /* (1 << 16)    PLL entry clock source                  
+  61:./inc/rcc.h   ****   0 * RCC_CFGR_PLLSRC_HSI_DIV2          |  /* 0x00000000   HSI clock divided by 2 selected as PLL e
+  62:./inc/rcc.h   ****   0 * RCC_CFGR_PLLSRC_HSE_PREDIV        |  /* 0x00010000   HSE/PREDIV clock selected as PLL entry c
+  63:./inc/rcc.h   ****   0 * RCC_CFGR_PLLXTPRE                 |  /* (1 << 17)    HSE divider for PLL entry               
+  64:./inc/rcc.h   ****   0 * RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV1 |  /* 0x00000000   HSE/PREDIV clock not divided for PLL ent
+  65:./inc/rcc.h   ****   0 * RCC_CFGR_PLLXTPRE_HSE_PREDIV_DIV2 |  /* 0x00020000   HSE/PREDIV clock divided by 2 for PLL en
+  66:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL                   |  /* (0xF << 18)  PLLMUL[3:0] bits (PLL multiplication fac
+  67:./inc/rcc.h   ****   A * RCC_CFGR_PLLMUL_0                 |  /* (1 << 18)      0x00040000                            
+  68:./inc/rcc.h   ****   B * RCC_CFGR_PLLMUL_1                 |  /* (2 << 18)      0x00080000                            
+  69:./inc/rcc.h   ****   C * RCC_CFGR_PLLMUL_2                 |  /* (4 << 18)      0x00100000                            
+  70:./inc/rcc.h   ****   D * RCC_CFGR_PLLMUL_3                 |  /* (8 << 18)      0x00200000                            
+  71:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL2                  |  /* 0x00000000   PLL input clock*2                       
+  72:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL3                  |  /* 0x00040000   PLL input clock*3                       
+  73:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL4                  |  /* 0x00080000   PLL input clock*4                       
+  74:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL5                  |  /* 0x000C0000   PLL input clock*5                       
+  75:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL6                  |  /* 0x00100000   PLL input clock*6                       
+  76:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL7                  |  /* 0x00140000   PLL input clock*7                       
+  77:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL8                  |  /* 0x00180000   PLL input clock*8                       
+  78:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL9                  |  /* 0x001C0000   PLL input clock*9                       
+  79:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL10                 |  /* 0x00200000   PLL input clock10                       
+  80:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL11                 |  /* 0x00240000   PLL input clock*11                      
+  81:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL12                 |  /* 0x00280000   PLL input clock*12                      
+  82:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL13                 |  /* 0x002C0000   PLL input clock*13                      
+  83:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL14                 |  /* 0x00300000   PLL input clock*14                      
+  84:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL15                 |  /* 0x00340000   PLL input clock*15                      
+  85:./inc/rcc.h   ****   0 * RCC_CFGR_PLLMUL16                 |  /* 0x00380000   PLL input clock*16                      
+  86:./inc/rcc.h   ****   0 * RCC_CFGR_MCO                      |  /* (0xF << 24)  MCO[3:0] bits (Microcontroller Clock Out
+  87:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_0                    |  /* (1 << 24)      0x01000000                            
+  88:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_1                    |  /* (2 << 24)      0x02000000                            
+  89:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_2                    |  /* (4 << 24)      0x04000000                            
+  90:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_NOCLOCK              |  /* 0x00000000   No clock                                
+  91:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_HSI14                |  /* 0x01000000   HSI14 clock selected as MCO source      
+  92:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_LSI                  |  /* 0x02000000   LSI clock selected as MCO source        
+  93:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_LSE                  |  /* 0x03000000   LSE clock selected as MCO source        
+  94:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_SYSCLK               |  /* 0x04000000   System clock selected as MCO source     
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 20
+
+
+  95:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_HSI                  |  /* 0x05000000   HSI clock selected as MCO source        
+  96:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_HSE                  |  /* 0x06000000   HSE clock selected as MCO source        
+  97:./inc/rcc.h   ****   0 * RCC_CFGR_MCO_PLL                  |  /* 0x07000000   PLL clock divided by 2 selected as MCO s
+  98:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE                   |  /* (7 << 28)    MCO prescaler                           
+  99:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV1              |  /* 0x00000000   MCO is divided by 1                     
+ 100:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV2              |  /* 0x10000000   MCO is divided by 2                     
+ 101:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV4              |  /* 0x20000000   MCO is divided by 4                     
+ 102:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV8              |  /* 0x30000000   MCO is divided by 8                     
+ 103:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV16             |  /* 0x40000000   MCO is divided by 16                    
+ 104:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV32             |  /* 0x50000000   MCO is divided by 32                    
+ 105:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV64             |  /* 0x60000000   MCO is divided by 64                    
+ 106:./inc/rcc.h   ****   0 * RCC_CFGR_MCOPRE_DIV128            |  /* 0x70000000   MCO is divided by 128                   
+ 107:./inc/rcc.h   ****   0 * RCC_CFGR_PLLNODIV                 |  /* (1 << 31)    PLL is not divided to MCO               
+ 108:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL                   |  /* (0xF << 24)  0x0F000000                              
+ 109:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_0                 |  /* (1 << 24)    0x01000000                              
+ 110:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_1                 |  /* (2 << 24)    0x02000000                              
+ 111:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_2                 |  /* (4 << 24)    0x04000000                              
+ 112:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_NOCLOCK           |  /* 0x00000000   No clock                                
+ 113:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_HSI14             |  /* 0x01000000   HSI14 clock selected as MCO source      
+ 114:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_LSI               |  /* 0x02000000   LSI clock selected as MCO source        
+ 115:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_LSE               |  /* 0x03000000   LSE clock selected as MCO source        
+ 116:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_SYSCLK            |  /* 0x04000000   System clock selected as MCO source     
+ 117:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_HSI               |  /* 0x05000000   HSI clock selected as MCO source        
+ 118:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_HSE               |  /* 0x06000000   HSE clock selected as MCO source        
+ 119:./inc/rcc.h   ****   0 * RCC_CFGR_MCOSEL_PLL_DIV2             /* 0x07000000   PLL clock divided by 2 selected as MCO s
+ 120:./inc/rcc.h   **** )
+ 121:./inc/rcc.h   **** 
+ 122:./inc/rcc.h   **** 
+ 123:./inc/rcc.h   **** #define RCC_CFGR2 (                     \
+ 124:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV                  |  /* (0xF << 0)   PREDIV[3:0] bits                        
+ 125:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_0                |  /* (1 << 0)       0x00000001                            
+ 126:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_1                |  /* (2 << 0)       0x00000002                            
+ 127:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_2                |  /* (4 << 0)       0x00000004                            
+ 128:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_3                |  /* (8 << 0)       0x00000008                            
+ 129:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV1             |  /* 0x00000000   PREDIV input clock not divided          
+ 130:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV2             |  /* 0x00000001   PREDIV input clock divided by 2         
+ 131:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV3             |  /* 0x00000002   PREDIV input clock divided by 3         
+ 132:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV4             |  /* 0x00000003   PREDIV input clock divided by 4         
+ 133:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV5             |  /* 0x00000004   PREDIV input clock divided by 5         
+ 134:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV6             |  /* 0x00000005   PREDIV input clock divided by 6         
+ 135:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV7             |  /* 0x00000006   PREDIV input clock divided by 7         
+ 136:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV8             |  /* 0x00000007   PREDIV input clock divided by 8         
+ 137:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV9             |  /* 0x00000008   PREDIV input clock divided by 9         
+ 138:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV10            |  /* 0x00000009   PREDIV input clock divided by 10        
+ 139:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV11            |  /* 0x0000000A   PREDIV input clock divided by 11        
+ 140:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV12            |  /* 0x0000000B   PREDIV input clock divided by 12        
+ 141:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV13            |  /* 0x0000000C   PREDIV input clock divided by 13        
+ 142:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV14            |  /* 0x0000000D   PREDIV input clock divided by 14        
+ 143:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV15            |  /* 0x0000000E   PREDIV input clock divided by 15        
+ 144:./inc/rcc.h   ****   0 * RCC_CFGR2_PREDIV_DIV16               /* 0x0000000F   PREDIV input clock divided by 16        
+ 145:./inc/rcc.h   **** )
+ 146:./inc/rcc.h   **** 
+ 147:./inc/rcc.h   **** 
+ 148:./inc/rcc.h   **** #define RCC_CFGR3 (                     \
+ 149:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW                |  /* (3 << 0)     USART1SW[1:0] bits                      
+ 150:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_0              |  /* (1 << 0)       0x00000001                            
+ 151:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_1              |  /* (2 << 0)       0x00000002                            
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 21
+
+
+ 152:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_PCLK           |  /* 0x00000000   PCLK clock used as USART1 clock source  
+ 153:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_SYSCLK         |  /* 0x00000001   System clock selected as USART1 clock so
+ 154:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_LSE            |  /* 0x00000002   LSE oscillator clock used as USART1 cloc
+ 155:./inc/rcc.h   ****   0 * RCC_CFGR3_USART1SW_HSI            |  /* 0x00000003   HSI oscillator clock used as USART1 cloc
+ 156:./inc/rcc.h   ****   0 * RCC_CFGR3_I2C1SW                  |  /* (1 << 4)     I2C1SW bits                             
+ 157:./inc/rcc.h   ****   0 * RCC_CFGR3_I2C1SW_HSI              |  /* 0x00000000   HSI oscillator clock used as I2C1 clock 
+ 158:./inc/rcc.h   ****   0 * RCC_CFGR3_I2C1SW_SYSCLK              /* (1 << 4)     System clock selected as I2C1 clock sour
+ 159:./inc/rcc.h   **** )
+ 160:./inc/rcc.h   **** 
+ 161:./inc/rcc.h   **** 
+ 162:./inc/rcc.h   **** #define RCC_CSR (                       \
+ 163:./inc/rcc.h   ****   0 * RCC_CSR_LSION                     |  /* (1 << 0)     Internal Low Speed oscillator enable    
+ 164:./inc/rcc.h   ****   0 * RCC_CSR_LSIRDY                    |  /* (1 << 1)     Internal Low Speed oscillator Ready     
+ 165:./inc/rcc.h   ****   0 * RCC_CSR_V18PWRRSTF                |  /* (1 << 23)    V1.8 power domain reset flag            
+ 166:./inc/rcc.h   ****   0 * RCC_CSR_RMVF                      |  /* (1 << 24)    Remove reset flag                       
+ 167:./inc/rcc.h   ****   0 * RCC_CSR_OBLRSTF                   |  /* (1 << 25)    OBL reset flag                          
+ 168:./inc/rcc.h   ****   0 * RCC_CSR_PINRSTF                   |  /* (1 << 26)    PIN reset flag                          
+ 169:./inc/rcc.h   ****   0 * RCC_CSR_PORRSTF                   |  /* (1 << 27)    POR/PDR reset flag                      
+ 170:./inc/rcc.h   ****   0 * RCC_CSR_SFTRSTF                   |  /* (1 << 28)    Software Reset flag                     
+ 171:./inc/rcc.h   ****   0 * RCC_CSR_IWDGRSTF                  |  /* (1 << 29)    Independent Watchdog reset flag         
+ 172:./inc/rcc.h   ****   0 * RCC_CSR_WWDGRSTF                  |  /* (1 << 30)    Window watchdog reset flag              
+ 173:./inc/rcc.h   ****   0 * RCC_CSR_LPWRRSTF                  |  /* (1 << 31)    Low-Power reset flag                    
+ 174:./inc/rcc.h   ****   0 * RCC_CSR_OBL                          /* (1 << 25)    OBL reset flag                          
+ 175:./inc/rcc.h   **** )
+ 176:./inc/rcc.h   **** 
+ 177:./inc/rcc.h   **** 
+ 178:./inc/rcc.h   **** #define RCC_AHBRSTR (                   \
+ 179:./inc/rcc.h   ****   0 * RCC_AHBRSTR_GPIOARST              |  /* (1 << 17)    GPIOA reset                             
+ 180:./inc/rcc.h   ****   0 * RCC_AHBRSTR_GPIOBRST              |  /* (1 << 18)    GPIOB reset                             
+ 181:./inc/rcc.h   ****   0 * RCC_AHBRSTR_GPIOCRST              |  /* (1 << 19)    GPIOC reset                             
+ 182:./inc/rcc.h   ****   0 * RCC_AHBRSTR_GPIODRST              |  /* (1 << 20)    GPIOD reset                             
+ 183:./inc/rcc.h   ****   0 * RCC_AHBRSTR_GPIOFRST                 /* (1 << 22)    GPIOF reset                             
+ 184:./inc/rcc.h   **** )
+ 185:./inc/rcc.h   **** 
+ 186:./inc/rcc.h   **** 
+ 187:./inc/rcc.h   **** #define RCC_APB1RSTR (                  \
+ 188:./inc/rcc.h   ****   0 * RCC_APB1RSTR_TIM3RST              |  /* (1 << 1)     Timer 3 reset                           
+ 189:./inc/rcc.h   ****   0 * RCC_APB1RSTR_TIM14RST             |  /* (1 << 8)     Timer 14 reset                          
+ 190:./inc/rcc.h   ****   0 * RCC_APB1RSTR_WWDGRST              |  /* (1 << 11)    Window Watchdog reset                   
+ 191:./inc/rcc.h   ****   0 * RCC_APB1RSTR_I2C1RST              |  /* (1 << 21)    I2C 1 reset                             
+ 192:./inc/rcc.h   ****   0 * RCC_APB1RSTR_PWRRST                  /* (1 << 28)    PWR reset                               
+ 193:./inc/rcc.h   **** )
+ 194:./inc/rcc.h   **** 
+ 195:./inc/rcc.h   **** 
+ 196:./inc/rcc.h   **** #define RCC_APB2RSTR (                  \
+ 197:./inc/rcc.h   ****   0 * RCC_APB2RSTR_SYSCFGRST            |  /* (1 << 0)     SYSCFG reset                            
+ 198:./inc/rcc.h   ****   0 * RCC_APB2RSTR_ADCRST               |  /* (1 << 9)     ADC reset                               
+ 199:./inc/rcc.h   ****   0 * RCC_APB2RSTR_TIM1RST              |  /* (1 << 11)    TIM1 reset                              
+ 200:./inc/rcc.h   ****   0 * RCC_APB2RSTR_SPI1RST              |  /* (1 << 12)    SPI1 reset                              
+ 201:./inc/rcc.h   ****   0 * RCC_APB2RSTR_USART1RST            |  /* (1 << 14)    USART1 reset                            
+ 202:./inc/rcc.h   ****   0 * RCC_APB2RSTR_TIM16RST             |  /* (1 << 17)    TIM16 reset                             
+ 203:./inc/rcc.h   ****   0 * RCC_APB2RSTR_TIM17RST             |  /* (1 << 18)    TIM17 reset                             
+ 204:./inc/rcc.h   ****   0 * RCC_APB2RSTR_DBGMCURST            |  /* (1 << 22)    DBGMCU reset                            
+ 205:./inc/rcc.h   ****   0 * RCC_APB2RSTR_ADC1RST                 /* (1 << 9)     0x00000200                              
+ 206:./inc/rcc.h   **** )
+ 207:./inc/rcc.h   **** 
+ 208:./inc/rcc.h   **** 
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 22
+
+
+ 209:./inc/rcc.h   **** #define RCC_BDCR (                      \
+ 210:./inc/rcc.h   ****   0 * RCC_BDCR_LSEON                    |  /* (1 << 0)     External Low Speed oscillator enable    
+ 211:./inc/rcc.h   ****   0 * RCC_BDCR_LSERDY                   |  /* (1 << 1)     External Low Speed oscillator Ready     
+ 212:./inc/rcc.h   ****   0 * RCC_BDCR_LSEBYP                   |  /* (1 << 2)     External Low Speed oscillator Bypass    
+ 213:./inc/rcc.h   ****   0 * RCC_BDCR_LSEDRV                   |  /* (3 << 3)     LSEDRV[1:0] bits (LSE Osc. drive capabil
+ 214:./inc/rcc.h   ****   0 * RCC_BDCR_LSEDRV_0                 |  /* (1 << 3)       0x00000008                            
+ 215:./inc/rcc.h   ****   0 * RCC_BDCR_LSEDRV_1                 |  /* (2 << 3)       0x00000010                            
+ 216:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL                   |  /* (3 << 8)     RTCSEL[1:0] bits (RTC clock source selec
+ 217:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_0                 |  /* (1 << 8)       0x00000100                            
+ 218:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_1                 |  /* (2 << 8)       0x00000200                            
+ 219:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_NOCLOCK           |  /* 0x00000000   No clock                                
+ 220:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_LSE               |  /* 0x00000100   LSE oscillator clock used as RTC clock  
+ 221:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_LSI               |  /* 0x00000200   LSI oscillator clock used as RTC clock  
+ 222:./inc/rcc.h   ****   0 * RCC_BDCR_RTCSEL_HSE               |  /* 0x00000300   HSE oscillator clock divided by 128 used
+ 223:./inc/rcc.h   ****   0 * RCC_BDCR_RTCEN                    |  /* (1 << 15)    RTC clock enable                        
+ 224:./inc/rcc.h   ****   0 * RCC_BDCR_BDRST                       /* (1 << 16)    Backup domain software reset            
+ 225:./inc/rcc.h   **** )
+ 226:./inc/rcc.h   **** 
+ 227:./inc/rcc.h   **** 
+ 228:./inc/rcc.h   **** #define RCC_CR (       \
+ 229:./inc/rcc.h   ****   R * RCC_CR_HSION     |  /* (1 << 0)     Internal High Speed clock enable      0x00000001  */\
+ 230:./inc/rcc.h   ****   0 * RCC_CR_HSIRDY    |  /* (1 << 1)     Internal High Speed clock ready flag  0x00000002  */\
+ 231:./inc/rcc.h   ****   0 * RCC_CR_HSITRIM   |  /* (0x1F << 3)  Internal High Speed clock trimming    0x000000F8  */\
+ 232:./inc/rcc.h   ****   0 * RCC_CR_HSITRIM_0 |  /* (0x01 << 3)    0x00000008                                      */\
+ 233:./inc/rcc.h   ****   0 * RCC_CR_HSITRIM_1 |  /* (0x02 << 3)    0x00000010                                      */\
+ 234:./inc/rcc.h   ****   0 * RCC_CR_HSITRIM_2 |  /* (0x04 << 3)    0x00000020                                      */\
+ 235:./inc/rcc.h   ****   0 * RCC_CR_HSITRIM_3 |  /* (0x08 << 3)    0x00000040                                      */\
+ 236:./inc/rcc.h   ****   R * RCC_CR_HSITRIM_4 |  /* (0x10 << 3)    0x00000080                                      */\
+ 237:./inc/rcc.h   ****   0 * RCC_CR_HSICAL    |  /* (0xFF << 8)  Internal High Speed clock Calibration 0x0000FF00  */\
+ 238:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_0  |  /* (0x01 << 8)    0x00000100                                      */\
+ 239:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_1  |  /* (0x02 << 8)    0x00000200                                      */\
+ 240:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_2  |  /* (0x04 << 8)    0x00000400                                      */\
+ 241:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_3  |  /* (0x08 << 8)    0x00000800                                      */\
+ 242:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_4  |  /* (0x10 << 8)    0x00001000                                      */\
+ 243:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_5  |  /* (0x20 << 8)    0x00002000                                      */\
+ 244:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_6  |  /* (0x40 << 8)    0x00004000                                      */\
+ 245:./inc/rcc.h   ****   0 * RCC_CR_HSICAL_7  |  /* (0x80 << 8)    0x00008000                                      */\
+ 246:./inc/rcc.h   ****   0 * RCC_CR_HSEON     |  /* (1 << 16)    External High Speed clock enable      0x00010000  */\
+ 247:./inc/rcc.h   ****   0 * RCC_CR_HSERDY    |  /* (1 << 17)    External High Speed clock ready flag  0x00020000  */\
+ 248:./inc/rcc.h   ****   0 * RCC_CR_HSEBYP    |  /* (1 << 18)    External High Speed clock Bypass      0x00040000  */\
+ 249:./inc/rcc.h   ****   0 * RCC_CR_CSSON     |  /* (1 << 19)    Clock Security System enable          0x00080000  */\
+ 250:./inc/rcc.h   ****   R * RCC_CR_PLLON     |  /* (1 << 24)    PLL enable                            0x01000000  */\
+ 251:./inc/rcc.h   ****   0 * RCC_CR_PLLRDY       /* (1 << 25)    PLL clock ready flag                  0x02000000  */\
+ 252:./inc/rcc.h   **** )
+ 253:./inc/rcc.h   **** 
+ 254:./inc/rcc.h   **** 
+ 255:./inc/rcc.h   **** #define RCC_CR2 (                       \
+ 256:./inc/rcc.h   ****   0 * RCC_CR2_HSI14ON                   |  /* (1 << 0)     Internal High Speed 14MHz clock enable  
+ 257:./inc/rcc.h   ****   0 * RCC_CR2_HSI14RDY                  |  /* (1 << 1)     Internal High Speed 14MHz clock ready fl
+ 258:./inc/rcc.h   ****   0 * RCC_CR2_HSI14DIS                  |  /* (1 << 2)     Internal High Speed 14MHz clock disable 
+ 259:./inc/rcc.h   ****   0 * RCC_CR2_HSI14TRIM                 |  /* (0x1F << 3)  Internal High Speed 14MHz clock trimming
+ 260:./inc/rcc.h   ****   0 * RCC_CR2_HSI14CAL                     /* (0xFF << 8)  Internal High Speed 14MHz clock Calibrat
+ 261:./inc/rcc.h   **** )
+ 262:./inc/rcc.h   **** 
+ 263:./inc/rcc.h   **** 
+ 264:./inc/rcc.h   **** #define RCC_CIR (                       \
+ 265:./inc/rcc.h   ****   0 * RCC_CIR_LSIRDYF                   |  /* (1 << 0)     LSI Ready Interrupt flag                
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 23
+
+
+ 266:./inc/rcc.h   ****   0 * RCC_CIR_LSERDYF                   |  /* (1 << 1)     LSE Ready Interrupt flag                
+ 267:./inc/rcc.h   ****   0 * RCC_CIR_HSIRDYF                   |  /* (1 << 2)     HSI Ready Interrupt flag                
+ 268:./inc/rcc.h   ****   0 * RCC_CIR_HSERDYF                   |  /* (1 << 3)     HSE Ready Interrupt flag                
+ 269:./inc/rcc.h   ****   0 * RCC_CIR_PLLRDYF                   |  /* (1 << 4)     PLL Ready Interrupt flag                
+ 270:./inc/rcc.h   ****   0 * RCC_CIR_HSI14RDYF                 |  /* (1 << 5)     HSI14 Ready Interrupt flag              
+ 271:./inc/rcc.h   ****   0 * RCC_CIR_CSSF                      |  /* (1 << 7)     Clock Security System Interrupt flag    
+ 272:./inc/rcc.h   ****   0 * RCC_CIR_LSIRDYIE                  |  /* (1 << 8)     LSI Ready Interrupt Enable              
+ 273:./inc/rcc.h   ****   0 * RCC_CIR_LSERDYIE                  |  /* (1 << 9)     LSE Ready Interrupt Enable              
+ 274:./inc/rcc.h   ****   0 * RCC_CIR_HSIRDYIE                  |  /* (1 << 10)    HSI Ready Interrupt Enable              
+ 275:./inc/rcc.h   ****   0 * RCC_CIR_HSERDYIE                  |  /* (1 << 11)    HSE Ready Interrupt Enable              
+ 276:./inc/rcc.h   ****   0 * RCC_CIR_PLLRDYIE                  |  /* (1 << 12)    PLL Ready Interrupt Enable              
+ 277:./inc/rcc.h   ****   0 * RCC_CIR_HSI14RDYIE                |  /* (1 << 13)    HSI14 Ready Interrupt Enable            
+ 278:./inc/rcc.h   ****   0 * RCC_CIR_LSIRDYC                   |  /* (1 << 16)    LSI Ready Interrupt Clear               
+ 279:./inc/rcc.h   ****   0 * RCC_CIR_LSERDYC                   |  /* (1 << 17)    LSE Ready Interrupt Clear               
+ 280:./inc/rcc.h   ****   0 * RCC_CIR_HSIRDYC                   |  /* (1 << 18)    HSI Ready Interrupt Clear               
+ 281:./inc/rcc.h   ****   0 * RCC_CIR_HSERDYC                   |  /* (1 << 19)    HSE Ready Interrupt Clear               
+ 282:./inc/rcc.h   ****   0 * RCC_CIR_PLLRDYC                   |  /* (1 << 20)    PLL Ready Interrupt Clear               
+ 283:./inc/rcc.h   ****   0 * RCC_CIR_HSI14RDYC                 |  /* (1 << 21)    HSI14 Ready Interrupt Clear             
+ 284:./inc/rcc.h   ****   0 * RCC_CIR_CSSC                         /* (1 << 23)    Clock Security System Interrupt Clear   
+ 285:./inc/rcc.h   **** )
+ 286:./inc/rcc.h   **** 
+ 287:./inc/rcc.h   **** #if !defined(DMA_EN)
+ 288:./inc/rcc.h   ****   #define DMA_EN 0
+ 289:./inc/rcc.h   **** #endif
+ 290:./inc/rcc.h   **** 
+ 291:./inc/rcc.h   **** #if !defined(SRAM_EN)
+ 292:./inc/rcc.h   ****   #define SRAM_EN 0
+ 293:./inc/rcc.h   **** #endif
+ 294:./inc/rcc.h   **** 
+ 295:./inc/rcc.h   **** #if !defined(FLITF_EN)
+ 296:./inc/rcc.h   ****   #define FLITF_EN 0
+ 297:./inc/rcc.h   **** #endif
+ 298:./inc/rcc.h   **** 
+ 299:./inc/rcc.h   **** #if !defined(CRC_EN)
+ 300:./inc/rcc.h   ****   #define CRC_EN 0
+ 301:./inc/rcc.h   **** #endif
+ 302:./inc/rcc.h   **** 
+ 303:./inc/rcc.h   **** #if !defined(GPIOA_EN)
+ 304:./inc/rcc.h   ****   #define GPIOA_EN 0
+ 305:./inc/rcc.h   **** #endif
+ 306:./inc/rcc.h   **** 
+ 307:./inc/rcc.h   **** #if !defined(GPIOB_EN)
+ 308:./inc/rcc.h   ****   #define GPIOB_EN 0
+ 309:./inc/rcc.h   **** #endif
+ 310:./inc/rcc.h   **** 
+ 311:./inc/rcc.h   **** #if !defined(GPIOC_EN)
+ 312:./inc/rcc.h   ****   #define GPIOC_EN 0
+ 313:./inc/rcc.h   **** #endif
+ 314:./inc/rcc.h   **** 
+ 315:./inc/rcc.h   **** #if !defined(GPIOD_EN)
+ 316:./inc/rcc.h   ****   #define GPIOD_EN 0
+ 317:./inc/rcc.h   **** #endif
+ 318:./inc/rcc.h   **** 
+ 319:./inc/rcc.h   **** #if !defined(GPIOF_EN)
+ 320:./inc/rcc.h   ****   #define GPIOF_EN 0
+ 321:./inc/rcc.h   **** #endif
+ 322:./inc/rcc.h   **** 
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 24
+
+
+ 323:./inc/rcc.h   **** #if !defined(DMA1_EN)
+ 324:./inc/rcc.h   ****   #define DMA1_EN 0
+ 325:./inc/rcc.h   **** #endif
+ 326:./inc/rcc.h   **** 
+ 327:./inc/rcc.h   **** 
+ 328:./inc/rcc.h   **** #define RCC_AHBENR (                                \
+ 329:./inc/rcc.h   ****   DMA_EN        * RCC_AHBENR_DMAEN                  |  /* (1 << 0)     DMA1 clock enable           
+ 330:./inc/rcc.h   ****   SRAM_EN       * RCC_AHBENR_SRAMEN                 |  /* (1 << 2)     SRAM interface clock enable 
+ 331:./inc/rcc.h   ****   FLITF_EN      * RCC_AHBENR_FLITFEN                |  /* (1 << 4)     FLITF clock enable          
+ 332:./inc/rcc.h   ****   CRC_EN        * RCC_AHBENR_CRCEN                  |  /* (1 << 6)     CRC clock enable            
+ 333:./inc/rcc.h   ****   GPIOA_EN      * RCC_AHBENR_GPIOAEN                |  /* (1 << 17)    GPIOA clock enable          
+ 334:./inc/rcc.h   ****   GPIOB_EN      * RCC_AHBENR_GPIOBEN                |  /* (1 << 18)    GPIOB clock enable          
+ 335:./inc/rcc.h   ****   GPIOC_EN      * RCC_AHBENR_GPIOCEN                |  /* (1 << 19)    GPIOC clock enable          
+ 336:./inc/rcc.h   ****   GPIOD_EN      * RCC_AHBENR_GPIODEN                |  /* (1 << 20)    GPIOD clock enable          
+ 337:./inc/rcc.h   ****   GPIOF_EN      * RCC_AHBENR_GPIOFEN                |  /* (1 << 22)    GPIOF clock enable          
+ 338:./inc/rcc.h   ****   DMA1_EN       * RCC_AHBENR_DMA1EN                    /* (1 << 0)     DMA1 clock enable           
+ 339:./inc/rcc.h   **** )
+ 340:./inc/rcc.h   **** 
+ 341:./inc/rcc.h   **** #if !defined(SYSCFGCOMP_EN)
+ 342:./inc/rcc.h   ****   #define SYSCFGCOMP_EN 0
+ 343:./inc/rcc.h   **** #endif
+ 344:./inc/rcc.h   **** 
+ 345:./inc/rcc.h   **** #if !defined(ADC_EN)
+ 346:./inc/rcc.h   ****   #define ADC_EN 0
+ 347:./inc/rcc.h   **** #endif
+ 348:./inc/rcc.h   **** 
+ 349:./inc/rcc.h   **** #if !defined(TIM1_EN)
+ 350:./inc/rcc.h   ****   #define TIM1_EN 0
+ 351:./inc/rcc.h   **** #endif
+ 352:./inc/rcc.h   **** 
+ 353:./inc/rcc.h   **** #if !defined(SPI1_EN)
+ 354:./inc/rcc.h   ****   #define SPI1_EN 0
+ 355:./inc/rcc.h   **** #endif
+ 356:./inc/rcc.h   **** 
+ 357:./inc/rcc.h   **** #if !defined(USART1_EN)
+ 358:./inc/rcc.h   ****   #define USART1_EN 0
+ 359:./inc/rcc.h   **** #endif
+ 360:./inc/rcc.h   **** 
+ 361:./inc/rcc.h   **** #if !defined(TIM16_EN)
+ 362:./inc/rcc.h   ****   #define TIM16_EN 0
+ 363:./inc/rcc.h   **** #endif
+ 364:./inc/rcc.h   **** 
+ 365:./inc/rcc.h   **** #if !defined(TIM17_EN)
+ 366:./inc/rcc.h   ****   #define TIM17_EN 0
+ 367:./inc/rcc.h   **** #endif
+ 368:./inc/rcc.h   **** 
+ 369:./inc/rcc.h   **** #if !defined(DBGMCU_EN)
+ 370:./inc/rcc.h   ****   #define DBGMCU_EN 0
+ 371:./inc/rcc.h   **** #endif
+ 372:./inc/rcc.h   **** 
+ 373:./inc/rcc.h   **** #if !defined(SYSCFG_EN)
+ 374:./inc/rcc.h   ****   #define SYSCFG_EN 0
+ 375:./inc/rcc.h   **** #endif
+ 376:./inc/rcc.h   **** 
+ 377:./inc/rcc.h   **** #if !defined(ADC1_EN)
+ 378:./inc/rcc.h   ****   #define ADC1_EN 0
+ 379:./inc/rcc.h   **** #endif
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 25
+
+
+ 380:./inc/rcc.h   **** 
+ 381:./inc/rcc.h   **** 
+ 382:./inc/rcc.h   **** #define RCC_APB2ENR (                               \
+ 383:./inc/rcc.h   ****   SYSCFGCOMP_EN * RCC_APB2ENR_SYSCFGCOMPEN          |  /* (1 << 0)     SYSCFG and comparator clock 
+ 384:./inc/rcc.h   ****   ADC_EN        * RCC_APB2ENR_ADCEN                 |  /* (1 << 9)     ADC1 clock enable           
+ 385:./inc/rcc.h   ****   TIM1_EN       * RCC_APB2ENR_TIM1EN                |  /* (1 << 11)    TIM1 clock enable           
+ 386:./inc/rcc.h   ****   SPI1_EN       * RCC_APB2ENR_SPI1EN                |  /* (1 << 12)    SPI1 clock enable           
+ 387:./inc/rcc.h   ****   USART1_EN     * RCC_APB2ENR_USART1EN              |  /* (1 << 14)    USART1 clock enable         
+ 388:./inc/rcc.h   ****   TIM16_EN      * RCC_APB2ENR_TIM16EN               |  /* (1 << 17)    TIM16 clock enable          
+ 389:./inc/rcc.h   ****   TIM17_EN      * RCC_APB2ENR_TIM17EN               |  /* (1 << 18)    TIM17 clock enable          
+ 390:./inc/rcc.h   ****   DBGMCU_EN     * RCC_APB2ENR_DBGMCUEN              |  /* (1 << 22)    DBGMCU clock enable         
+ 391:./inc/rcc.h   ****   SYSCFG_EN     * RCC_APB2ENR_SYSCFGEN              |  /* (1 << 0)     SYSCFG clock enable         
+ 392:./inc/rcc.h   ****   ADC1_EN       * RCC_APB2ENR_ADC1EN                   /* (1 << 9)     ADC1 clock enable           
+ 393:./inc/rcc.h   **** )
+ 394:./inc/rcc.h   **** 
+ 395:./inc/rcc.h   **** #if !defined(TIM3_EN)
+ 396:./inc/rcc.h   ****   #define TIM3_EN 0
+ 397:./inc/rcc.h   **** #endif
+ 398:./inc/rcc.h   **** 
+ 399:./inc/rcc.h   **** #if !defined(TIM14_EN)
+ 400:./inc/rcc.h   ****   #define TIM14_EN 0
+ 401:./inc/rcc.h   **** #endif
+ 402:./inc/rcc.h   **** 
+ 403:./inc/rcc.h   **** #if !defined(WWDG_EN)
+ 404:./inc/rcc.h   ****   #define WWDG_EN 0
+ 405:./inc/rcc.h   **** #endif
+ 406:./inc/rcc.h   **** 
+ 407:./inc/rcc.h   **** #if !defined(I2C1_EN)
+ 408:./inc/rcc.h   ****   #define I2C1_EN 0
+ 409:./inc/rcc.h   **** #endif
+ 410:./inc/rcc.h   **** 
+ 411:./inc/rcc.h   **** #if !defined(PWR_EN)
+ 412:./inc/rcc.h   ****   #define PWR_EN 0
+ 413:./inc/rcc.h   **** #endif
+ 414:./inc/rcc.h   **** 
+ 415:./inc/rcc.h   **** 
+ 416:./inc/rcc.h   **** #define RCC_APB1ENR (                               \
+ 417:./inc/rcc.h   ****   TIM3_EN       * RCC_APB1ENR_TIM3EN                |  /* (1 << 1)     Timer 3 clock enable        
+ 418:./inc/rcc.h   ****   TIM14_EN      * RCC_APB1ENR_TIM14EN               |  /* (1 << 8)     Timer 14 clock enable       
+ 419:./inc/rcc.h   ****   WWDG_EN       * RCC_APB1ENR_WWDGEN                |  /* (1 << 11)    Window Watchdog clock enable
+ 420:./inc/rcc.h   ****   I2C1_EN       * RCC_APB1ENR_I2C1EN                |  /* (1 << 21)    I2C1 clock enable           
+ 421:./inc/rcc.h   ****   PWR_EN        * RCC_APB1ENR_PWREN                    /* (1 << 28)    PWR clock enable            
+ 422:./inc/rcc.h   **** )
+ 423:./inc/rcc.h   **** 
+ 424:./inc/rcc.h   **** 
+ 425:./inc/rcc.h   **** __STATIC_FORCEINLINE void init_rcc(void) {
+ 441              		.loc 3 425 27 view .LVU66
+ 442              	.LBB37:
+ 426:./inc/rcc.h   **** 
+ 427:./inc/rcc.h   ****   /* Perform pre-configuration of the hardware */
+ 428:./inc/rcc.h   ****   configure_flash();
+ 443              		.loc 3 428 3 view .LVU67
+ 429:./inc/rcc.h   **** 
+ 430:./inc/rcc.h   ****   #if defined RCC_AHBENR
+ 431:./inc/rcc.h   ****     #if RCC_AHBENR != 0
+ 432:./inc/rcc.h   ****       RCC->AHBENR = RCC_AHBENR; /* 0x40021014: RCC AHB peripheral clock register, Address offset: 0
+ 444              		.loc 3 432 7 view .LVU68
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 26
+
+
+ 445              	@ ./inc/rcc.h:432:       RCC->AHBENR = RCC_AHBENR; /* 0x40021014: RCC AHB peripheral clock register
+ 446              		.loc 3 432 19 is_stmt 0 view .LVU69
+ 447 000e 8C22     		movs	r2, #140	@ tmp123,
+ 448              	.LBE37:
+ 449              	.LBE36:
+ 450              	.LBB39:
+ 451              	.LBB40:
+ 452              	@ ./inc/gpio.h:255:       GPIOA->MODER = GPIOA_MODER; /* 0x48000000: GPIO port mode register, Addre
+ 453              		.file 4 "./inc/gpio.h"
+   1:./inc/gpio.h  **** #ifndef __GPIO_H__
+   2:./inc/gpio.h  **** #define __GPIO_H__
+   3:./inc/gpio.h  **** 
+   4:./inc/gpio.h  **** #ifdef __cplusplus
+   5:./inc/gpio.h  ****   extern "C" {
+   6:./inc/gpio.h  **** #endif
+   7:./inc/gpio.h  **** 
+   8:./inc/gpio.h  **** 
+   9:./inc/gpio.h  **** #define USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT        1
+  10:./inc/gpio.h  **** 
+  11:./inc/gpio.h  **** #define GPIO_MODE                      (USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)
+  12:./inc/gpio.h  **** #define PIN_XOR                        (GPIO_MODE & 3UL)
+  13:./inc/gpio.h  **** 
+  14:./inc/gpio.h  **** #define PIN_MODE_INPUT                 (0x00UL ^ PIN_XOR)
+  15:./inc/gpio.h  **** #define PIN_MODE_OUTPUT                (0x01UL ^ PIN_XOR)
+  16:./inc/gpio.h  **** #define PIN_MODE_AF                    (0x02UL ^ PIN_XOR)
+  17:./inc/gpio.h  **** #define PIN_MODE_ANALOG                (0x03UL ^ PIN_XOR)
+  18:./inc/gpio.h  **** 
+  19:./inc/gpio.h  **** #define PIN_CFG(PIN, MODE)             ((MODE)   << ((PIN) * 2))
+  20:./inc/gpio.h  **** #define PIN_MODE(PIN, MODE)            (((MODE)  << GPIO_MODER_MODER ## PIN ## _Pos) & GPIO_MODER_M
+  21:./inc/gpio.h  **** #define PIN_SPEED(PIN, SPEED)          (((SPEED) << GPIO_OSPEEDR_OSPEEDR ## PIN ## _Pos) & GPIO_OSP
+  22:./inc/gpio.h  **** #define PIN_OTYPE(PIN, OTYPE)          ((OTYPE)   ? GPIO_OTYPER_OT_ ## PIN : 0)
+  23:./inc/gpio.h  **** #define PIN_PUPD(PIN, PUPD)            (((PUPD)  << GPIO_PUPDR_PUPDR ## PIN ## _Pos) & GPIO_PUPDR_P
+  24:./inc/gpio.h  **** #define PIN_AF(PIN, AF)                (AF << (PIN * 4))
+  25:./inc/gpio.h  **** 
+  26:./inc/gpio.h  **** #define PA0_AF1_USART1_CTS             PIN_AF(0, 1ULL)
+  27:./inc/gpio.h  **** #define PA1_AF0_EVENTOUT               PIN_AF(1, 0ULL)
+  28:./inc/gpio.h  **** #define PA1_AF1_USART1_RTS             PIN_AF(1, 1ULL)
+  29:./inc/gpio.h  **** #define PA2_AF1_USART1_TX              PIN_AF(2, 1ULL)
+  30:./inc/gpio.h  **** #define PA3_AF1_USART1_RX              PIN_AF(3, 1ULL)
+  31:./inc/gpio.h  **** #define PA4_AF0_SPI1_NSS               PIN_AF(4, 0ULL)
+  32:./inc/gpio.h  **** #define PA4_AF1_USART1_CK              PIN_AF(4, 1ULL)
+  33:./inc/gpio.h  **** #define PA4_AF4_TIM14_CH1              PIN_AF(4, 4ULL)
+  34:./inc/gpio.h  **** #define PA5_AF0_SPI1_SCK               PIN_AF(5, 0ULL)
+  35:./inc/gpio.h  **** #define PA6_AF0_SPI1_MISO              PIN_AF(6, 0ULL)
+  36:./inc/gpio.h  **** #define PA6_AF1_TIM3_CH1               PIN_AF(6, 1ULL)
+  37:./inc/gpio.h  **** #define PA6_AF2_TIM1_BKIN              PIN_AF(6, 2ULL)
+  38:./inc/gpio.h  **** #define PA6_AF5_TIM16_CH1              PIN_AF(6, 5ULL)
+  39:./inc/gpio.h  **** #define PA6_AF6_EVENTOUT               PIN_AF(6, 6ULL)
+  40:./inc/gpio.h  **** #define PA7_AF0_SPI1_MOSI              PIN_AF(7, 0ULL)
+  41:./inc/gpio.h  **** #define PA7_AF1_TIM3_CH2               PIN_AF(7, 1ULL)
+  42:./inc/gpio.h  **** #define PA7_AF2_TIM1_CH1N              PIN_AF(7, 2ULL)
+  43:./inc/gpio.h  **** #define PA7_AF4_TIM14_CH1              PIN_AF(7, 4ULL)
+  44:./inc/gpio.h  **** #define PA7_AF5_TIM17_CH1              PIN_AF(7, 5ULL)
+  45:./inc/gpio.h  **** #define PA7_AF6_EVENTOUT               PIN_AF(7, 6ULL)
+  46:./inc/gpio.h  **** #define PA9_AF1_USART1_TX              PIN_AF(9, 1ULL)
+  47:./inc/gpio.h  **** #define PA9_AF2_TIM1_CH2               PIN_AF(9, 2ULL)
+  48:./inc/gpio.h  **** #define PA9_AF4_I2C1_SCL               PIN_AF(9, 4ULL)
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 27
+
+
+  49:./inc/gpio.h  **** #define PA10_AF0_TIM17_BKIN            PIN_AF(10, 0ULL)
+  50:./inc/gpio.h  **** #define PA10_AF1_USART1_RX             PIN_AF(10, 1ULL)
+  51:./inc/gpio.h  **** #define PA10_AF2_TIM1_CH3              PIN_AF(10, 2ULL)
+  52:./inc/gpio.h  **** #define PA10_AF4_I2C1_SDA              PIN_AF(10, 4ULL)
+  53:./inc/gpio.h  **** #define PA13_AF0_SWDIO                 PIN_AF(13, 0ULL)
+  54:./inc/gpio.h  **** #define PA13_AF1_IR_OUT                PIN_AF(13, 1ULL)
+  55:./inc/gpio.h  **** #define PA14_AF0_SWCLK                 PIN_AF(14, 0ULL)
+  56:./inc/gpio.h  **** #define PA14_AF1_USART1_TX             PIN_AF(14, 1ULL)
+  57:./inc/gpio.h  **** 
+  58:./inc/gpio.h  **** #define PB1_AF0_TIM14_CH1              PIN_AF(1, 0ULL)
+  59:./inc/gpio.h  **** #define PB1_AF1_TIM3_CH4               PIN_AF(1, 1ULL)
+  60:./inc/gpio.h  **** #define PB1_AF2_TIM1_CH3N              PIN_AF(1, 2ULL)
+  61:./inc/gpio.h  **** 
+  62:./inc/gpio.h  **** #define PIN_TYPE_PP                    0x00UL
+  63:./inc/gpio.h  **** #define PIN_TYPE_OD                    0x01UL
+  64:./inc/gpio.h  **** 
+  65:./inc/gpio.h  **** #define PIN_SPEED_LOW                  0x00UL
+  66:./inc/gpio.h  **** #define PIN_SPEED_MED                  0x01UL
+  67:./inc/gpio.h  **** #define PIN_SPEED_HIGH                 0x03UL
+  68:./inc/gpio.h  **** 
+  69:./inc/gpio.h  **** #define PIN_PUPD_NONE                  0x00UL
+  70:./inc/gpio.h  **** #define PIN_PUPD_UP                    0x01UL
+  71:./inc/gpio.h  **** #define PIN_PUPD_DOWN                  0x02UL
+  72:./inc/gpio.h  **** 
+  73:./inc/gpio.h  **** #define _BR(PIN)                       GPIO_BSRR_BR_ ## PIN
+  74:./inc/gpio.h  **** #define BR(PIN)                        _BR(PIN)
+  75:./inc/gpio.h  **** #define _BS(PIN)                       GPIO_BSRR_BS_ ## PIN
+  76:./inc/gpio.h  **** #define BS(PIN)                        _BS(PIN)
+  77:./inc/gpio.h  **** #define _ODR(PIN)                      GPIO_ODR_ ## PIN
+  78:./inc/gpio.h  **** #define ODR(PIN)                       _ODR(PIN)
+  79:./inc/gpio.h  **** 
+  80:./inc/gpio.h  **** #define GPIOA_MODER                    (GPIO_MODE ^ (GPIOA_MODE))
+  81:./inc/gpio.h  **** #define GPIOB_MODER                    (GPIO_MODE ^ (GPIOB_MODE))
+  82:./inc/gpio.h  **** #define GPIOF_MODER                    (GPIO_MODE ^ (GPIOF_MODE))
+  83:./inc/gpio.h  **** 
+  84:./inc/gpio.h  **** #define GPIOA_AFR_0                    (GPIOA_AF & UINT32_MAX)
+  85:./inc/gpio.h  **** #define GPIOA_AFR_1                    ((GPIOA_AF >> 32) & UINT32_MAX)
+  86:./inc/gpio.h  **** 
+  87:./inc/gpio.h  **** #define GPIOB_AFR_0                    (GPIOB_AF & UINT32_MAX)
+  88:./inc/gpio.h  **** #define GPIOB_AFR_1                    ((GPIOB_AF >> 32) & UINT32_MAX)
+  89:./inc/gpio.h  **** 
+  90:./inc/gpio.h  **** 
+  91:./inc/gpio.h  **** #define CONFIGURE_PIN(GPIOx, PIN, MODE, OTYPE, SPEED, PUPD) do {                               \
+  92:./inc/gpio.h  ****   if (MODE)   MODIFY_REG((GPIOx)->MODER,   (0x03UL << ((PIN) * 2)), ((MODE)  << ((PIN) * 2))); \
+  93:./inc/gpio.h  ****   if (SPEED)  MODIFY_REG((GPIOx)->OSPEEDR, (0x03UL << ((PIN) * 2)), ((SPEED) << ((PIN) * 2))); \
+  94:./inc/gpio.h  ****   if (PUPD)   MODIFY_REG((GPIOx)->PUPDR,   (0x03UL << ((PIN) * 2)), ((PUPD)  << ((PIN) * 2))); \
+  95:./inc/gpio.h  ****   if (OTYPE)  MODIFY_REG((GPIOx)->OTYPER,  (0x01UL << (PIN)),       ((OTYPE) << (PIN)));       \
+  96:./inc/gpio.h  **** }while(0)
+  97:./inc/gpio.h  **** 
+  98:./inc/gpio.h  **** #ifndef USART1_EN
+  99:./inc/gpio.h  ****   #define USART1_EN 0
+ 100:./inc/gpio.h  **** #endif
+ 101:./inc/gpio.h  **** 
+ 102:./inc/gpio.h  **** #ifndef SPI1_EN
+ 103:./inc/gpio.h  ****   #define SPI1_EN 0
+ 104:./inc/gpio.h  **** #endif
+ 105:./inc/gpio.h  **** 
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 28
+
+
+ 106:./inc/gpio.h  **** #ifndef I2C1_EN
+ 107:./inc/gpio.h  ****   #define I2C1_EN 0
+ 108:./inc/gpio.h  **** #endif
+ 109:./inc/gpio.h  **** 
+ 110:./inc/gpio.h  **** #ifndef SWD_EN
+ 111:./inc/gpio.h  ****   #ifndef NDEBUG
+ 112:./inc/gpio.h  ****     #define SWD_EN 1
+ 113:./inc/gpio.h  ****   #else
+ 114:./inc/gpio.h  ****     #define SWD_EN 0
+ 115:./inc/gpio.h  ****   #endif
+ 116:./inc/gpio.h  **** #endif
+ 117:./inc/gpio.h  **** 
+ 118:./inc/gpio.h  **** #define GPIO_MODE_EXAMPLE (       \
+ 119:./inc/gpio.h  ****   + PIN_MODE(0,  PIN_MODE_ANALOG) \
+ 120:./inc/gpio.h  ****   + PIN_MODE(1,  PIN_MODE_ANALOG) \
+ 121:./inc/gpio.h  ****   + PIN_MODE(2,  PIN_MODE_ANALOG) \
+ 122:./inc/gpio.h  ****   + PIN_MODE(3,  PIN_MODE_ANALOG) \
+ 123:./inc/gpio.h  ****   + PIN_MODE(4,  PIN_MODE_ANALOG) \
+ 124:./inc/gpio.h  ****   + PIN_MODE(5,  PIN_MODE_ANALOG) \
+ 125:./inc/gpio.h  ****   + PIN_MODE(6,  PIN_MODE_ANALOG) \
+ 126:./inc/gpio.h  ****   + PIN_MODE(7,  PIN_MODE_ANALOG) \
+ 127:./inc/gpio.h  ****   + PIN_MODE(8,  PIN_MODE_ANALOG) \
+ 128:./inc/gpio.h  ****   + PIN_MODE(9,  PIN_MODE_ANALOG) \
+ 129:./inc/gpio.h  ****   + PIN_MODE(10, PIN_MODE_ANALOG) \
+ 130:./inc/gpio.h  ****   + PIN_MODE(11, PIN_MODE_ANALOG) \
+ 131:./inc/gpio.h  ****   + PIN_MODE(12, PIN_MODE_ANALOG) \
+ 132:./inc/gpio.h  ****   + PIN_MODE(13, PIN_MODE_ANALOG) \
+ 133:./inc/gpio.h  ****   + PIN_MODE(14, PIN_MODE_ANALOG) \
+ 134:./inc/gpio.h  ****   + PIN_MODE(15, PIN_MODE_ANALOG) \
+ 135:./inc/gpio.h  **** )
+ 136:./inc/gpio.h  **** 
+ 137:./inc/gpio.h  **** #define GPIOA_MODE (                                                    \
+ 138:./inc/gpio.h  ****   !0         * PIN_MODE(0,  PIN_MODE_OUTPUT) /* PA0  -- OUTPUT     */ | \
+ 139:./inc/gpio.h  ****   !0         * PIN_MODE(1,  PIN_MODE_OUTPUT) /* PA1  -- OUTPUT     */ | \
+ 140:./inc/gpio.h  ****   !USART1_EN * PIN_MODE(2,  PIN_MODE_OUTPUT) /* PA2  -- OUTPUT     */ | \
+ 141:./inc/gpio.h  ****   !USART1_EN * PIN_MODE(3,  PIN_MODE_OUTPUT) /* PA3  -- OUTPUT     */ | \
+ 142:./inc/gpio.h  ****   USART1_EN  * PIN_MODE(2,  PIN_MODE_AF)     /* PA2  -- USART1 TX  */ | \
+ 143:./inc/gpio.h  ****   USART1_EN  * PIN_MODE(3,  PIN_MODE_AF)     /* PA3  -- USART1 RX  */ | \
+ 144:./inc/gpio.h  ****   !SPI1_EN   * PIN_MODE(4,  PIN_MODE_OUTPUT) /* PA4  -- OUTPUT     */ | \
+ 145:./inc/gpio.h  ****   SPI1_EN    * PIN_MODE(4,  PIN_MODE_AF)     /* PA4  -- SPI1 CS    */ | \
+ 146:./inc/gpio.h  ****   SPI1_EN    * PIN_MODE(5,  PIN_MODE_AF)     /* PA5  -- SPI1 SCK   */ | \
+ 147:./inc/gpio.h  ****   SPI1_EN    * PIN_MODE(6,  PIN_MODE_AF)     /* PA6  -- SPI1 MISO  */ | \
+ 148:./inc/gpio.h  ****   SPI1_EN    * PIN_MODE(7,  PIN_MODE_AF)     /* PA7  -- SPI1 MOSI  */ | \
+ 149:./inc/gpio.h  ****   I2C1_EN    * PIN_MODE(9,  PIN_MODE_AF)     /* PA9  -- I2C1 SDA   */ | \
+ 150:./inc/gpio.h  ****   I2C1_EN    * PIN_MODE(10, PIN_MODE_AF)     /* PA10 -- I2C1 SCL   */ | \
+ 151:./inc/gpio.h  ****   SWD_EN     * PIN_MODE(13, PIN_MODE_AF)     /* PA13 -- SWDCLK     */ | \
+ 152:./inc/gpio.h  ****   SWD_EN     * PIN_MODE(14, PIN_MODE_AF)     /* PA14 -- SWDIO      */   \
+ 153:./inc/gpio.h  **** )
+ 154:./inc/gpio.h  **** 
+ 155:./inc/gpio.h  **** #if 0
+ 156:./inc/gpio.h  **** #define GPIOA_OTYPE (                         \
+ 157:./inc/gpio.h  ****   I2C1_EN   * (PIN_TYPE_OD << 9)            | \
+ 158:./inc/gpio.h  ****   I2C1_EN   * (PIN_TYPE_OD << 10)             \
+ 159:./inc/gpio.h  **** )
+ 160:./inc/gpio.h  **** #else
+ 161:./inc/gpio.h  **** #define GPIOA_OTYPE (                         \
+ 162:./inc/gpio.h  ****   I2C1_EN   * PIN_OTYPE(9,  PIN_TYPE_OD)    | \
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 29
+
+
+ 163:./inc/gpio.h  ****   I2C1_EN   * PIN_OTYPE(10, PIN_TYPE_OD)      \
+ 164:./inc/gpio.h  **** )
+ 165:./inc/gpio.h  **** #endif
+ 166:./inc/gpio.h  **** 
+ 167:./inc/gpio.h  **** #define GPIOA_OSPEED (                        \
+ 168:./inc/gpio.h  ****   SPI1_EN   * PIN_SPEED(4,  PIN_SPEED_HIGH) | \
+ 169:./inc/gpio.h  ****   SPI1_EN   * PIN_SPEED(5,  PIN_SPEED_HIGH) | \
+ 170:./inc/gpio.h  ****   SPI1_EN   * PIN_SPEED(6,  PIN_SPEED_HIGH) | \
+ 171:./inc/gpio.h  ****   SPI1_EN   * PIN_SPEED(7,  PIN_SPEED_HIGH)   \
+ 172:./inc/gpio.h  **** )
+ 173:./inc/gpio.h  **** 
+ 174:./inc/gpio.h  **** #define GPIOA_AF (                            \
+ 175:./inc/gpio.h  ****   USART1_EN * PA2_AF1_USART1_TX             | \
+ 176:./inc/gpio.h  ****   USART1_EN * PA3_AF1_USART1_RX             | \
+ 177:./inc/gpio.h  ****   SPI1_EN   * PA4_AF0_SPI1_NSS              | \
+ 178:./inc/gpio.h  ****   SPI1_EN   * PA5_AF0_SPI1_SCK              | \
+ 179:./inc/gpio.h  ****   SPI1_EN   * PA6_AF0_SPI1_MISO             | \
+ 180:./inc/gpio.h  ****   SPI1_EN   * PA7_AF0_SPI1_MOSI             | \
+ 181:./inc/gpio.h  ****   I2C1_EN   * PA9_AF4_I2C1_SCL              | \
+ 182:./inc/gpio.h  ****   I2C1_EN   * PA10_AF4_I2C1_SDA             | \
+ 183:./inc/gpio.h  ****   SWD_EN    * PA13_AF0_SWDIO                | \
+ 184:./inc/gpio.h  ****   SWD_EN    * PA14_AF0_SWCLK                  \
+ 185:./inc/gpio.h  **** )
+ 186:./inc/gpio.h  **** 
+ 187:./inc/gpio.h  **** #define GPIOB_MODE                     PIN_MODE(1,  PIN_MODE_AF)
+ 188:./inc/gpio.h  **** #define GPIOB_OSPEEDR                  PIN_SPEED(1, PIN_SPEED_HIGH)
+ 189:./inc/gpio.h  **** 
+ 190:./inc/gpio.h  **** #define GPIOB_AF                       PB1_AF2_TIM1_CH3N
+ 191:./inc/gpio.h  **** 
+ 192:./inc/gpio.h  **** #define GPIOF_MODE (                          \
+ 193:./inc/gpio.h  ****   PIN_MODE(0,  PIN_MODE_INPUT)              | \
+ 194:./inc/gpio.h  ****   PIN_MODE(1,  PIN_MODE_INPUT)                \
+ 195:./inc/gpio.h  **** )
+ 196:./inc/gpio.h  **** 
+ 197:./inc/gpio.h  **** #define GPIOF_PUPDR (                         \
+ 198:./inc/gpio.h  ****   PIN_PUPD(0,  PIN_PUPD_UP)                 | \
+ 199:./inc/gpio.h  ****   PIN_PUPD(1,  PIN_PUPD_UP)                   \
+ 200:./inc/gpio.h  **** )
+ 201:./inc/gpio.h  **** 
+ 202:./inc/gpio.h  **** __STATIC_FORCEINLINE void init_gpio(void) {
+ 203:./inc/gpio.h  **** 
+ 204:./inc/gpio.h  **** 
+ 205:./inc/gpio.h  ****   #if defined GPIOA_BRR
+ 206:./inc/gpio.h  ****     #if GPIOA_BRR != 0
+ 207:./inc/gpio.h  ****       GPIOA->BRR = GPIOA_BRR; /* 0x48000028: GPIO bit reset register, Address offset: 0x28 */
+ 208:./inc/gpio.h  ****     #endif
+ 209:./inc/gpio.h  ****   #else
+ 210:./inc/gpio.h  ****     #define GPIOA_BRR 0
+ 211:./inc/gpio.h  ****   #endif
+ 212:./inc/gpio.h  **** 
+ 213:./inc/gpio.h  ****   #if defined GPIOA_AFR_0
+ 214:./inc/gpio.h  ****     #if GPIOA_AFR_0 != 0
+ 215:./inc/gpio.h  ****       GPIOA->AFR[0] = GPIOA_AFR_0; /* 0x48000020: GPIO alternate function low register, Address off
+ 216:./inc/gpio.h  ****     #endif
+ 217:./inc/gpio.h  ****   #else
+ 218:./inc/gpio.h  ****     #define GPIOA_AFR_0 0
+ 219:./inc/gpio.h  ****   #endif
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 30
+
+
+ 220:./inc/gpio.h  **** 
+ 221:./inc/gpio.h  ****   #if defined GPIOA_AFR_1
+ 222:./inc/gpio.h  ****     #if GPIOA_AFR_1 != 0
+ 223:./inc/gpio.h  ****       GPIOA->AFR[1] = GPIOA_AFR_1; /* 0x48000024: GPIO alternate function low register, Address off
+ 224:./inc/gpio.h  ****     #endif
+ 225:./inc/gpio.h  ****   #else
+ 226:./inc/gpio.h  ****     #define GPIOA_AFR_1 0
+ 227:./inc/gpio.h  ****   #endif
+ 228:./inc/gpio.h  **** 
+ 229:./inc/gpio.h  ****   #if defined GPIOA_BSRR
+ 230:./inc/gpio.h  ****     #if GPIOA_BSRR != 0
+ 231:./inc/gpio.h  ****       GPIOA->BSRR = GPIOA_BSRR; /* 0x48000018: GPIO port bit set/reset register, Address offset: 0x
+ 232:./inc/gpio.h  ****     #endif
+ 233:./inc/gpio.h  ****   #else
+ 234:./inc/gpio.h  ****     #define GPIOA_BSRR 0
+ 235:./inc/gpio.h  ****   #endif
+ 236:./inc/gpio.h  **** 
+ 237:./inc/gpio.h  ****   #if defined GPIOA_IDR
+ 238:./inc/gpio.h  ****     #if GPIOA_IDR != 0
+ 239:./inc/gpio.h  ****       GPIOA->IDR = GPIOA_IDR; /* 0x48000010: GPIO port input data register, Address offset: 0x10 */
+ 240:./inc/gpio.h  ****     #endif
+ 241:./inc/gpio.h  ****   #else
+ 242:./inc/gpio.h  ****     #define GPIOA_IDR 0
+ 243:./inc/gpio.h  ****   #endif
+ 244:./inc/gpio.h  **** 
+ 245:./inc/gpio.h  ****   #if defined GPIOA_LCKR
+ 246:./inc/gpio.h  ****     #if GPIOA_LCKR != 0
+ 247:./inc/gpio.h  ****       GPIOA->LCKR = GPIOA_LCKR; /* 0x4800001C: GPIO port configuration lock register, Address offse
+ 248:./inc/gpio.h  ****     #endif
+ 249:./inc/gpio.h  ****   #else
+ 250:./inc/gpio.h  ****     #define GPIOA_LCKR 0
+ 251:./inc/gpio.h  ****   #endif
+ 252:./inc/gpio.h  **** 
+ 253:./inc/gpio.h  ****   #if defined GPIOA_MODER
+ 254:./inc/gpio.h  ****     #if GPIOA_MODER != 0
+ 255:./inc/gpio.h  ****       GPIOA->MODER = GPIOA_MODER; /* 0x48000000: GPIO port mode register, Address offset: 0x00 */
+ 454              		.loc 4 255 20 view .LVU70
+ 455 0010 9026     		movs	r6, #144	@ tmp124,
+ 456              	.LBE40:
+ 457              	.LBE39:
+ 458              	.LBB42:
+ 459              	.LBB38:
+ 460              	@ ./inc/rcc.h:432:       RCC->AHBENR = RCC_AHBENR; /* 0x40021014: RCC AHB peripheral clock register
+ 461              		.loc 3 432 19 view .LVU71
+ 462 0012 1E4B     		ldr	r3, .L23	@ tmp122,
+ 463 0014 D203     		lsls	r2, r2, #15	@ tmp123, tmp123,
+ 464 0016 5A61     		str	r2, [r3, #20]	@ tmp123, MEM[(struct RCC_TypeDef *)1073876992B].AHBENR
+ 433:./inc/rcc.h   ****     #endif
+ 434:./inc/rcc.h   ****   #else
+ 435:./inc/rcc.h   ****     #define RCC_AHBENR 0
+ 436:./inc/rcc.h   ****   #endif
+ 437:./inc/rcc.h   **** 
+ 438:./inc/rcc.h   ****   #if defined RCC_APB1ENR
+ 439:./inc/rcc.h   ****     #if RCC_APB1ENR != 0
+ 440:./inc/rcc.h   ****       RCC->APB1ENR = RCC_APB1ENR; /* 0x4002101C: RCC APB1 peripheral clock enable register, Address
+ 441:./inc/rcc.h   ****     #endif
+ 442:./inc/rcc.h   ****   #else
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 31
+
+
+ 443:./inc/rcc.h   ****     #define RCC_APB1ENR 0
+ 444:./inc/rcc.h   ****   #endif
+ 445:./inc/rcc.h   **** 
+ 446:./inc/rcc.h   ****   #if defined RCC_APB2ENR
+ 447:./inc/rcc.h   ****     #if RCC_APB2ENR != 0
+ 448:./inc/rcc.h   ****       RCC->APB2ENR = RCC_APB2ENR; /* 0x40021018: RCC APB2 peripheral clock enable register, Address
+ 449:./inc/rcc.h   ****     #endif
+ 450:./inc/rcc.h   ****   #else
+ 451:./inc/rcc.h   ****     #define RCC_APB2ENR 0
+ 452:./inc/rcc.h   ****   #endif
+ 453:./inc/rcc.h   **** 
+ 454:./inc/rcc.h   ****   #if defined RCC_CFGR
+ 455:./inc/rcc.h   ****     #if RCC_CFGR != 0
+ 456:./inc/rcc.h   ****       RCC->CFGR = RCC_CFGR; /* 0x40021004: RCC clock configuration register, Address offset: 0x04  
+ 457:./inc/rcc.h   ****     #endif
+ 458:./inc/rcc.h   ****   #else
+ 459:./inc/rcc.h   ****     #define RCC_CFGR 0
+ 460:./inc/rcc.h   ****   #endif
+ 461:./inc/rcc.h   **** 
+ 462:./inc/rcc.h   ****   #if defined RCC_CFGR2
+ 463:./inc/rcc.h   ****     #if RCC_CFGR2 != 0
+ 464:./inc/rcc.h   ****       RCC->CFGR2 = RCC_CFGR2; /* 0x4002102C: RCC clock configuration register 2, Address offset: 0x
+ 465:./inc/rcc.h   ****     #endif
+ 466:./inc/rcc.h   ****   #else
+ 467:./inc/rcc.h   ****     #define RCC_CFGR2 0
+ 468:./inc/rcc.h   ****   #endif
+ 469:./inc/rcc.h   **** 
+ 470:./inc/rcc.h   ****   #if defined RCC_CFGR3
+ 471:./inc/rcc.h   ****     #if RCC_CFGR3 != 0
+ 472:./inc/rcc.h   ****       RCC->CFGR3 = RCC_CFGR3; /* 0x40021030: RCC clock configuration register 3, Address offset: 0x
+ 473:./inc/rcc.h   ****     #endif
+ 474:./inc/rcc.h   ****   #else
+ 475:./inc/rcc.h   ****     #define RCC_CFGR3 0
+ 476:./inc/rcc.h   ****   #endif
+ 477:./inc/rcc.h   **** 
+ 478:./inc/rcc.h   ****   #if defined RCC_CSR
+ 479:./inc/rcc.h   ****     #if RCC_CSR != 0
+ 480:./inc/rcc.h   ****       RCC->CSR = RCC_CSR; /* 0x40021024: RCC clock control & status register, Address offset: 0x24 
+ 481:./inc/rcc.h   ****     #endif
+ 482:./inc/rcc.h   ****   #else
+ 483:./inc/rcc.h   ****     #define RCC_CSR 0
+ 484:./inc/rcc.h   ****   #endif
+ 485:./inc/rcc.h   **** 
+ 486:./inc/rcc.h   ****   #if defined RCC_AHBRSTR
+ 487:./inc/rcc.h   ****     #if RCC_AHBRSTR != 0
+ 488:./inc/rcc.h   ****       RCC->AHBRSTR = RCC_AHBRSTR; /* 0x40021028: RCC AHB peripheral reset register, Address offset:
+ 489:./inc/rcc.h   ****     #endif
+ 490:./inc/rcc.h   ****   #else
+ 491:./inc/rcc.h   ****     #define RCC_AHBRSTR 0
+ 492:./inc/rcc.h   ****   #endif
+ 493:./inc/rcc.h   **** 
+ 494:./inc/rcc.h   ****   #if defined RCC_APB1RSTR
+ 495:./inc/rcc.h   ****     #if RCC_APB1RSTR != 0
+ 496:./inc/rcc.h   ****       RCC->APB1RSTR = RCC_APB1RSTR; /* 0x40021010: RCC APB1 peripheral reset register, Address offs
+ 497:./inc/rcc.h   ****     #endif
+ 498:./inc/rcc.h   ****   #else
+ 499:./inc/rcc.h   ****     #define RCC_APB1RSTR 0
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 32
+
+
+ 500:./inc/rcc.h   ****   #endif
+ 501:./inc/rcc.h   **** 
+ 502:./inc/rcc.h   ****   #if defined RCC_APB2RSTR
+ 503:./inc/rcc.h   ****     #if RCC_APB2RSTR != 0
+ 504:./inc/rcc.h   ****       RCC->APB2RSTR = RCC_APB2RSTR; /* 0x4002100C: RCC APB2 peripheral reset register, Address offs
+ 505:./inc/rcc.h   ****     #endif
+ 506:./inc/rcc.h   ****   #else
+ 507:./inc/rcc.h   ****     #define RCC_APB2RSTR 0
+ 508:./inc/rcc.h   ****   #endif
+ 509:./inc/rcc.h   **** 
+ 510:./inc/rcc.h   ****   #if defined RCC_BDCR
+ 511:./inc/rcc.h   ****     #if RCC_BDCR != 0
+ 512:./inc/rcc.h   ****       RCC->BDCR = RCC_BDCR; /* 0x40021020: RCC Backup domain control register, Address offset: 0x20
+ 513:./inc/rcc.h   ****     #endif
+ 514:./inc/rcc.h   ****   #else
+ 515:./inc/rcc.h   ****     #define RCC_BDCR 0
+ 516:./inc/rcc.h   ****   #endif
+ 517:./inc/rcc.h   **** 
+ 518:./inc/rcc.h   ****   #if defined RCC_CIR
+ 519:./inc/rcc.h   ****     #if RCC_CIR != 0
+ 520:./inc/rcc.h   ****       RCC->CIR = RCC_CIR; /* 0x40021008: RCC clock interrupt register, Address offset: 0x08        
+ 521:./inc/rcc.h   ****     #endif
+ 522:./inc/rcc.h   ****   #else
+ 523:./inc/rcc.h   ****     #define RCC_CIR 0
+ 524:./inc/rcc.h   ****   #endif
+ 525:./inc/rcc.h   **** 
+ 526:./inc/rcc.h   ****   #if defined RCC_CR
+ 527:./inc/rcc.h   ****     #if RCC_CR != 0
+ 528:./inc/rcc.h   ****       RCC->CR = RCC_CR; /* 0x40021000: RCC clock control register, Address offset: 0x00            
+ 529:./inc/rcc.h   ****     #endif
+ 530:./inc/rcc.h   ****   #else
+ 531:./inc/rcc.h   ****     #define RCC_CR 0
+ 532:./inc/rcc.h   ****   #endif
+ 533:./inc/rcc.h   **** 
+ 534:./inc/rcc.h   ****   #if defined RCC_CR2
+ 535:./inc/rcc.h   ****     #if RCC_CR2 != 0
+ 536:./inc/rcc.h   ****       RCC->CR2 = RCC_CR2; /* 0x40021034: RCC clock control register 2, Address offset: 0x34        
+ 537:./inc/rcc.h   ****     #endif
+ 538:./inc/rcc.h   ****   #else
+ 539:./inc/rcc.h   ****     #define RCC_CR2 0
+ 540:./inc/rcc.h   ****   #endif
+ 541:./inc/rcc.h   **** 
+ 542:./inc/rcc.h   **** #if 0
+ 543:./inc/rcc.h   ****   NVIC_SetPriority(RCC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));
+ 544:./inc/rcc.h   ****   NVIC_ClearPendingIRQ(RCC_IRQn);
+ 545:./inc/rcc.h   ****   NVIC_EnableIRQ(RCC_IRQn);
+ 546:./inc/rcc.h   **** #endif
+ 547:./inc/rcc.h   ****   
+ 548:./inc/rcc.h   ****   /* Proceed with additional actions */
+ 549:./inc/rcc.h   ****   wait_for_clock_stable();
+ 465              		.loc 3 549 3 is_stmt 1 view .LVU72
+ 466              	.LBE38:
+ 467              	.LBE42:
+ 123:./inc/main.h  **** 
+ 468              		.loc 2 123 3 view .LVU73
+ 469              	.LBB43:
+ 470              	.LBI39:
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 33
+
+
+ 202:./inc/gpio.h  **** 
+ 471              		.loc 4 202 27 view .LVU74
+ 472              	.LBB41:
+ 473              		.loc 4 255 7 view .LVU75
+ 474              	@ ./inc/gpio.h:303:       GPIOB->AFR[0] = GPIOB_AFR_0; /* 0x48000420: GPIO alternate function low r
+ 256:./inc/gpio.h  ****     #endif
+ 257:./inc/gpio.h  ****   #else
+ 258:./inc/gpio.h  ****     #define GPIOA_MODER 0
+ 259:./inc/gpio.h  ****   #endif
+ 260:./inc/gpio.h  **** 
+ 261:./inc/gpio.h  ****   #if defined GPIOA_ODR
+ 262:./inc/gpio.h  ****     #if GPIOA_ODR != 0
+ 263:./inc/gpio.h  ****       GPIOA->ODR = GPIOA_ODR; /* 0x48000014: GPIO port output data register, Address offset: 0x14 *
+ 264:./inc/gpio.h  ****     #endif
+ 265:./inc/gpio.h  ****   #else
+ 266:./inc/gpio.h  ****     #define GPIOA_ODR 0
+ 267:./inc/gpio.h  ****   #endif
+ 268:./inc/gpio.h  **** 
+ 269:./inc/gpio.h  ****   #if defined GPIOA_OSPEEDR
+ 270:./inc/gpio.h  ****     #if GPIOA_OSPEEDR != 0
+ 271:./inc/gpio.h  ****       GPIOA->OSPEEDR = GPIOA_OSPEEDR; /* 0x48000008: GPIO port output speed register, Address offse
+ 272:./inc/gpio.h  ****     #endif
+ 273:./inc/gpio.h  ****   #else
+ 274:./inc/gpio.h  ****     #define GPIOA_OSPEEDR 0
+ 275:./inc/gpio.h  ****   #endif
+ 276:./inc/gpio.h  **** 
+ 277:./inc/gpio.h  ****   #if defined GPIOA_OTYPER
+ 278:./inc/gpio.h  ****     #if GPIOA_OTYPER != 0
+ 279:./inc/gpio.h  ****       GPIOA->OTYPER = GPIOA_OTYPER; /* 0x48000004: GPIO port output type register, Address offset: 
+ 280:./inc/gpio.h  ****     #endif
+ 281:./inc/gpio.h  ****   #else
+ 282:./inc/gpio.h  ****     #define GPIOA_OTYPER 0
+ 283:./inc/gpio.h  ****   #endif
+ 284:./inc/gpio.h  **** 
+ 285:./inc/gpio.h  ****   #if defined GPIOA_PUPDR
+ 286:./inc/gpio.h  ****     #if GPIOA_PUPDR != 0
+ 287:./inc/gpio.h  ****       GPIOA->PUPDR = GPIOA_PUPDR; /* 0x4800000C: GPIO port pull-up/pull-down register, Address offs
+ 288:./inc/gpio.h  ****     #endif
+ 289:./inc/gpio.h  ****   #else
+ 290:./inc/gpio.h  ****     #define GPIOA_PUPDR 0
+ 291:./inc/gpio.h  ****   #endif
+ 292:./inc/gpio.h  **** 
+ 293:./inc/gpio.h  ****   #if defined GPIOB_BRR
+ 294:./inc/gpio.h  ****     #if GPIOB_BRR != 0
+ 295:./inc/gpio.h  ****       GPIOB->BRR = GPIOB_BRR; /* 0x48000428: GPIO bit reset register, Address offset: 0x28 */
+ 296:./inc/gpio.h  ****     #endif
+ 297:./inc/gpio.h  ****   #else
+ 298:./inc/gpio.h  ****     #define GPIOB_BRR 0
+ 299:./inc/gpio.h  ****   #endif
+ 300:./inc/gpio.h  **** 
+ 301:./inc/gpio.h  ****   #if defined GPIOB_AFR_0
+ 302:./inc/gpio.h  ****     #if GPIOB_AFR_0 != 0
+ 303:./inc/gpio.h  ****       GPIOB->AFR[0] = GPIOB_AFR_0; /* 0x48000420: GPIO alternate function low register, Address off
+ 475              		.loc 4 303 21 is_stmt 0 view .LVU76
+ 476 0018 2022     		movs	r2, #32	@ tmp127,
+ 477              	@ ./inc/gpio.h:255:       GPIOA->MODER = GPIOA_MODER; /* 0x48000000: GPIO port mode register, Addre
+ 255:./inc/gpio.h  ****     #endif
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 34
+
+
+ 478              		.loc 4 255 20 view .LVU77
+ 479 001a 1D4B     		ldr	r3, .L23+4	@ tmp125,
+ 480 001c F605     		lsls	r6, r6, #23	@ tmp124, tmp124,
+ 481 001e 3360     		str	r3, [r6]	@ tmp125, MEM[(struct GPIO_TypeDef *)1207959552B].MODER
+ 482              		.loc 4 303 7 is_stmt 1 view .LVU78
+ 483              	@ ./inc/gpio.h:303:       GPIOB->AFR[0] = GPIOB_AFR_0; /* 0x48000420: GPIO alternate function low r
+ 484              		.loc 4 303 21 is_stmt 0 view .LVU79
+ 485 0020 1C4B     		ldr	r3, .L23+8	@ tmp126,
+ 486 0022 0124     		movs	r4, #1	@ tmp144,
+ 487 0024 1A62     		str	r2, [r3, #32]	@ tmp127, MEM[(struct GPIO_TypeDef *)1207960576B].AFR[0]
+ 304:./inc/gpio.h  ****     #endif
+ 305:./inc/gpio.h  ****   #else
+ 306:./inc/gpio.h  ****     #define GPIOB_AFR_0 0
+ 307:./inc/gpio.h  ****   #endif
+ 308:./inc/gpio.h  **** 
+ 309:./inc/gpio.h  ****   #if defined GPIOB_AFR_1
+ 310:./inc/gpio.h  ****     #if GPIOB_AFR_1 != 0
+ 311:./inc/gpio.h  ****       GPIOB->AFR[1] = GPIOB_AFR_1; /* 0x48000424: GPIO alternate function low register, Address off
+ 312:./inc/gpio.h  ****     #endif
+ 313:./inc/gpio.h  ****   #else
+ 314:./inc/gpio.h  ****     #define GPIOB_AFR_1 0
+ 315:./inc/gpio.h  ****   #endif
+ 316:./inc/gpio.h  **** 
+ 317:./inc/gpio.h  ****   #if defined GPIOB_BSRR
+ 318:./inc/gpio.h  ****     #if GPIOB_BSRR != 0
+ 319:./inc/gpio.h  ****       GPIOB->BSRR = GPIOB_BSRR; /* 0x48000418: GPIO port bit set/reset register, Address offset: 0x
+ 320:./inc/gpio.h  ****     #endif
+ 321:./inc/gpio.h  ****   #else
+ 322:./inc/gpio.h  ****     #define GPIOB_BSRR 0
+ 323:./inc/gpio.h  ****   #endif
+ 324:./inc/gpio.h  **** 
+ 325:./inc/gpio.h  ****   #if defined GPIOB_IDR
+ 326:./inc/gpio.h  ****     #if GPIOB_IDR != 0
+ 327:./inc/gpio.h  ****       GPIOB->IDR = GPIOB_IDR; /* 0x48000410: GPIO port input data register, Address offset: 0x10 */
+ 328:./inc/gpio.h  ****     #endif
+ 329:./inc/gpio.h  ****   #else
+ 330:./inc/gpio.h  ****     #define GPIOB_IDR 0
+ 331:./inc/gpio.h  ****   #endif
+ 332:./inc/gpio.h  **** 
+ 333:./inc/gpio.h  ****   #if defined GPIOB_LCKR
+ 334:./inc/gpio.h  ****     #if GPIOB_LCKR != 0
+ 335:./inc/gpio.h  ****       GPIOB->LCKR = GPIOB_LCKR; /* 0x4800041C: GPIO port configuration lock register, Address offse
+ 336:./inc/gpio.h  ****     #endif
+ 337:./inc/gpio.h  ****   #else
+ 338:./inc/gpio.h  ****     #define GPIOB_LCKR 0
+ 339:./inc/gpio.h  ****   #endif
+ 340:./inc/gpio.h  **** 
+ 341:./inc/gpio.h  ****   #if defined GPIOB_MODER
+ 342:./inc/gpio.h  ****     #if GPIOB_MODER != 0
+ 343:./inc/gpio.h  ****       GPIOB->MODER = GPIOB_MODER; /* 0x48000400: GPIO port mode register, Address offset: 0x00 */
+ 488              		.loc 4 343 7 is_stmt 1 view .LVU80
+ 489              	@ ./inc/gpio.h:343:       GPIOB->MODER = GPIOB_MODER; /* 0x48000400: GPIO port mode register, Addre
+ 490              		.loc 4 343 20 is_stmt 0 view .LVU81
+ 491 0026 253A     		subs	r2, r2, #37	@ tmp129,
+ 492 0028 1A60     		str	r2, [r3]	@ tmp129, MEM[(struct GPIO_TypeDef *)1207960576B].MODER
+ 344:./inc/gpio.h  ****     #endif
+ 345:./inc/gpio.h  ****   #else
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 35
+
+
+ 346:./inc/gpio.h  ****     #define GPIOB_MODER 0
+ 347:./inc/gpio.h  ****   #endif
+ 348:./inc/gpio.h  **** 
+ 349:./inc/gpio.h  ****   #if defined GPIOB_ODR
+ 350:./inc/gpio.h  ****     #if GPIOB_ODR != 0
+ 351:./inc/gpio.h  ****       GPIOB->ODR = GPIOB_ODR; /* 0x48000414: GPIO port output data register, Address offset: 0x14 *
+ 352:./inc/gpio.h  ****     #endif
+ 353:./inc/gpio.h  ****   #else
+ 354:./inc/gpio.h  ****     #define GPIOB_ODR 0
+ 355:./inc/gpio.h  ****   #endif
+ 356:./inc/gpio.h  **** 
+ 357:./inc/gpio.h  ****   #if defined GPIOB_OSPEEDR
+ 358:./inc/gpio.h  ****     #if GPIOB_OSPEEDR != 0
+ 359:./inc/gpio.h  ****       GPIOB->OSPEEDR = GPIOB_OSPEEDR; /* 0x48000408: GPIO port output speed register, Address offse
+ 493              		.loc 4 359 7 is_stmt 1 view .LVU82
+ 494              	@ ./inc/gpio.h:359:       GPIOB->OSPEEDR = GPIOB_OSPEEDR; /* 0x48000408: GPIO port output speed reg
+ 495              		.loc 4 359 22 is_stmt 0 view .LVU83
+ 496 002a 1132     		adds	r2, r2, #17	@ tmp131,
+ 497 002c 9A60     		str	r2, [r3, #8]	@ tmp131, MEM[(struct GPIO_TypeDef *)1207960576B].OSPEEDR
+ 360:./inc/gpio.h  ****     #endif
+ 361:./inc/gpio.h  ****   #else
+ 362:./inc/gpio.h  ****     #define GPIOB_OSPEEDR 0
+ 363:./inc/gpio.h  ****   #endif
+ 364:./inc/gpio.h  **** 
+ 365:./inc/gpio.h  ****   #if defined GPIOB_OTYPER
+ 366:./inc/gpio.h  ****     #if GPIOB_OTYPER != 0
+ 367:./inc/gpio.h  ****       GPIOB->OTYPER = GPIOB_OTYPER; /* 0x48000404: GPIO port output type register, Address offset: 
+ 368:./inc/gpio.h  ****     #endif
+ 369:./inc/gpio.h  ****   #else
+ 370:./inc/gpio.h  ****     #define GPIOB_OTYPER 0
+ 371:./inc/gpio.h  ****   #endif
+ 372:./inc/gpio.h  **** 
+ 373:./inc/gpio.h  ****   #if defined GPIOB_PUPDR
+ 374:./inc/gpio.h  ****     #if GPIOB_PUPDR != 0
+ 375:./inc/gpio.h  ****       GPIOB->PUPDR = GPIOB_PUPDR; /* 0x4800040C: GPIO port pull-up/pull-down register, Address offs
+ 376:./inc/gpio.h  ****     #endif
+ 377:./inc/gpio.h  ****   #else
+ 378:./inc/gpio.h  ****     #define GPIOB_PUPDR 0
+ 379:./inc/gpio.h  ****   #endif
+ 380:./inc/gpio.h  **** 
+ 381:./inc/gpio.h  ****   #if defined GPIOF_BRR
+ 382:./inc/gpio.h  ****     #if GPIOF_BRR != 0
+ 383:./inc/gpio.h  ****       GPIOF->BRR = GPIOF_BRR; /* 0x48001428: GPIO bit reset register, Address offset: 0x28 */
+ 384:./inc/gpio.h  ****     #endif
+ 385:./inc/gpio.h  ****   #else
+ 386:./inc/gpio.h  ****     #define GPIOF_BRR 0
+ 387:./inc/gpio.h  ****   #endif
+ 388:./inc/gpio.h  **** 
+ 389:./inc/gpio.h  ****   #if defined GPIOF_AFR_0
+ 390:./inc/gpio.h  ****     #if GPIOF_AFR_0 != 0
+ 391:./inc/gpio.h  ****       GPIOF->AFR[0] = GPIOF_AFR_0; /* 0x48001420: GPIO alternate function low register, Address off
+ 392:./inc/gpio.h  ****     #endif
+ 393:./inc/gpio.h  ****   #else
+ 394:./inc/gpio.h  ****     #define GPIOF_AFR_0 0
+ 395:./inc/gpio.h  ****   #endif
+ 396:./inc/gpio.h  **** 
+ 397:./inc/gpio.h  ****   #if defined GPIOF_AFR_1
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 36
+
+
+ 398:./inc/gpio.h  ****     #if GPIOF_AFR_1 != 0
+ 399:./inc/gpio.h  ****       GPIOF->AFR[1] = GPIOF_AFR_1; /* 0x48001424: GPIO alternate function low register, Address off
+ 400:./inc/gpio.h  ****     #endif
+ 401:./inc/gpio.h  ****   #else
+ 402:./inc/gpio.h  ****     #define GPIOF_AFR_1 0
+ 403:./inc/gpio.h  ****   #endif
+ 404:./inc/gpio.h  **** 
+ 405:./inc/gpio.h  ****   #if defined GPIOF_BSRR
+ 406:./inc/gpio.h  ****     #if GPIOF_BSRR != 0
+ 407:./inc/gpio.h  ****       GPIOF->BSRR = GPIOF_BSRR; /* 0x48001418: GPIO port bit set/reset register, Address offset: 0x
+ 408:./inc/gpio.h  ****     #endif
+ 409:./inc/gpio.h  ****   #else
+ 410:./inc/gpio.h  ****     #define GPIOF_BSRR 0
+ 411:./inc/gpio.h  ****   #endif
+ 412:./inc/gpio.h  **** 
+ 413:./inc/gpio.h  ****   #if defined GPIOF_IDR
+ 414:./inc/gpio.h  ****     #if GPIOF_IDR != 0
+ 415:./inc/gpio.h  ****       GPIOF->IDR = GPIOF_IDR; /* 0x48001410: GPIO port input data register, Address offset: 0x10 */
+ 416:./inc/gpio.h  ****     #endif
+ 417:./inc/gpio.h  ****   #else
+ 418:./inc/gpio.h  ****     #define GPIOF_IDR 0
+ 419:./inc/gpio.h  ****   #endif
+ 420:./inc/gpio.h  **** 
+ 421:./inc/gpio.h  ****   #if defined GPIOF_LCKR
+ 422:./inc/gpio.h  ****     #if GPIOF_LCKR != 0
+ 423:./inc/gpio.h  ****       GPIOF->LCKR = GPIOF_LCKR; /* 0x4800141C: GPIO port configuration lock register, Address offse
+ 424:./inc/gpio.h  ****     #endif
+ 425:./inc/gpio.h  ****   #else
+ 426:./inc/gpio.h  ****     #define GPIOF_LCKR 0
+ 427:./inc/gpio.h  ****   #endif
+ 428:./inc/gpio.h  **** 
+ 429:./inc/gpio.h  ****   #if defined GPIOF_MODER
+ 430:./inc/gpio.h  ****     #if GPIOF_MODER != 0
+ 431:./inc/gpio.h  ****       GPIOF->MODER = GPIOF_MODER; /* 0x48001400: GPIO port mode register, Address offset: 0x00 */
+ 498              		.loc 4 431 7 is_stmt 1 view .LVU84
+ 499              	@ ./inc/gpio.h:431:       GPIOF->MODER = GPIOF_MODER; /* 0x48001400: GPIO port mode register, Addre
+ 500              		.loc 4 431 20 is_stmt 0 view .LVU85
+ 501 002e 1A4B     		ldr	r3, .L23+12	@ tmp132,
+ 502 0030 1C3A     		subs	r2, r2, #28	@ tmp133,
+ 503 0032 1A60     		str	r2, [r3]	@ tmp133, MEM[(struct GPIO_TypeDef *)1207964672B].MODER
+ 432:./inc/gpio.h  ****     #endif
+ 433:./inc/gpio.h  ****   #else
+ 434:./inc/gpio.h  ****     #define GPIOF_MODER 0
+ 435:./inc/gpio.h  ****   #endif
+ 436:./inc/gpio.h  **** 
+ 437:./inc/gpio.h  ****   #if defined GPIOF_ODR
+ 438:./inc/gpio.h  ****     #if GPIOF_ODR != 0
+ 439:./inc/gpio.h  ****       GPIOF->ODR = GPIOF_ODR; /* 0x48001414: GPIO port output data register, Address offset: 0x14 *
+ 440:./inc/gpio.h  ****     #endif
+ 441:./inc/gpio.h  ****   #else
+ 442:./inc/gpio.h  ****     #define GPIOF_ODR 0
+ 443:./inc/gpio.h  ****   #endif
+ 444:./inc/gpio.h  **** 
+ 445:./inc/gpio.h  ****   #if defined GPIOF_OSPEEDR
+ 446:./inc/gpio.h  ****     #if GPIOF_OSPEEDR != 0
+ 447:./inc/gpio.h  ****       GPIOF->OSPEEDR = GPIOF_OSPEEDR; /* 0x48001408: GPIO port output speed register, Address offse
+ 448:./inc/gpio.h  ****     #endif
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 37
+
+
+ 449:./inc/gpio.h  ****   #else
+ 450:./inc/gpio.h  ****     #define GPIOF_OSPEEDR 0
+ 451:./inc/gpio.h  ****   #endif
+ 452:./inc/gpio.h  **** 
+ 453:./inc/gpio.h  ****   #if defined GPIOF_OTYPER
+ 454:./inc/gpio.h  ****     #if GPIOF_OTYPER != 0
+ 455:./inc/gpio.h  ****       GPIOF->OTYPER = GPIOF_OTYPER; /* 0x48001404: GPIO port output type register, Address offset: 
+ 456:./inc/gpio.h  ****     #endif
+ 457:./inc/gpio.h  ****   #else
+ 458:./inc/gpio.h  ****     #define GPIOF_OTYPER 0
+ 459:./inc/gpio.h  ****   #endif
+ 460:./inc/gpio.h  **** 
+ 461:./inc/gpio.h  ****   #if defined GPIOF_PUPDR
+ 462:./inc/gpio.h  ****     #if GPIOF_PUPDR != 0
+ 463:./inc/gpio.h  ****       GPIOF->PUPDR = GPIOF_PUPDR; /* 0x4800140C: GPIO port pull-up/pull-down register, Address offs
+ 504              		.loc 4 463 7 is_stmt 1 view .LVU86
+ 505              	@ ./inc/gpio.h:463:       GPIOF->PUPDR = GPIOF_PUPDR; /* 0x4800140C: GPIO port pull-up/pull-down re
+ 506              		.loc 4 463 20 is_stmt 0 view .LVU87
+ 507 0034 1532     		adds	r2, r2, #21	@ tmp135,
+ 508 0036 DA60     		str	r2, [r3, #12]	@ tmp135, MEM[(struct GPIO_TypeDef *)1207964672B].PUPDR
+ 509              	.LBE41:
+ 510              	.LBE43:
+ 126:./inc/main.h  **** 
+ 511              		.loc 2 126 3 is_stmt 1 view .LVU88
+ 512              	.LBB44:
+ 513              	.LBI44:
+ 131:./inc/main.h  **** 
+ 514              		.loc 2 131 27 view .LVU89
+ 515              	.LBB45:
+ 135:./inc/main.h  ****   SysTick->VAL  = SysTick->LOAD;
+ 516              		.loc 2 135 3 view .LVU90
+ 517              	@ ./inc/main.h:135:   SysTick->LOAD = HCLK * 1000 / (8 - SYSTICK_CLOCK_SOURCE * 7) - 1;
+ 135:./inc/main.h  ****   SysTick->VAL  = SysTick->LOAD;
+ 518              		.loc 2 135 17 is_stmt 0 view .LVU91
+ 519 0038 184A     		ldr	r2, .L23+16	@ tmp136,
+ 520 003a 194B     		ldr	r3, .L23+20	@ tmp137,
+ 521 003c 0025     		movs	r5, #0	@,
+ 522 003e 5360     		str	r3, [r2, #4]	@ tmp137, MEM[(struct SysTick_Type *)3758153744B].LOAD
+ 136:./inc/main.h  ****   SysTick->CTRL = (
+ 523              		.loc 2 136 3 is_stmt 1 view .LVU92
+ 524              	@ ./inc/main.h:136:   SysTick->VAL  = SysTick->LOAD;
+ 136:./inc/main.h  ****   SysTick->CTRL = (
+ 525              		.loc 2 136 26 is_stmt 0 view .LVU93
+ 526 0040 5368     		ldr	r3, [r2, #4]	@ _3, MEM[(struct SysTick_Type *)3758153744B].LOAD
+ 527              	.LBE45:
+ 528              	.LBE44:
+ 529              	.LBE35:
+ 530              	.LBE34:
+ 531              	.LBB49:
+ 532              	.LBB50:
+ 533              	.LBB51:
+ 534              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 361:./src/main.c  **** 
+ 362:./src/main.c  **** }
+ 363:./src/main.c  **** 
+ 364:./src/main.c  **** 
+ 365:./src/main.c  **** __STATIC_FORCEINLINE __SYSTICK_VOLATILE uint64_t * uptime(void) {
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 38
+
+
+ 366:./src/main.c  ****   extern __SYSTICK_VOLATILE uint64_t system_uptime;
+ 367:./src/main.c  ****   return &system_uptime;
+ 368:./src/main.c  **** }
+ 369:./src/main.c  **** 
+ 370:./src/main.c  **** 
+ 371:./src/main.c  **** /* a trick to use the same code in function and interrupt service routine */
+ 372:./src/main.c  **** #if YES == SYSTICK_IRQ_EN
+ 373:./src/main.c  **** 
+ 374:./src/main.c  **** __STATIC_FORCEINLINE void process_systick_event(void) {}
+ 375:./src/main.c  **** void SysTick_Handler(void);
+ 376:./src/main.c  **** void SysTick_Handler(void) {
+ 377:./src/main.c  **** 
+ 378:./src/main.c  **** #else
+ 379:./src/main.c  **** 
+ 380:./src/main.c  **** __STATIC_FORCEINLINE void process_systick_event(void) {
+ 381:./src/main.c  ****   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 535              		.loc 1 381 27 view .LVU94
+ 536 0042 8027     		movs	r7, #128	@ tmp156,
+ 537              	.LBE51:
+ 538              	.LBE50:
+ 539              	.LBE49:
+ 540              	.LBB58:
+ 541              	.LBB48:
+ 542              	.LBB47:
+ 543              	.LBB46:
+ 544              	@ ./inc/main.h:136:   SysTick->VAL  = SysTick->LOAD;
+ 136:./inc/main.h  ****   SysTick->CTRL = (
+ 545              		.loc 2 136 17 view .LVU95
+ 546 0044 9360     		str	r3, [r2, #8]	@ _3, MEM[(struct SysTick_Type *)3758153744B].VAL
+ 137:./inc/main.h  ****     + SYSTICK_CLOCK_SOURCE * SysTick_CTRL_CLKSOURCE_Msk
+ 547              		.loc 2 137 3 is_stmt 1 view .LVU96
+ 548              	@ ./inc/main.h:137:   SysTick->CTRL = (
+ 137:./inc/main.h  ****     + SYSTICK_CLOCK_SOURCE * SysTick_CTRL_CLKSOURCE_Msk
+ 549              		.loc 2 137 17 is_stmt 0 view .LVU97
+ 550 0046 0123     		movs	r3, #1	@ tmp141,
+ 551 0048 1360     		str	r3, [r2]	@ tmp141, MEM[(struct SysTick_Type *)3758153744B].CTRL
+ 552 004a 164B     		ldr	r3, .L23+24	@ tmp142,
+ 553              	.LBE46:
+ 554              	.LBE47:
+ 555              	.LBE48:
+ 556              	.LBE58:
+ 557              	.LBB59:
+ 558              	.LBB55:
+ 559              	.LBB52:
+ 560              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 561              		.loc 1 381 27 view .LVU98
+ 562 004c 7F02     		lsls	r7, r7, #9	@ tmp156, tmp156,
+ 563 004e 1868     		ldr	r0, [r3]	@ system_uptime, system_uptime
+ 564 0050 5968     		ldr	r1, [r3, #4]	@ system_uptime, system_uptime
+ 565              	@ ./src/main.c:390:   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ 382:./src/main.c  ****     return;
+ 383:./src/main.c  ****   }
+ 384:./src/main.c  ****   
+ 385:./src/main.c  **** #endif
+ 386:./src/main.c  **** 
+ 387:./src/main.c  ****   /* ### Share code between a regular function and an interrupt service routine ### */
+ 388:./src/main.c  **** 
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 39
+
+
+ 389:./src/main.c  ****   /* This line implements a simple blink function + uptime counting */
+ 390:./src/main.c  ****   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ 566              		.loc 1 390 29 discriminator 1 view .LVU99
+ 567 0052 8023     		movs	r3, #128	@ tmp146,
+ 568 0054 9B00     		lsls	r3, r3, #2	@ tmp146, tmp146,
+ 569 0056 9846     		mov	r8, r3	@ tmp146, tmp146
+ 570              	@ ./src/main.c:390:   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ 571              		.loc 1 390 57 discriminator 1 view .LVU100
+ 572 0058 134B     		ldr	r3, .L23+28	@ tmp162,
+ 573 005a 0019     		adds	r0, r0, r4	@ ivtmp.53, tmp144
+ 574 005c 6941     		adcs	r1, r1, r5	@ ivtmp.53, tmp144
+ 575 005e 9C46     		mov	ip, r3	@ tmp162, tmp162
+ 576              	.L17:
+ 577              	.LBE52:
+ 578              	.LBE55:
+ 579              	.LBE59:
+ 360:./src/main.c  **** 
+ 580              		.loc 1 360 16 is_stmt 1 discriminator 1 view .LVU101
+ 360:./src/main.c  **** 
+ 581              		.loc 1 360 27 discriminator 3 view .LVU102
+ 582              	.LBB60:
+ 583              	.LBI49:
+ 391:./src/main.c  **** 
+ 392:./src/main.c  **** }
+ 393:./src/main.c  **** 
+ 394:./src/main.c  **** 
+ 395:./src/main.c  **** __STATIC_FORCEINLINE void idle(void) {
+ 584              		.loc 1 395 27 view .LVU103
+ 396:./src/main.c  ****   /* Routine to handle idle state (waiting for an event) */
+ 397:./src/main.c  ****   
+ 398:./src/main.c  ****   process_systick_event();
+ 585              		.loc 1 398 3 view .LVU104
+ 586              	.LBB56:
+ 587              	.LBI50:
+ 380:./src/main.c  ****   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 588              		.loc 1 380 27 view .LVU105
+ 589              	.LBB53:
+ 381:./src/main.c  ****     return;
+ 590              		.loc 1 381 3 view .LVU106
+ 591              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 381:./src/main.c  ****     return;
+ 592              		.loc 1 381 20 is_stmt 0 view .LVU107
+ 593 0060 1368     		ldr	r3, [r2]	@ _4, MEM[(struct SysTick_Type *)3758153744B].CTRL
+ 594              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 381:./src/main.c  ****     return;
+ 595              		.loc 1 381 6 view .LVU108
+ 596 0062 3B42     		tst	r3, r7	@ _4, tmp156
+ 597 0064 FCD0     		beq	.L17		@,
+ 598              	.L22:
+ 390:./src/main.c  **** 
+ 599              		.loc 1 390 3 is_stmt 1 view .LVU109
+ 600              	@ ./src/main.c:390:   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ 390:./src/main.c  **** 
+ 601              		.loc 1 390 29 is_stmt 0 discriminator 1 view .LVU110
+ 602 0066 4346     		mov	r3, r8	@ _8, tmp146
+ 603 0068 0340     		ands	r3, r0	@ _8, ivtmp.53
+ 604              	@ ./src/main.c:390:   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 40
+
+
+ 390:./src/main.c  **** 
+ 605              		.loc 1 390 57 discriminator 1 view .LVU111
+ 606 006a 1C00     		movs	r4, r3	@ _8, _8
+ 607 006c 6342     		rsbs	r3, r4, #0	@ tmp159, _8
+ 608 006e 6341     		adcs	r3, r3, r4	@ tmp159, _8
+ 609 0070 6446     		mov	r4, ip	@ tmp162, tmp162
+ 610 0072 5B42     		rsbs	r3, r3, #0	@ tmp161, tmp159
+ 611 0074 2340     		ands	r3, r4	@ iftmp.0_9, tmp162
+ 612 0076 1033     		adds	r3, r3, #16	@ iftmp.0_9,
+ 613              	@ ./src/main.c:390:   GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS_4 : GPIO_BSRR_BR_4;
+ 390:./src/main.c  **** 
+ 614              		.loc 1 390 15 discriminator 4 view .LVU112
+ 615 0078 B361     		str	r3, [r6, #24]	@ iftmp.0_9, MEM[(struct GPIO_TypeDef *)1207959552B].BSRR
+ 616 007a 0024     		movs	r4, #0	@,
+ 617 007c 0123     		movs	r3, #1	@ tmp175,
+ 618 007e C018     		adds	r0, r0, r3	@ ivtmp.53, tmp175
+ 619 0080 6141     		adcs	r1, r1, r4	@ ivtmp.53, tmp175
+ 620              	.LBE53:
+ 621              	.LBE56:
+ 622              	.LBE60:
+ 360:./src/main.c  **** 
+ 623              		.loc 1 360 16 is_stmt 1 discriminator 1 view .LVU113
+ 360:./src/main.c  **** 
+ 624              		.loc 1 360 27 discriminator 3 view .LVU114
+ 625              	.LBB61:
+ 395:./src/main.c  ****   /* Routine to handle idle state (waiting for an event) */
+ 626              		.loc 1 395 27 view .LVU115
+ 627              		.loc 1 398 3 view .LVU116
+ 628              	.LBB57:
+ 380:./src/main.c  ****   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 629              		.loc 1 380 27 view .LVU117
+ 630              	.LBB54:
+ 381:./src/main.c  ****     return;
+ 631              		.loc 1 381 3 view .LVU118
+ 632              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 381:./src/main.c  ****     return;
+ 633              		.loc 1 381 20 is_stmt 0 view .LVU119
+ 634 0082 1368     		ldr	r3, [r2]	@ _4, MEM[(struct SysTick_Type *)3758153744B].CTRL
+ 635              	@ ./src/main.c:381:   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
+ 381:./src/main.c  ****     return;
+ 636              		.loc 1 381 6 view .LVU120
+ 637 0084 3B42     		tst	r3, r7	@ _4, tmp156
+ 638 0086 EED1     		bne	.L22		@,
+ 639 0088 EAE7     		b	.L17		@
+ 640              	.L24:
+ 641 008a C046     		.align	2
+ 642              	.L23:
+ 643 008c 00100240 		.word	1073876992
+ 644 0090 55FDFFEB 		.word	-335545003
+ 645 0094 00040048 		.word	1207960576
+ 646 0098 00140048 		.word	1207964672
+ 647 009c 10E000E0 		.word	-536813552
+ 648 00a0 E7030000 		.word	999
+ 649 00a4 00000000 		.word	system_uptime
+ 650 00a8 F0FF0F00 		.word	1048560
+ 651              	.LBE54:
+ 652              	.LBE57:
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 41
+
+
+ 653              	.LBE61:
+ 654              		.cfi_endproc
+ 655              	.LFE58:
+ 657              		.global	system_uptime
+ 658              		.section	.bss.system_uptime,"aw",%nobits
+ 659              		.align	3
+ 662              	system_uptime:
+ 663 0000 00000000 		.space	8
+ 663      00000000 
+ 664              		.text
+ 665              	.Letext0:
+ 666              		.file 5 "C:/Users/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/arm-none-eabi/include/machine/_d
+ 667              		.file 6 "C:/Users/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/arm-none-eabi/include/sys/_stdin
+ 668              		.file 7 "./inc/core_cm0.h"
+ 669              		.file 8 "./inc/stm32f030x6.h"
+ 670              		.file 9 "./inc/tim14.h"
+ARM GAS  C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s 			page 42
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:24     .text._close_r:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:31     .text._close_r:00000000 _close_r
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:46     .text._close:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:53     .text._close:00000000 _close
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:66     .text._lseek_r:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:73     .text._lseek_r:00000000 _lseek_r
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:86     .text._lseek:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:93     .text._lseek:00000000 _lseek
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:106    .text._read_r:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:113    .text._read_r:00000000 _read_r
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:126    .text._read:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:133    .text._read:00000000 _read
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:146    .text._write_r:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:153    .text._write_r:00000000 _write_r
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:166    .text.init_tim_cr1:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:173    .text.init_tim_cr1:00000000 init_tim_cr1
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:193    .text.TIM_Configuration:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:200    .text.TIM_Configuration:00000000 TIM_Configuration
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:388    .text.TIM_Configuration:000000b0 $d
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:396    .text.startup.main:00000000 $t
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:403    .text.startup.main:00000000 main
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:643    .text.startup.main:0000008c $d
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:662    .bss.system_uptime:00000000 system_uptime
+C:\Users\MR20AF~1.SMI\AppData\Local\Temp\ccbEfuia.s:659    .bss.system_uptime:00000000 $d
+                           .group:00000000 wm4.0.768e9d312318936ac6fb44bbc2c0266e
+                           .group:00000000 wm4.main.h.2.86977e9676cfa9e392d9042b8ea1e0e6
+                           .group:00000000 wm4.stm32f030x6.h.35.5e0c0eb70de0e6be61a98e42026756d1
+                           .group:00000000 wm4._newlib_version.h.4.411db44ea2338a62eca2f0777f81481b
+                           .group:00000000 wm4.features.h.33.d554620bb17bd3b714c3fb5c268772bc
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.48bafbb683905c4daa4565a85aeeb264
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.cmsis_version.h.32.0ac195c83bb4537824e6ad1c47474b79
+                           .group:00000000 wm4.core_cm0.h.66.608acc5992a3a56ab454582ca0035b64
+                           .group:00000000 wm4.cmsis_gcc.h.26.a3b89b5e9a2415e707ee83167896964a
+                           .group:00000000 wm4.core_cm0.h.132.e003f6d5680cd66ad439e55128780d12
+                           .group:00000000 wm4.stm32f030x6.h.426.954ed8635014676bba7a32b1b9921ff0
+                           .group:00000000 wm4.gpio.h.2.096a762886e4977efd6edca124d190e1
+                           .group:00000000 wm4.rcc.h.2.c2550cd9a2ae292ac15b5036148e9fd4
+                           .group:00000000 wm4.tim14.h.8.5e54f3dc06e40658b6836750532920b5
+
+NO UNDEFINED SYMBOLS

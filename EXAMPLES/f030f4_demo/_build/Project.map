@@ -1,0 +1,859 @@
+Archive member included to satisfy reference by file (symbol)
+
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o (exit)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o) (__stdio_exit_handler)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (_fwalk_sglue)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (__sread)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o (memset)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (_impure_data)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o (__libc_init_array)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (__retarget_lock_init_recursive)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (_malloc_r)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o) (__malloc_lock)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o) (_fflush_r)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o) (_sbrk_r)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o) (_free_r)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o) (errno)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o) (_sbrk)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o) (_exit)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+                              _build/system_stm32f0xx.o (__aeabi_uidiv)
+C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .rodata.all_implied_fbits
+                0x00000000       0x24 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .data.__dso_handle
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .text          0x00000000       0x80 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .ARM.extab     0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .ARM.exidx     0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .debug_line_str
+                0x00000000       0xd2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .ARM.attributes
+                0x00000000       0x1b C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .group         0x00000000        0xc _build/main.o
+ .text          0x00000000        0x0 _build/main.o
+ .data          0x00000000        0x0 _build/main.o
+ .bss           0x00000000        0x0 _build/main.o
+ .text._close_r
+                0x00000000        0x4 _build/main.o
+ .text._close   0x00000000        0x4 _build/main.o
+ .text._lseek_r
+                0x00000000        0x4 _build/main.o
+ .text._lseek   0x00000000        0x4 _build/main.o
+ .text._read_r  0x00000000        0x4 _build/main.o
+ .text._read    0x00000000        0x4 _build/main.o
+ .text._write_r
+                0x00000000        0x4 _build/main.o
+ .text.init_tim_cr1
+                0x00000000        0x4 _build/main.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .group         0x00000000        0xc _build/system_stm32f0xx.o
+ .text          0x00000000        0x0 _build/system_stm32f0xx.o
+ .data          0x00000000        0x0 _build/system_stm32f0xx.o
+ .bss           0x00000000        0x0 _build/system_stm32f0xx.o
+ .text.SystemCoreClockUpdate
+                0x00000000       0x64 _build/system_stm32f0xx.o
+ .rodata.APBPrescTable
+                0x00000000        0x8 _build/system_stm32f0xx.o
+ .rodata.AHBPrescTable
+                0x00000000       0x10 _build/system_stm32f0xx.o
+ .data.SystemCoreClock
+                0x00000000        0x4 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000      0xaa2 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x22 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x22 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x8e _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x51 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000      0x103 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x6a _build/system_stm32f0xx.o
+ .debug_macro   0x00000000      0x1df _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x1c _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0x22 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000       0xdd _build/system_stm32f0xx.o
+ .debug_macro   0x00000000      0x392 _build/system_stm32f0xx.o
+ .debug_macro   0x00000000     0x6e6e _build/system_stm32f0xx.o
+ .text          0x00000000       0x14 _build/startup_stm32f030x6.o
+ .data          0x00000000        0x0 _build/startup_stm32f030x6.o
+ .bss           0x00000000        0x0 _build/startup_stm32f030x6.o
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .text.exit     0x00000000       0x28 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .debug_frame   0x00000000       0x28 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.std      0x00000000       0x6c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.stdio_exit_handler
+                0x00000000       0x1c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.cleanup_stdio
+                0x00000000       0x3c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__fp_lock
+                0x00000000       0x18 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__fp_unlock
+                0x00000000       0x18 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.global_stdio_init.part.0
+                0x00000000       0x3c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__sfp_lock_acquire
+                0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__sfp_lock_release
+                0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__sfp    0x00000000       0xa8 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__sinit  0x00000000       0x30 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__fp_lock_all
+                0x00000000       0x1c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text.__fp_unlock_all
+                0x00000000       0x1c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .data.__sglue  0x00000000        0xc C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .bss.__sf      0x00000000      0x138 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .bss.__stdio_exit_handler
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .debug_frame   0x00000000      0x138 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .text._fwalk_sglue
+                0x00000000       0x38 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .debug_frame   0x00000000       0x34 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text.__sread  0x00000000       0x28 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text.__seofread
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text.__swrite
+                0x00000000       0x38 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text.__sseek  0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text.__sclose
+                0x00000000        0xc C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .debug_frame   0x00000000       0x90 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .text.memset   0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .debug_frame   0x00000000       0x20 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .data._impure_ptr
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .data._impure_data
+                0x00000000       0x4c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_init
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_init_recursive
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_close
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_close_recursive
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_acquire
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_acquire_recursive
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_try_acquire
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_try_acquire_recursive
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_release
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text.__retarget_lock_release_recursive
+                0x00000000        0x2 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___arc4random_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___dd_hash_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___tz_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___env_recursive_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___malloc_recursive_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___at_quick_exit_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___atexit_recursive_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .bss.__lock___sfp_recursive_mutex
+                0x00000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .debug_frame   0x00000000       0xb0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .text.sbrk_aligned
+                0x00000000       0x44 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .text._malloc_r
+                0x00000000      0x100 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .bss.__malloc_sbrk_start
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .bss.__malloc_free_list
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .debug_frame   0x00000000       0x50 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .text.__malloc_lock
+                0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .text.__malloc_unlock
+                0x00000000       0x10 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .debug_frame   0x00000000       0x40 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .text.__sflush_r
+                0x00000000      0x114 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .text._fflush_r
+                0x00000000       0x56 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .text.fflush   0x00000000       0x30 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .debug_frame   0x00000000       0x68 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .text._sbrk_r  0x00000000       0x24 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .debug_frame   0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .text._free_r  0x00000000       0x94 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .debug_frame   0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .text._reclaim_reent
+                0x00000000       0xd4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .bss.errno     0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .debug_frame   0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .text._sbrk    0x00000000       0x1c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .bss.heap_end.0
+                0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .debug_frame   0x00000000       0x20 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .text._exit    0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .debug_frame   0x00000000       0x20 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+ .text          0x00000000      0x114 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .debug_frame   0x00000000       0x20 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .debug_line_str
+                0x00000000       0xc9 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x00000000       0x1e C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .text          0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .debug_line_str
+                0x00000000       0xc9 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x00000000       0x1e C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .rodata.all_implied_fbits
+                0x00000000       0x24 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .eh_frame      0x00000000        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .text          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+ .data          0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+ .bss           0x00000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x20000000         0x00001000         xrw
+FLASH            0x08000000         0x00008000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+LOAD _build/main.o
+LOAD _build/system_stm32f0xx.o
+LOAD _build/startup_stm32f030x6.o
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libm.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a
+START GROUP
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libg_nano.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a
+END GROUP
+START GROUP
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a
+END GROUP
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+                0x20001000                        _estack = 0x20001000
+                0x00000000                        _Min_Heap_Size = 0x0
+                0x00000200                        _Min_Stack_Size = 0x200
+
+.isr_vector     0x08000000       0xc0
+                0x08000000                        . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x08000000       0xc0 _build/startup_stm32f030x6.o
+                0x08000000                g_pfnVectors
+                0x080000c0                        . = ALIGN (0x4)
+
+.text           0x080000c0      0x2bc
+                0x080000c0                        . = ALIGN (0x4)
+ *(.text)
+ *(.text*)
+ .text.deregister_tm_clones
+                0x080000c0       0x20 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .text.register_tm_clones
+                0x080000e0       0x28 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .text.__do_global_dtors_aux
+                0x08000108       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .text.frame_dummy
+                0x08000134       0x24 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .text.TIM_Configuration
+                0x08000158       0xc0 _build/main.o
+                0x08000158                TIM_Configuration
+ .text.startup.main
+                0x08000218       0xac _build/main.o
+                0x08000218                main
+ .text.SystemInit
+                0x080002c4        0x4 _build/system_stm32f0xx.o
+                0x080002c4                SystemInit
+ .text.Reset_Handler
+                0x080002c8       0x50 _build/startup_stm32f030x6.o
+                0x080002c8                Reset_Handler
+ .text.Default_Handler
+                0x08000318        0x2 _build/startup_stm32f030x6.o
+                0x08000318                TIM1_CC_IRQHandler
+                0x08000318                HardFault_Handler
+                0x08000318                SysTick_Handler
+                0x08000318                PendSV_Handler
+                0x08000318                NMI_Handler
+                0x08000318                I2C1_IRQHandler
+                0x08000318                SPI1_IRQHandler
+                0x08000318                EXTI2_3_IRQHandler
+                0x08000318                ADC1_IRQHandler
+                0x08000318                TIM17_IRQHandler
+                0x08000318                RTC_IRQHandler
+                0x08000318                TIM16_IRQHandler
+                0x08000318                TIM3_IRQHandler
+                0x08000318                EXTI4_15_IRQHandler
+                0x08000318                RCC_IRQHandler
+                0x08000318                DMA1_Channel1_IRQHandler
+                0x08000318                Default_Handler
+                0x08000318                TIM14_IRQHandler
+                0x08000318                DMA1_Channel4_5_IRQHandler
+                0x08000318                EXTI0_1_IRQHandler
+                0x08000318                SVC_Handler
+                0x08000318                WWDG_IRQHandler
+                0x08000318                DMA1_Channel2_3_IRQHandler
+                0x08000318                FLASH_IRQHandler
+                0x08000318                USART1_IRQHandler
+                0x08000318                TIM1_BRK_UP_TRG_COM_IRQHandler
+ *fill*         0x0800031a        0x2 
+ .text.__libc_init_array
+                0x0800031c       0x48 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+                0x0800031c                __libc_init_array
+ *(.glue_7)
+ .glue_7        0x08000364        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x08000364        0x0 linker stubs
+ *(.eh_frame)
+ .eh_frame      0x08000364        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ *(.init)
+ .init          0x08000364        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+                0x08000364                _init
+ .init          0x08000368        0x8 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+ *(.fini)
+ .fini          0x08000370        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+                0x08000370                _fini
+ .fini          0x08000374        0x8 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+                0x0800037c                        . = ALIGN (0x4)
+                0x0800037c                        _etext = .
+
+.vfp11_veneer   0x0800037c        0x0
+ .vfp11_veneer  0x0800037c        0x0 linker stubs
+
+.v4_bx          0x0800037c        0x0
+ .v4_bx         0x0800037c        0x0 linker stubs
+
+.iplt           0x0800037c        0x0
+ .iplt          0x0800037c        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+
+.rel.dyn        0x0800037c        0x0
+ .rel.iplt      0x0800037c        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+
+.rodata         0x0800037c        0x0
+                0x0800037c                        . = ALIGN (0x4)
+ *(.rodata)
+ *(.rodata*)
+                0x0800037c                        . = ALIGN (0x4)
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM            0x0800037c        0x0
+                0x0800037c                        __exidx_start = .
+ *(.ARM.exidx*)
+                0x0800037c                        __exidx_end = .
+
+.preinit_array  0x0800037c        0x0
+                0x0800037c                        PROVIDE (__preinit_array_start = .)
+ *(.preinit_array*)
+                0x0800037c                        PROVIDE (__preinit_array_end = .)
+
+.init_array     0x0800037c        0x4
+                0x0800037c                        PROVIDE (__init_array_start = .)
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array*)
+ .init_array    0x0800037c        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+                0x08000380                        PROVIDE (__init_array_end = .)
+
+.fini_array     0x08000380        0x4
+                [!provide]                        PROVIDE (__fini_array_start = .)
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array*)
+ .fini_array    0x08000380        0x4 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+                [!provide]                        PROVIDE (__fini_array_end = .)
+                0x08000384                        _sidata = LOADADDR (.data)
+
+.data           0x20000000        0x0 load address 0x08000384
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sdata = .
+ *(.data)
+ *(.data*)
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _edata = .
+
+.tm_clone_table
+                0x20000000        0x0 load address 0x08000384
+ .tm_clone_table
+                0x20000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .tm_clone_table
+                0x20000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+
+.igot.plt       0x20000000        0x0 load address 0x08000384
+ .igot.plt      0x20000000        0x0 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+                0x20000000                        . = ALIGN (0x4)
+
+.bss            0x20000000       0x28 load address 0x08000384
+                0x20000000                        _sbss = .
+                0x20000000                        __bss_start__ = _sbss
+ *(.bss)
+ *(.bss*)
+ .bss.completed.1
+                0x20000000        0x1 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ *fill*         0x20000001        0x3 
+ .bss.object.0  0x20000004       0x18 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ *fill*         0x2000001c        0x4 
+ .bss.system_uptime
+                0x20000020        0x8 _build/main.o
+                0x20000020                system_uptime
+ *(COMMON)
+                0x20000028                        . = ALIGN (0x4)
+                0x20000028                        _ebss = .
+                0x20000028                        __bss_end__ = _ebss
+
+._user_heap_stack
+                0x20000028      0x200 load address 0x08000384
+                0x20000028                        . = ALIGN (0x8)
+                0x20000028                        PROVIDE (end = .)
+                [!provide]                        PROVIDE (_end = .)
+                0x20000028                        . = (. + _Min_Heap_Size)
+                0x20000228                        . = (. + _Min_Stack_Size)
+ *fill*         0x20000028      0x200 
+                0x20000228                        . = ALIGN (0x8)
+
+/DISCARD/
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+
+.ARM.attributes
+                0x00000000       0x28
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x1e C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+ .ARM.attributes
+                0x0000001e       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+ .ARM.attributes
+                0x0000004a       0x2c _build/main.o
+ .ARM.attributes
+                0x00000076       0x2c _build/system_stm32f0xx.o
+ .ARM.attributes
+                0x000000a2       0x21 _build/startup_stm32f030x6.o
+ .ARM.attributes
+                0x000000c3       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+ .ARM.attributes
+                0x000000ef       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+ .ARM.attributes
+                0x0000011b       0x1e C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtn.o
+OUTPUT(_build/Project.elf elf32-littlearm)
+LOAD linker stubs
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libm.a
+LOAD C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a
+
+.debug_info     0x00000000      0xd73
+ .debug_info    0x00000000      0xae2 _build/main.o
+ .debug_info    0x00000ae2      0x261 _build/system_stm32f0xx.o
+ .debug_info    0x00000d43       0x30 _build/startup_stm32f030x6.o
+
+.debug_abbrev   0x00000000      0x42a
+ .debug_abbrev  0x00000000      0x2ce _build/main.o
+ .debug_abbrev  0x000002ce      0x138 _build/system_stm32f0xx.o
+ .debug_abbrev  0x00000406       0x24 _build/startup_stm32f030x6.o
+
+.debug_loclists
+                0x00000000      0x100
+ .debug_loclists
+                0x00000000       0x28 _build/main.o
+ .debug_loclists
+                0x00000028       0xd8 _build/system_stm32f0xx.o
+
+.debug_aranges  0x00000000       0xb8
+ .debug_aranges
+                0x00000000       0x68 _build/main.o
+ .debug_aranges
+                0x00000068       0x28 _build/system_stm32f0xx.o
+ .debug_aranges
+                0x00000090       0x28 _build/startup_stm32f030x6.o
+
+.debug_rnglists
+                0x00000000       0xbf
+ .debug_rnglists
+                0x00000000       0x8d _build/main.o
+ .debug_rnglists
+                0x0000008d       0x19 _build/system_stm32f0xx.o
+ .debug_rnglists
+                0x000000a6       0x19 _build/startup_stm32f030x6.o
+
+.debug_macro    0x00000000     0x88d9
+ .debug_macro   0x00000000      0x108 _build/main.o
+ .debug_macro   0x00000108      0xaa2 _build/main.o
+ .debug_macro   0x00000baa       0x40 _build/main.o
+ .debug_macro   0x00000bea       0x22 _build/main.o
+ .debug_macro   0x00000c0c       0x22 _build/main.o
+ .debug_macro   0x00000c2e       0x8e _build/main.o
+ .debug_macro   0x00000cbc       0x51 _build/main.o
+ .debug_macro   0x00000d0d      0x103 _build/main.o
+ .debug_macro   0x00000e10       0x6a _build/main.o
+ .debug_macro   0x00000e7a      0x1df _build/main.o
+ .debug_macro   0x00001059       0x1c _build/main.o
+ .debug_macro   0x00001075       0x22 _build/main.o
+ .debug_macro   0x00001097       0xdd _build/main.o
+ .debug_macro   0x00001174      0x392 _build/main.o
+ .debug_macro   0x00001506     0x6e6e _build/main.o
+ .debug_macro   0x00008374      0x2c2 _build/main.o
+ .debug_macro   0x00008636      0x12c _build/main.o
+ .debug_macro   0x00008762       0x18 _build/main.o
+ .debug_macro   0x0000877a       0xcb _build/system_stm32f0xx.o
+ .debug_macro   0x00008845       0x2e _build/system_stm32f0xx.o
+ .debug_macro   0x00008873       0x66 _build/system_stm32f0xx.o
+
+.debug_line     0x00000000      0x905
+ .debug_line    0x00000000      0x55e _build/main.o
+ .debug_line    0x0000055e      0x32c _build/system_stm32f0xx.o
+ .debug_line    0x0000088a       0x7b _build/startup_stm32f030x6.o
+
+.debug_str      0x00000000    0x2f2d1
+ .debug_str     0x00000000    0x2f2d1 _build/main.o
+                              0x2eda8 (size before relaxing)
+ .debug_str     0x0002f2d1    0x2bf9b _build/system_stm32f0xx.o
+ .debug_str     0x0002f2d1       0x7c _build/startup_stm32f030x6.o
+
+.comment        0x00000000       0x45
+ .comment       0x00000000       0x45 _build/main.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045       0x46 _build/system_stm32f0xx.o
+
+.debug_frame    0x00000000      0x13c
+ .debug_frame   0x00000000       0xd8 _build/main.o
+ .debug_frame   0x000000d8       0x38 _build/system_stm32f0xx.o
+ .debug_frame   0x00000110       0x2c C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+
+.debug_line_str
+                0x00000000       0x60
+ .debug_line_str
+                0x00000000       0x60 _build/startup_stm32f030x6.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC1_IRQHandler                                   _build/startup_stm32f030x6.o
+AHBPrescTable                                     _build/system_stm32f0xx.o
+APBPrescTable                                     _build/system_stm32f0xx.o
+DMA1_Channel1_IRQHandler                          _build/startup_stm32f030x6.o
+DMA1_Channel2_3_IRQHandler                        _build/startup_stm32f030x6.o
+DMA1_Channel4_5_IRQHandler                        _build/startup_stm32f030x6.o
+Default_Handler                                   _build/startup_stm32f030x6.o
+EXTI0_1_IRQHandler                                _build/startup_stm32f030x6.o
+EXTI2_3_IRQHandler                                _build/startup_stm32f030x6.o
+EXTI4_15_IRQHandler                               _build/startup_stm32f030x6.o
+FLASH_IRQHandler                                  _build/startup_stm32f030x6.o
+HardFault_Handler                                 _build/startup_stm32f030x6.o
+I2C1_IRQHandler                                   _build/startup_stm32f030x6.o
+NMI_Handler                                       _build/startup_stm32f030x6.o
+PendSV_Handler                                    _build/startup_stm32f030x6.o
+RCC_IRQHandler                                    _build/startup_stm32f030x6.o
+RTC_IRQHandler                                    _build/startup_stm32f030x6.o
+Reset_Handler                                     _build/startup_stm32f030x6.o
+SPI1_IRQHandler                                   _build/startup_stm32f030x6.o
+SVC_Handler                                       _build/startup_stm32f030x6.o
+SysTick_Handler                                   _build/startup_stm32f030x6.o
+SystemCoreClock                                   _build/system_stm32f0xx.o
+SystemCoreClockUpdate                             _build/system_stm32f0xx.o
+SystemInit                                        _build/system_stm32f0xx.o
+                                                  _build/startup_stm32f030x6.o
+TIM14_IRQHandler                                  _build/startup_stm32f030x6.o
+TIM16_IRQHandler                                  _build/startup_stm32f030x6.o
+TIM17_IRQHandler                                  _build/startup_stm32f030x6.o
+TIM1_BRK_UP_TRG_COM_IRQHandler                    _build/startup_stm32f030x6.o
+TIM1_CC_IRQHandler                                _build/startup_stm32f030x6.o
+TIM3_IRQHandler                                   _build/startup_stm32f030x6.o
+TIM_Configuration                                 _build/main.o
+USART1_IRQHandler                                 _build/startup_stm32f030x6.o
+WWDG_IRQHandler                                   _build/startup_stm32f030x6.o
+_ITM_deregisterTMCloneTable                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+_ITM_registerTMCloneTable                         C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+__TMC_END__                                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtend.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+__aeabi_idiv0                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+__aeabi_ldiv0                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+__aeabi_uidiv                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+                                                  _build/system_stm32f0xx.o
+__aeabi_uidivmod                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+__bss_end__                                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+__bss_start__                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+__call_exitprocs                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+__deregister_frame_info                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+__dso_handle                                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+__fp_lock_all                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__fp_unlock_all                                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__init_array_end                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+__init_array_start                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+__libc_fini_array                                 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+__libc_init_array                                 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+                                                  _build/startup_stm32f030x6.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+__lock___arc4random_mutex                         C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__lock___at_quick_exit_mutex                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__lock___atexit_recursive_mutex                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__lock___dd_hash_mutex                            C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__lock___env_recursive_mutex                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__lock___malloc_recursive_mutex                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+__lock___sfp_recursive_mutex                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__lock___tz_mutex                                 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__malloc_free_list                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+__malloc_lock                                     C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+__malloc_sbrk_start                               C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+__malloc_unlock                                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+__preinit_array_end                               C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+__preinit_array_start                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+__register_frame_info                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crtbegin.o
+__retarget_lock_acquire                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_acquire_recursive                 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__retarget_lock_close                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_close_recursive                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_init                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_init_recursive                    C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__retarget_lock_release                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_release_recursive                 C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mlock.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__retarget_lock_try_acquire                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__retarget_lock_try_acquire_recursive             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-lock.o)
+__sclose                                          C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__seofread                                        C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+__sf                                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+__sflush_r                                        C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+__sfp                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__sfp_lock_acquire                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__sfp_lock_release                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__sglue                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+__sinit                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+__sread                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__sseek                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__stack                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+__stdio_exit_handler                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+__swrite                                          C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+__udivsi3                                         C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+_close                                            _build/main.o
+_close_r                                          _build/main.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+_ebss                                             _build/startup_stm32f030x6.o
+_edata                                            _build/startup_stm32f030x6.o
+_estack                                           _build/startup_stm32f030x6.o
+_exit                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(_exit.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+_fflush_r                                         C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+_fini                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+_free_r                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-freer.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+_fwalk_sglue                                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fwalk.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+_impure_data                                      C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+_impure_ptr                                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-impure.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+_init                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crti.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-init.o)
+_lseek                                            _build/main.o
+_lseek_r                                          _build/main.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+_mainCRTStartup                                   C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+_malloc_r                                         C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+_read                                             _build/main.o
+_read_r                                           _build/main.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+_reclaim_reent                                    C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+_sbrk                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+_sbrk_r                                           C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-mallocr.o)
+_sbss                                             _build/startup_stm32f030x6.o
+_sdata                                            _build/startup_stm32f030x6.o
+_sidata                                           _build/startup_stm32f030x6.o
+_stack_init                                       C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+_start                                            C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+_write_r                                          _build/main.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-stdio.o)
+atexit                                            C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+end                                               C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libnosys.a(sbrk.o)
+errno                                             C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-reent.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-sbrkr.o)
+exit                                              C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-exit.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+fflush                                            C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-fflush.o)
+g_pfnVectors                                      _build/startup_stm32f030x6.o
+hardware_init_hook                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+init_tim_cr1                                      _build/main.o
+main                                              _build/main.o
+                                                  _build/startup_stm32f030x6.o
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+memset                                            C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-memset.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp\libc_nano.a(libc_a-findfp.o)
+                                                  C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+software_init_hook                                C:/Documents and Settings/mr.smith/scoop/apps/gcc-arm-none-eabi/14.2.rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/crt0.o
+system_uptime                                     _build/main.o

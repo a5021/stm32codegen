@@ -1,0 +1,1461 @@
+./src/main.c: In function 'TIM1_Configuration':
+./src/main.c:13:28: error: 'TIM' undeclared (first use in this function); did you mean 'TIM3'?
+   13 |         (PERIPH == TIM1) ? TIM : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:13:28: note: each undeclared identifier is reported only once for each function it appears in
+   13 |         (PERIPH == TIM1) ? TIM : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:14:20: error: 'TIM2' undeclared (first use in this function); did you mean 'TIM3'?
+   14 |         (PERIPH == TIM2) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:16:20: error: 'TIM4' undeclared (first use in this function); did you mean 'TIM3'?
+   16 |         (PERIPH == TIM4) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:17:20: error: 'TIM5' undeclared (first use in this function); did you mean 'TIM3'?
+   17 |         (PERIPH == TIM5) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:18:20: error: 'TIM6' undeclared (first use in this function); did you mean 'TIM3'?
+   18 |         (PERIPH == TIM6) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:19:20: error: 'TIM7' undeclared (first use in this function); did you mean 'TIM3'?
+   19 |         (PERIPH == TIM7) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:20:20: error: 'TIM8' undeclared (first use in this function); did you mean 'TIM3'?
+   20 |         (PERIPH == TIM8) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:21:20: error: 'TIM9' undeclared (first use in this function); did you mean 'TIM3'?
+   21 |         (PERIPH == TIM9) ? TIM : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:22:20: error: 'TIM10' undeclared (first use in this function); did you mean 'TIM1'?
+   22 |         (PERIPH == TIM10) ? TIM : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:23:20: error: 'TIM11' undeclared (first use in this function); did you mean 'TIM1'?
+   23 |         (PERIPH == TIM11) ? TIM : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:24:20: error: 'TIM12' undeclared (first use in this function); did you mean 'TIM1'?
+   24 |         (PERIPH == TIM12) ? TIM : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:25:20: error: 'TIM13' undeclared (first use in this function); did you mean 'TIM3'?
+   25 |         (PERIPH == TIM13) ? TIM : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:27:20: error: 'TIM15' undeclared (first use in this function); did you mean 'TIM1'?
+   27 |         (PERIPH == TIM15) ? TIM : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:32:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   32 |         (PERIPH == USART1) ? USART : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:32:30: error: 'USART' undeclared (first use in this function); did you mean 'USART1'?
+   32 |         (PERIPH == USART1) ? USART : \
+      |                              ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:33:20: error: 'USART2' undeclared (first use in this function); did you mean 'USART1'?
+   33 |         (PERIPH == USART2) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:34:20: error: 'USART3' undeclared (first use in this function); did you mean 'USART1'?
+   34 |         (PERIPH == USART3) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:35:20: error: 'USART4' undeclared (first use in this function); did you mean 'USART1'?
+   35 |         (PERIPH == USART4) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:36:20: error: 'USART5' undeclared (first use in this function); did you mean 'USART1'?
+   36 |         (PERIPH == USART5) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:37:20: error: 'USART6' undeclared (first use in this function); did you mean 'USART1'?
+   37 |         (PERIPH == USART6) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:38:20: error: 'USART7' undeclared (first use in this function); did you mean 'USART1'?
+   38 |         (PERIPH == USART7) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:39:20: error: 'USART8' undeclared (first use in this function); did you mean 'USART1'?
+   39 |         (PERIPH == USART8) ? USART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:40:20: error: 'UART4' undeclared (first use in this function); did you mean 'USART1'?
+   40 |         (PERIPH == UART4) ? UART : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:40:29: error: 'UART' undeclared (first use in this function); did you mean 'USART1'?
+   40 |         (PERIPH == UART4) ? UART : \
+      |                             ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:41:20: error: 'UART5' undeclared (first use in this function); did you mean 'USART1'?
+   41 |         (PERIPH == UART5) ? UART : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:42:20: error: 'UART7' undeclared (first use in this function); did you mean 'USART1'?
+   42 |         (PERIPH == UART7) ? UART : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:43:20: error: 'UART8' undeclared (first use in this function); did you mean 'USART1'?
+   43 |         (PERIPH == UART8) ? UART : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:44:20: error: 'UART9' undeclared (first use in this function); did you mean 'USART1'?
+   44 |         (PERIPH == UART9) ? UART : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:45:20: error: 'UART10' undeclared (first use in this function); did you mean 'USART1'?
+   45 |         (PERIPH == UART10) ? UART : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:48:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   48 |         (PERIPH == SPI1) ? SPI : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:48:28: error: 'SPI' undeclared (first use in this function); did you mean 'SPI1'?
+   48 |         (PERIPH == SPI1) ? SPI : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:49:20: error: 'SPI2' undeclared (first use in this function); did you mean 'SPI1'?
+   49 |         (PERIPH == SPI2) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:50:20: error: 'SPI3' undeclared (first use in this function); did you mean 'SPI1'?
+   50 |         (PERIPH == SPI3) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:51:20: error: 'SPI4' undeclared (first use in this function); did you mean 'SPI1'?
+   51 |         (PERIPH == SPI4) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:52:20: error: 'SPI5' undeclared (first use in this function); did you mean 'SPI1'?
+   52 |         (PERIPH == SPI5) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:53:20: error: 'SPI6' undeclared (first use in this function); did you mean 'SPI1'?
+   53 |         (PERIPH == SPI6) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:56:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   56 |         (PERIPH == I2C1) ? I2C : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:56:28: error: 'I2C' undeclared (first use in this function); did you mean 'I2C1'?
+   56 |         (PERIPH == I2C1) ? I2C : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:57:20: error: 'I2C2' undeclared (first use in this function); did you mean 'I2C1'?
+   57 |         (PERIPH == I2C2) ? I2C : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:58:20: error: 'I2C3' undeclared (first use in this function); did you mean 'I2C1'?
+   58 |         (PERIPH == I2C3) ? I2C : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:59:20: error: 'I2C4' undeclared (first use in this function); did you mean 'I2C1'?
+   59 |         (PERIPH == I2C4) ? I2C : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:62:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   62 |         (PERIPH == GPIOA) ? GPIO : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:62:29: error: 'GPIO' undeclared (first use in this function); did you mean 'GPIOD'?
+   62 |         (PERIPH == GPIOA) ? GPIO : \
+      |                             ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:63:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   63 |         (PERIPH == GPIOB) ? GPIO : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:64:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   64 |         (PERIPH == GPIOC) ? GPIO : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:65:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   65 |         (PERIPH == GPIOD) ? GPIO : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:66:20: error: 'GPIOE' undeclared (first use in this function); did you mean 'GPIOD'?
+   66 |         (PERIPH == GPIOE) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:67:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   67 |         (PERIPH == GPIOF) ? GPIO : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:68:20: error: 'GPIOG' undeclared (first use in this function); did you mean 'GPIOD'?
+   68 |         (PERIPH == GPIOG) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:69:20: error: 'GPIOH' undeclared (first use in this function); did you mean 'GPIOD'?
+   69 |         (PERIPH == GPIOH) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:70:20: error: 'GPIOI' undeclared (first use in this function); did you mean 'GPIOD'?
+   70 |         (PERIPH == GPIOI) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:71:20: error: 'GPIOJ' undeclared (first use in this function); did you mean 'GPIOD'?
+   71 |         (PERIPH == GPIOJ) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:72:20: error: 'GPIOK' undeclared (first use in this function); did you mean 'GPIOD'?
+   72 |         (PERIPH == GPIOK) ? GPIO : \
+      |                    ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:75:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   75 |         (PERIPH == ADC1) ? ADC : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:76:20: error: 'ADC2' undeclared (first use in this function); did you mean 'ADC1'?
+   76 |         (PERIPH == ADC2) ? ADC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:77:20: error: 'ADC3' undeclared (first use in this function); did you mean 'ADC1'?
+   77 |         (PERIPH == ADC3) ? ADC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:78:20: error: 'ADC4' undeclared (first use in this function); did you mean 'ADC1'?
+   78 |         (PERIPH == ADC4) ? ADC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:79:20: error: 'ADC5' undeclared (first use in this function); did you mean 'ADC1'?
+   79 |         (PERIPH == ADC5) ? ADC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:82:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+   82 |         (PERIPH == DMA1) ? DMA : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:82:28: error: 'DMA' undeclared (first use in this function); did you mean 'DMA1'?
+   82 |         (PERIPH == DMA1) ? DMA : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:83:20: error: 'DMA2' undeclared (first use in this function); did you mean 'DMA1'?
+   83 |         (PERIPH == DMA2) ? DMA : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:86:20: error: 'CAN1' undeclared (first use in this function)
+   86 |         (PERIPH == CAN1) ? CAN : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:86:28: error: 'CAN' undeclared (first use in this function)
+   86 |         (PERIPH == CAN1) ? CAN : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:87:20: error: 'CAN2' undeclared (first use in this function)
+   87 |         (PERIPH == CAN2) ? CAN : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:88:20: error: 'DAC1' undeclared (first use in this function); did you mean 'ADC1'?
+   88 |         (PERIPH == DAC1) ? DAC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:88:28: error: 'DAC' undeclared (first use in this function); did you mean 'ADC'?
+   88 |         (PERIPH == DAC1) ? DAC : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:89:20: error: 'DAC2' undeclared (first use in this function)
+   89 |         (PERIPH == DAC2) ? DAC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:90:20: error: 'ETH' undeclared (first use in this function)
+   90 |         (PERIPH == ETH) ? ETH : \
+      |                    ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:91:20: error: 'FMC' undeclared (first use in this function)
+   91 |         (PERIPH == FMC) ? FMC : \
+      |                    ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:92:20: error: 'FSMC' undeclared (first use in this function)
+   92 |         (PERIPH == FSMC) ? FSMC : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:93:20: error: 'HDMI_CEC' undeclared (first use in this function)
+   93 |         (PERIPH == HDMI_CEC) ? CEC : \
+      |                    ^~~~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:93:32: error: 'CEC' undeclared (first use in this function); did you mean 'CRC'?
+   93 |         (PERIPH == HDMI_CEC) ? CEC : \
+      |                                ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:94:20: error: 'I2S2' undeclared (first use in this function)
+   94 |         (PERIPH == I2S2) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:95:20: error: 'I2S3' undeclared (first use in this function)
+   95 |         (PERIPH == I2S3) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:96:20: error: 'I2S4' undeclared (first use in this function)
+   96 |         (PERIPH == I2S4) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:97:20: error: 'I2S5' undeclared (first use in this function)
+   97 |         (PERIPH == I2S5) ? SPI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:98:20: error: 'OTG_FS' undeclared (first use in this function)
+   98 |         (PERIPH == OTG_FS) ? OTG_FS : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:99:20: error: 'OTG_HS' undeclared (first use in this function)
+   99 |         (PERIPH == OTG_HS) ? OTG_HS : \
+      |                    ^~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:100:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+  100 |         (PERIPH == PWR) ? PWR : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:101:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+  101 |         (PERIPH == RCC) ? RCC : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:102:20: error: 'RNG' undeclared (first use in this function)
+  102 |         (PERIPH == RNG) ? RNG : \
+      |                    ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:103:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+  103 |         (PERIPH == RTC) ? RTC : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:104:20: error: 'SAI1' undeclared (first use in this function); did you mean 'SPI1'?
+  104 |         (PERIPH == SAI1) ? SAI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:104:28: error: 'SAI' undeclared (first use in this function)
+  104 |         (PERIPH == SAI1) ? SAI : \
+      |                            ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:105:20: error: 'SAI2' undeclared (first use in this function)
+  105 |         (PERIPH == SAI2) ? SAI : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:106:20: error: 'SDIO' undeclared (first use in this function)
+  106 |         (PERIPH == SDIO) ? SDIO : \
+      |                    ^~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:107:20: error: 'SPDIF_RX' undeclared (first use in this function)
+  107 |         (PERIPH == SPDIF_RX) ? SPDIF : \
+      |                    ^~~~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:107:32: error: 'SPDIF' undeclared (first use in this function)
+  107 |         (PERIPH == SPDIF_RX) ? SPDIF : \
+      |                                ^~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:108:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+  108 |         (PERIPH == SYSCFG) ? SYSCFG : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:109:20: error: 'TSC' undeclared (first use in this function)
+  109 |         (PERIPH == TSC) ? TSC : \
+      |                    ^~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:110:17: error: comparison of distinct pointer types lacks a cast [-Werror=compare-distinct-pointer-types]
+  110 |         (PERIPH == WWDG) ? WWDG : \
+      |                 ^~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:114:5: error: pasting ")" and "_CR1" does not give a valid preprocessing token
+  114 |     )
+      |     ^
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:110:33: error: pointer type mismatch in conditional expression [-Wincompatible-pointer-types]
+  110 |         (PERIPH == WWDG) ? WWDG : \
+      |                                 ^
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./inc/stm32f030x6.h:488:29: note: first expression has type 'WWDG_TypeDef *'
+  488 | #define WWDG                ((WWDG_TypeDef *) WWDG_BASE)
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:110:28: note: in expansion of macro 'WWDG'
+  110 |         (PERIPH == WWDG) ? WWDG : \
+      |                            ^~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./inc/stm32f030x6.h:497:29: note: second expression has type 'TIM_TypeDef *'
+  497 | #define TIM1                ((TIM_TypeDef *) TIM1_BASE)
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+./src/main.c:8:27: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                           ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:117:13: note: in expansion of macro 'PERIPHERAL_BASE'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |             ^~~~~~~~~~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+./src/main.c:204:29: note: in expansion of macro 'TIM1'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                             ^~~~
+./src/main.c:117:42: error: expected ';' before '_CR1_CEN'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |                                          ^
+./src/main.c:8:30: note: in definition of macro 'CONCAT3_'
+    8 | #define CONCAT3_(a, b, c) a##b##c
+      |                              ^
+./src/main.c:117:5: note: in expansion of macro 'CONCAT3'
+  117 |     CONCAT3(PERIPHERAL_BASE(PERIPHERAL), _##REGISTER, _##FIELD)
+      |     ^~~~~~~
+./src/main.c:204:17: note: in expansion of macro '_FIELD_NAME'
+  204 |     TIM1->CR1 = _FIELD_NAME(TIM1, CR1, CEN);
+      |                 ^~~~~~~~~~~
+cc1.exe: all warnings being treated as errors
+make: *** [Makefile:142: _build/main.o] Error 1
