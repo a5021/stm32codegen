@@ -56,7 +56,7 @@ jobs:
       run: |
         set +e
         tmpf=$(mktemp)
-        VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
+        printf '\n' | VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
         rc=${PIPESTATUS[0]}
         if [ $rc -ne 0 ]; then
           # Annotate each compiler error line
