@@ -54,14 +54,13 @@ jobs:
       working-directory: EXAMPLES
       shell: bash
       run: |
+        set +e
         tmpf=$(mktemp)
-        set -o pipefail
         VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
-        rc=$?
+        rc=${PIPESTATUS[0]}
         if [ $rc -ne 0 ]; then
           last=$(tail -20 "$tmpf" | head -15 | tr '\n' '|')
           echo "::error title=G031F8 build failed::$last"
-          # Show tail in group for the log
           echo "::group::G031F8 build log tail"
           tail -60 "$tmpf"
           echo "::endgroup::"
