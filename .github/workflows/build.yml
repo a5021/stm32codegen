@@ -59,13 +59,14 @@ jobs:
         VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
         rc=${PIPESTATUS[0]}
         if [ $rc -ne 0 ]; then
-          {
-            echo "## G031F8 build failed (exit $rc)"
-            echo
-            echo '```'
-            cat "$tmpf"
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+          # Annotate each compiler error line
+          grep -n -i 'error:' "$tmpf" | while IFS=: read -r ln msg; do
+            echo "::error file=g031f8_demo.sh,line=${ln}::${msg:0:200}"
+          done
+          # If no errors found by grep, dump last 20 lines as fallback
+          if ! grep -qi 'error:' "$tmpf"; then
+            echo "::error title=Build failed (no 'error:' in output)::$(tail -20 "$tmpf" | tr '\n' '|')"
+          fi
         fi
         rm -f "$tmpf"
         exit $rc
