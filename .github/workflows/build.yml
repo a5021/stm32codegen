@@ -52,14 +52,19 @@ jobs:
 
     - name: Generate G031F8 project and build
       working-directory: EXAMPLES
-      run: |
-        VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee /tmp/g031_build.log
-        exit ${PIPESTATUS[0]}
       shell: bash
-
-    - name: Upload build log
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: g031-build-log
-        path: /tmp/g031_build.log
+      run: |
+        tmpf=$(mktemp)
+        set -o pipefail
+        VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
+        rc=$?
+        if [ $rc -ne 0 ]; then
+          last=$(tail -20 "$tmpf" | head -15 | tr '\n' '|')
+          echo "::error title=G031F8 build failed::$last"
+          # Show tail in group for the log
+          echo "::group::G031F8 build log tail"
+          tail -60 "$tmpf"
+          echo "::endgroup::"
+        fi
+        rm -f "$tmpf"
+        exit $rc
