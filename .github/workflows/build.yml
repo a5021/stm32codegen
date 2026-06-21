@@ -18,6 +18,9 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Install dependencies
+      run: pip install requests
+
     - name: Syntax check
       run: |
         python -m py_compile stm32cgen.py
@@ -27,7 +30,4 @@ jobs:
       run: python stm32cgen.py --help
 
     - name: Generate code for STM32F103C8
-      run: |
-        python stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM > generated.c 2>&1
-        echo "=== generated.c ==="
-        cat generated.c
+      run: python stm32cgen.py stm32f103c8 -m tim -f init_tim -p TIM > generated.c
