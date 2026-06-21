@@ -160,7 +160,7 @@ def copyright_message(cname):
 
     cmd_line = ' '.join(f'"{arg}"' if " " in arg or arg == '' else arg for arg in sys.argv[1:])
 
-    s1 = f'//  This code was generated for the {cname.strip(".h")} microcontroller by "stm32cgen" tool.'
+    s1 = f'//  This code was generated for the {cname.strip(".h")} microcontroller by "stm32codegen" tool.'
     l1 = len(s1) + 4
     s0 = l1 * '/' + '\n'
     s2 = '// ' + 'https://github.com/a5021/stm32codegen'.center(l1)
@@ -971,7 +971,7 @@ if __name__ == '__main__':
 
     import argparse
 
-    parser = argparse.ArgumentParser(prog='stm32cgen', description='STM32 initialization generator')
+    parser = argparse.ArgumentParser(prog='stm32codegen', description='STM32 initialization generator')
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
