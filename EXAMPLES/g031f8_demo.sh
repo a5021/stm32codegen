@@ -272,10 +272,10 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
        PIN_MODE_ANALOG "(0x03UL ^ PIN_XOR)"\
        ""\
        "PIN_CFG(PIN, MODE)" "((MODE)   << ((PIN) * 2))"\
-       "PIN_MODE(PIN, MODE)" "(((MODE)  << GPIO_MODER_MODER ## PIN ## _Pos) & GPIO_MODER_MODER ## PIN ## _Msk)"\
-       "PIN_SPEED(PIN, SPEED)" "(((SPEED) << GPIO_OSPEEDR_OSPEEDR ## PIN ## _Pos) & GPIO_OSPEEDR_OSPEEDR ## PIN ## _Msk)"\
-       "PIN_OTYPE(PIN, OTYPE)" "((OTYPE)   ? GPIO_OTYPER_OT_ ## PIN : 0)"\
-       "PIN_PUPD(PIN, PUPD)" "(((PUPD)  << GPIO_PUPDR_PUPDR ## PIN ## _Pos) & GPIO_PUPDR_PUPDR ## PIN ## _Msk)"\
+       "PIN_MODE(PIN, MODE)" "(((MODE)  << GPIO_MODER_MODE ## PIN ## _Pos) & GPIO_MODER_MODE ## PIN ## _Msk)"\
+       "PIN_SPEED(PIN, SPEED)" "(((SPEED) << GPIO_OSPEEDR_OSPEED ## PIN ## _Pos) & GPIO_OSPEEDR_OSPEED ## PIN ## _Msk)"\
+       "PIN_OTYPE(PIN, OTYPE)" "((OTYPE)   ? GPIO_OTYPER_OT ## PIN : 0)"\
+       "PIN_PUPD(PIN, PUPD)" "(((PUPD)  << GPIO_PUPDR_PUPD ## PIN ## _Pos) & GPIO_PUPDR_PUPD ## PIN ## _Msk)"\
        "PIN_AF(PIN, AF)" "(AF << (PIN * 4))"\
        ""\
        PA0_AF1_USART1_CTS "PIN_AF(0, 1ULL)"\
@@ -321,11 +321,11 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
        PIN_PUPD_UP 0x01UL\
        PIN_PUPD_DOWN 0x02UL\
        ""\
-       _BR\(PIN\) "GPIO_BSRR_BR_ ## PIN"\
+       _BR\(PIN\) "GPIO_BSRR_BR ## PIN"\
        BR\(PIN\) _BR\(PIN\)\
-       _BS\(PIN\) "GPIO_BSRR_BS_ ## PIN"\
+       _BS\(PIN\) "GPIO_BSRR_BS ## PIN"\
        BS\(PIN\) _BS\(PIN\)\
-       _ODR\(PIN\) "GPIO_ODR_ ## PIN"\
+       _ODR\(PIN\) "GPIO_ODR_OD ## PIN"\
        ODR\(PIN\) _ODR\(PIN\)\
        ""\
        GPIOA_MODER "(GPIO_MODE ^ (GPIOA_MODE))"\
@@ -722,7 +722,7 @@ fi
 
 fname1=("system_stm32g0xx.c" "startup_stm32g031xx.s")
 fname2=("system_stm32g0xx.h" "stm32g0xx.h" "stm32g031xx.h")
-fname3=("cmsis_compiler.h" "cmsis_armclang.h" "cmsis_gcc.h" "cmsis_iccarm.h" "cmsis_version.h" "core_cm0plus.h" "cmsis_armcc.h")
+fname3=("cmsis_compiler.h" "cmsis_armclang.h" "cmsis_gcc.h" "cmsis_iccarm.h" "cmsis_version.h" "core_cm0plus.h" "cmsis_armcc.h" "mpu_armv7.h")
 
 raw_github="https://raw.githubusercontent.com/"
 
