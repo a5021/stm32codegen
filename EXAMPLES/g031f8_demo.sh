@@ -157,14 +157,14 @@ generate_header "main.h" $opt g031f8 -M\
        YES                    \(\!NO\)\
        ON                     YES\
        ""\
-       HCLK                   "8    /* 8 to 64 (MHz) with a step of 4 */"\
+       HCLK                   "16   /* 16 to 64 (MHz) with a step of 4 */"\
        ""\
        SYSTICK_CLOCK_SOURCE   "0    /* 0 = HCLK / 8; 1 = HCLK         */"\
        SYSTICK_ENABLE         YES\
        SYSTICK_IRQ_ENABLE     NO\
     \
-    -H "#if HCLK < 8 || HCLK > 64 || (HCLK % 4 != 0)"\
-    -H "  #error \"Invalid HCLK value. Must be between 8 and 64 MHz with a step of 4 MHz.\""\
+    -H "#if HCLK < 16 || HCLK > 64 || (HCLK % 4 != 0)"\
+    -H "  #error \"Invalid HCLK value. Must be between 16 and 64 MHz with a step of 4 MHz.\""\
     -H \#endif\
     \
     $force_inline\
