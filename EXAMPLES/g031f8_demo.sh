@@ -286,37 +286,57 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
        "PIN_PUPD(PIN, PUPD)" "(((PUPD)  << GPIO_PUPDR_PUPD ## PIN ## _Pos) & GPIO_PUPDR_PUPD ## PIN ## _Msk)"\
        "PIN_AF(PIN, AF)" "(AF << (PIN * 4))"\
        ""\
-       PA0_AF1_USART1_CTS "PIN_AF(0, 1ULL)"\
-       PA1_AF0_EVENTOUT "PIN_AF(1, 0ULL)"\
-       PA1_AF1_USART1_RTS "PIN_AF(1, 1ULL)"\
-       PA2_AF1_USART1_TX "PIN_AF(2, 1ULL)"\
-       PA3_AF1_USART1_RX "PIN_AF(3, 1ULL)"\
-       PA4_AF0_SPI1_NSS "PIN_AF(4, 0ULL)"\
-       PA4_AF1_USART1_CK "PIN_AF(4, 1ULL)"\
-       PA4_AF4_TIM14_CH1 "PIN_AF(4, 4ULL)"\
-       PA5_AF0_SPI1_SCK "PIN_AF(5, 0ULL)"\
-       PA6_AF0_SPI1_MISO "PIN_AF(6, 0ULL)"\
-       PA6_AF1_TIM3_CH1 "PIN_AF(6, 1ULL)"\
-       PA6_AF2_TIM1_BKIN "PIN_AF(6, 2ULL)"\
-       PA6_AF5_TIM16_CH1 "PIN_AF(6, 5ULL)"\
-       PA6_AF6_EVENTOUT "PIN_AF(6, 6ULL)"\
-       PA7_AF0_SPI1_MOSI "PIN_AF(7, 0ULL)"\
-       PA7_AF1_TIM3_CH2 "PIN_AF(7, 1ULL)"\
-       PA7_AF2_TIM1_CH1N "PIN_AF(7, 2ULL)"\
-       PA7_AF4_TIM14_CH1 "PIN_AF(7, 4ULL)"\
-       PA7_AF5_TIM17_CH1 "PIN_AF(7, 5ULL)"\
-       PA7_AF6_EVENTOUT "PIN_AF(7, 6ULL)"\
-       PA9_AF1_USART1_TX "PIN_AF(9, 1ULL)"\
-       PA9_AF2_TIM1_CH2 "PIN_AF(9, 2ULL)"\
-       PA9_AF4_I2C1_SCL "PIN_AF(9, 4ULL)"\
-       PA10_AF0_TIM17_BKIN "PIN_AF(10, 0ULL)"\
-       PA10_AF1_USART1_RX "PIN_AF(10, 1ULL)"\
-       PA10_AF2_TIM1_CH3 "PIN_AF(10, 2ULL)"\
-       PA10_AF4_I2C1_SDA "PIN_AF(10, 4ULL)"\
-       PA13_AF0_SWDIO "PIN_AF(13, 0ULL)"\
-       PA13_AF1_IR_OUT "PIN_AF(13, 1ULL)"\
-       PA14_AF0_SWCLK "PIN_AF(14, 0ULL)"\
-       PA14_AF1_USART1_TX "PIN_AF(14, 1ULL)"\
+        PA0_AF1_USART2_CTS "PIN_AF(0, 1ULL)"\
+        PA0_AF5_LPTIM1_OUT "PIN_AF(0, 5ULL)"\
+        PA1_AF0_SPI1_SCK "PIN_AF(1, 0ULL)"\
+        PA1_AF1_USART2_RTS "PIN_AF(1, 1ULL)"\
+        PA1_AF2_TIM2_CH2 "PIN_AF(1, 2ULL)"\
+        PA1_AF6_I2C1_SMBA "PIN_AF(1, 6ULL)"\
+        PA1_AF7_EVENTOUT "PIN_AF(1, 7ULL)"\
+        PA2_AF0_SPI1_MOSI "PIN_AF(2, 0ULL)"\
+        PA2_AF1_USART2_TX "PIN_AF(2, 1ULL)"\
+        PA2_AF2_TIM2_CH3 "PIN_AF(2, 2ULL)"\
+        PA2_AF6_LPUART1_TX "PIN_AF(2, 6ULL)"\
+        PA3_AF0_SPI2_MISO "PIN_AF(3, 0ULL)"\
+        PA3_AF1_USART2_RX "PIN_AF(3, 1ULL)"\
+        PA3_AF2_TIM2_CH4 "PIN_AF(3, 2ULL)"\
+        PA3_AF6_LPUART1_RX "PIN_AF(3, 6ULL)"\
+        PA3_AF7_EVENTOUT "PIN_AF(3, 7ULL)"\
+        PA4_AF0_SPI1_NSS "PIN_AF(4, 0ULL)"\
+        PA4_AF1_SPI2_MOSI "PIN_AF(4, 1ULL)"\
+        PA4_AF4_TIM14_CH1 "PIN_AF(4, 4ULL)"\
+        PA4_AF5_LPTIM2_OUT "PIN_AF(4, 5ULL)"\
+        PA4_AF7_EVENTOUT "PIN_AF(4, 7ULL)"\
+        PA5_AF0_SPI1_SCK "PIN_AF(5, 0ULL)"\
+        PA5_AF2_TIM2_CH1 "PIN_AF(5, 2ULL)"\
+        PA5_AF5_LPTIM2_ETR "PIN_AF(5, 5ULL)"\
+        PA5_AF7_EVENTOUT "PIN_AF(5, 7ULL)"\
+        PA6_AF0_SPI1_MISO "PIN_AF(6, 0ULL)"\
+        PA6_AF1_TIM3_CH1 "PIN_AF(6, 1ULL)"\
+        PA6_AF2_TIM1_BK "PIN_AF(6, 2ULL)"\
+        PA6_AF5_TIM16_CH1 "PIN_AF(6, 5ULL)"\
+        PA6_AF6_LPUART1_CTS "PIN_AF(6, 6ULL)"\
+        PA7_AF0_SPI1_MOSI "PIN_AF(7, 0ULL)"\
+        PA7_AF1_TIM3_CH2 "PIN_AF(7, 1ULL)"\
+        PA7_AF2_TIM1_CH1N "PIN_AF(7, 2ULL)"\
+        PA7_AF4_TIM14_CH1 "PIN_AF(7, 4ULL)"\
+        PA7_AF5_TIM17_CH1 "PIN_AF(7, 5ULL)"\
+        PA9_AF1_USART1_TX "PIN_AF(9, 1ULL)"\
+        PA9_AF2_TIM1_CH2 "PIN_AF(9, 2ULL)"\
+        PA9_AF4_SPI2_MISO "PIN_AF(9, 4ULL)"\
+        PA9_AF6_I2C1_SCL "PIN_AF(9, 6ULL)"\
+        PA9_AF7_EVENTOUT "PIN_AF(9, 7ULL)"\
+        PA10_AF1_USART1_RX "PIN_AF(10, 1ULL)"\
+        PA10_AF2_TIM1_CH3 "PIN_AF(10, 2ULL)"\
+        PA10_AF5_TIM17_BK "PIN_AF(10, 5ULL)"\
+        PA10_AF6_I2C1_SDA "PIN_AF(10, 6ULL)"\
+        PA10_AF7_EVENTOUT "PIN_AF(10, 7ULL)"\
+        PA13_AF0_SWDIO "PIN_AF(13, 0ULL)"\
+        PA13_AF1_IR_OUT "PIN_AF(13, 1ULL)"\
+        PA13_AF7_EVENTOUT "PIN_AF(13, 7ULL)"\
+        PA14_AF0_SWCLK "PIN_AF(14, 0ULL)"\
+        PA14_AF1_USART2_TX "PIN_AF(14, 1ULL)"\
+        PA14_AF7_EVENTOUT "PIN_AF(14, 7ULL)"\
        ""\
        PIN_TYPE_PP 0x00UL\
        PIN_TYPE_OD 0x01UL\
@@ -349,8 +369,8 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -H "  if (OTYPE)  MODIFY_REG((GPIOx)->OTYPER,  (0x01UL << (PIN)),       ((OTYPE) << (PIN)));       \\"\
     -H }while\(0\)\
     -H ""\
-    -H "#ifndef USART1_EN"\
-    -H "  #define USART1_EN 0"\
+    -H "#ifndef USART_EN"\
+    -H "  #define USART_EN 0"\
     -H "#endif"\
     -H ""\
     -H "#ifndef SPI1_EN"\
@@ -391,19 +411,19 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -H '#define GPIOA_MODE (                                                    \'\
     -H '  !0         * PIN_MODE(0,  PIN_MODE_OUTPUT) /* PA0  -- OUTPUT     */ | \'\
     -H '  !0         * PIN_MODE(1,  PIN_MODE_OUTPUT) /* PA1  -- OUTPUT     */ | \'\
-    -H '  !USART1_EN * PIN_MODE(2,  PIN_MODE_OUTPUT) /* PA2  -- OUTPUT     */ | \'\
-    -H '  !USART1_EN * PIN_MODE(3,  PIN_MODE_OUTPUT) /* PA3  -- OUTPUT     */ | \'\
-    -H '  USART1_EN  * PIN_MODE(2,  PIN_MODE_AF)     /* PA2  -- USART1 TX  */ | \'\
-    -H '  USART1_EN  * PIN_MODE(3,  PIN_MODE_AF)     /* PA3  -- USART1 RX  */ | \'\
+    -H '  !USART_EN * PIN_MODE(2,  PIN_MODE_OUTPUT) /* PA2  -- OUTPUT     */ | \'\
+    -H '  !USART_EN * PIN_MODE(3,  PIN_MODE_OUTPUT) /* PA3  -- OUTPUT     */ | \'\
+    -H '  USART_EN  * PIN_MODE(2,  PIN_MODE_AF)     /* PA2  -- USART2 TX  */ | \'\
+    -H '  USART_EN  * PIN_MODE(3,  PIN_MODE_AF)     /* PA3  -- USART2 RX  */ | \'\
     -H '  !SPI1_EN   * PIN_MODE(4,  PIN_MODE_OUTPUT) /* PA4  -- OUTPUT     */ | \'\
     -H '  SPI1_EN    * PIN_MODE(4,  PIN_MODE_AF)     /* PA4  -- SPI1 CS    */ | \'\
     -H '  SPI1_EN    * PIN_MODE(5,  PIN_MODE_AF)     /* PA5  -- SPI1 SCK   */ | \'\
     -H '  SPI1_EN    * PIN_MODE(6,  PIN_MODE_AF)     /* PA6  -- SPI1 MISO  */ | \'\
     -H '  SPI1_EN    * PIN_MODE(7,  PIN_MODE_AF)     /* PA7  -- SPI1 MOSI  */ | \'\
-    -H '  I2C1_EN    * PIN_MODE(9,  PIN_MODE_AF)     /* PA9  -- I2C1 SDA   */ | \'\
-    -H '  I2C1_EN    * PIN_MODE(10, PIN_MODE_AF)     /* PA10 -- I2C1 SCL   */ | \'\
-    -H '  SWD_EN     * PIN_MODE(13, PIN_MODE_AF)     /* PA13 -- SWDCLK     */ | \'\
-    -H '  SWD_EN     * PIN_MODE(14, PIN_MODE_AF)     /* PA14 -- SWDIO      */   \'\
+    -H '  I2C1_EN    * PIN_MODE(9,  PIN_MODE_AF)     /* PA9  -- I2C1 SCL   */ | \'\
+    -H '  I2C1_EN    * PIN_MODE(10, PIN_MODE_AF)     /* PA10 -- I2C1 SDA   */ | \'\
+    -H '  SWD_EN     * PIN_MODE(13, PIN_MODE_AF)     /* PA13 -- SWDIO      */ | \'\
+    -H '  SWD_EN     * PIN_MODE(14, PIN_MODE_AF)     /* PA14 -- SWDCLK     */   \'\
     -H ')'\
     -H ""\
     -H "#if 0"\
@@ -426,14 +446,14 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
     -H ")"\
     -H ""\
     -H "#define GPIOA_AF (                            \\"\
-    -H "  USART1_EN * PA2_AF1_USART1_TX             | \\"\
-    -H "  USART1_EN * PA3_AF1_USART1_RX             | \\"\
+    -H "  USART_EN  * PA2_AF1_USART2_TX             | \\"\
+    -H "  USART_EN  * PA3_AF1_USART2_RX             | \\"\
     -H "  SPI1_EN   * PA4_AF0_SPI1_NSS              | \\"\
     -H "  SPI1_EN   * PA5_AF0_SPI1_SCK              | \\"\
     -H "  SPI1_EN   * PA6_AF0_SPI1_MISO             | \\"\
     -H "  SPI1_EN   * PA7_AF0_SPI1_MOSI             | \\"\
-    -H "  I2C1_EN   * PA9_AF4_I2C1_SCL              | \\"\
-    -H "  I2C1_EN   * PA10_AF4_I2C1_SDA             | \\"\
+    -H "  I2C1_EN   * PA9_AF6_I2C1_SCL              | \\"\
+    -H "  I2C1_EN   * PA10_AF6_I2C1_SDA             | \\"\
     -H "  SWD_EN    * PA13_AF0_SWDIO                | \\"\
     -H "  SWD_EN    * PA14_AF0_SWCLK                  \\"\
     -H ")"\
