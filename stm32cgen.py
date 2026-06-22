@@ -572,8 +572,9 @@ def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
 
                         bitfield_enable = bitfield_enable.ljust(bitfield_indent)
 
+            desc = lx[3].ljust(11) if lx[3].strip() else lx[3]
             s0 += f'{indent * idn}{bitfield_enable} * {lx[0].ljust(max_field_len[0] + 1)}{cn}'\
-                  f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{lx[3].ljust(11)} */{lf}'
+                  f'{lx[1].ljust(max_field_len[1] + 2)}{lx[2].ljust(max_field_len[2] + 1)}{desc} */{lf}'
 
     else:
         b_ndx = args.direct_init.index(rn)
@@ -590,7 +591,10 @@ def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
         while '  ' in reg_comment:
             reg_comment = reg_comment.replace('  ', ' ')
 
-        reg_comment = f'/* {reg_address}: {reg_comment.ljust(max_field_len[1] + max_field_len[2] + 17)} */'
+        if reg_comment.strip():
+            reg_comment = f'/* {reg_address}: {reg_comment.ljust(max_field_len[1] + max_field_len[2] + 17)} */'
+        else:
+            reg_comment = f'/* {reg_address}: */'
     else:
         reg_comment = ''
 
