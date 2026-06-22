@@ -269,6 +269,7 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
 
 
 "${py_gen[@]}" -l g031f8 -p GPIOA -m gpio -f init_gpio\
+    --exclude-register IDR LCKR\
     -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
        GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\

@@ -247,6 +247,7 @@ generate_header "rcc.h" -l 030f4 -p RCC -m rcc -f init_rcc\
     -F "#undef $tag"
 
 generate_header "gpio.h" -l 030f4 -p GPIOA GPIOB GPIOF -m gpio -f init_gpio\
+    --exclude-register IDR LCKR\
     -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
        GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\

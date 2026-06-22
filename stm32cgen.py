@@ -899,7 +899,7 @@ def_sort_list = [
 
 ini_sort_list = [
     ('LPUART', 'XUART'), ('UART', 'USART'), ('OR', 'ZX1'), ('CCR1', 'CCR0'), ('ISR', 'VV0'),
-    ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('BRR', 'AAA'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
+    ('ICR', 'VV1'), ('RDR', 'WW0'), ('TDR', 'WW1'), ('PSC', 'AA0'), ('CR1', 'ZZ1'),
     ('EGR', 'ARS'), ('CCER', 'DDER'), ('LPTIM', 'XTIM'), ('AHBENR', 'A10'), ('AHB1ENR', 'A20'), ('AHB2ENR', 'A30'),
     ('AHB3ENR', 'A40'), ('APB1ENR', 'A50'), ('APB2ENR', 'A60'), ('CFGR', 'A70'), ('CSR', 'A80'),
     ('LCD_CLR', 'LCD_U20'), ('LCD_CR', 'LCD_XR'), ('QUADSPI', 'XSPI'), ('XSPI_CR', 'XSPI_XR'), ('DCR', 'U20'),
@@ -927,8 +927,24 @@ def sort_code_block(code_block, rep_list):
     return ret_name
 
 
+gpio_ini_sort = [
+    ('ODR', 'AA0'),          # 1. Output data (set default levels first)
+    ('AFR_0', 'AB0'),        # 2. Alternate function low  (pins 0-7)
+    ('AFR_1', 'AB5'),        # 3. Alternate function high (pins 8-15)
+    ('OSPEEDR', 'AC0'),      # 4. Output speed
+    ('OSPEEDER', 'AC0'),     # 4b. F3/L0/L1 variant
+    ('OTYPER', 'AD0'),       # 5. Output type
+    ('PUPDR', 'AE0'),        # 6. Pull-up/pull-down
+    ('MODER', 'ZZZ1'),       # 7. Mode register (MUST be last to avoid glitches)
+    ('BRR', 'ZZZ'),          # 8. Bit reset (runtime operation)
+    ('BSRR', 'ZZY'),         # 9. Bit set/reset (runtime operation)
+]
+
+
 def sort_ini_block(initialization_block):
-    return sort_code_block(initialization_block, ini_sort_list)
+    ret = sort_code_block(initialization_block, gpio_ini_sort)
+    ret = sort_code_block([ret], ini_sort_list)
+    return ret
 
 
 def sort_def_block(definition_block):
