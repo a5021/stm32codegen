@@ -130,7 +130,7 @@ stm32codegen/
 
 ## Examples
 
-Each subdirectory under `EXAMPLES/` is a self-contained project created by a shell script. To set up an example:
+`EXAMPLES/` contains shell scripts that generate complete demo projects. To set up an example:
 
 ```
 cd EXAMPLES
