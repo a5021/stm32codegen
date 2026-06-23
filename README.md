@@ -60,14 +60,7 @@ python stm32cgen.py stm32f103c8 -m gpio -f gpio_init -p GPIOA,GPIOB
 
 ## Command-Line Options
 
-| Option | Description |
-|--------|-------------|
-| `device` | Target STM32 device (e.g., stm32f103c8, stm32f407vg) |
-| `-m, --module` | Peripheral module to generate code for (tim, usart, adc, gpio, etc.) |
-| `-f, --function` | Function name for generated initialization code |
-| `-p, --peripheral` | Specific peripheral instances to include (e.g., TIM1, USART2) |
-| `-o, --output` | Output file name (default: stdout) |
-| `-h, --help` | Display help message |
+See the full reference: [`docs/cli-reference.md`](docs/cli-reference.md)
 
 ## How It Works
 
@@ -78,13 +71,17 @@ The generator parses CMSIS device header files to extract peripheral register st
 The tool supports any STM32 family with CMSIS headers, including:
 
 - STM32F0 series
-- STM32F1 series (F103, F105, F107)
+- STM32F1 series
 - STM32F2 series
 - STM32F3 series
-- STM32F4 series (F401, F407, F429, etc.)
+- STM32F4 series
 - STM32F7 series
-- STM32L0/L1/L4 series
+- STM32G0 series
+- STM32G4 series
 - STM32H7 series
+- STM32L0 series
+- STM32L1 series
+- STM32L4 series
 
 ## Project Structure
 
