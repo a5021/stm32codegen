@@ -125,8 +125,28 @@ stm32codegen/
 ├── stm32cmsis.py         # CMSIS module
 ├── stm32cgen.py          # Main code generator script
 ├── README.md             # This file
-└── EXAMPLES/             # Usage examples (if available)
+└── EXAMPLES/             # Usage examples
 ```
+
+## Examples
+
+Each subdirectory under `EXAMPLES/` is a self-contained project created by a shell script. To set up an example:
+
+```
+cd EXAMPLES
+bash <script_name>.sh
+```
+
+The script uses `stm32cgen.py` to generate initialization code, downloads CMSIS headers from the STM32 and ARM repositories, creates a Makefile, and builds the project. The only prerequisites are Python 3 and `arm-none-eabi-gcc`.
+
+After a successful build, flash the target with:
+
+```
+make program    # ST-LINK
+make jprogram   # J-Link
+```
+
+The scripts are safe to re-run: existing source files are not overwritten (only generated headers are recreated).
 
 ## Contributing
 
