@@ -86,47 +86,6 @@ The tool supports any STM32 family with CMSIS headers, including:
 - STM32L0/L1/L4 series
 - STM32H7 series
 
-## Integration
-
-The generator produces header files with `__STATIC_FORCEINLINE` initialization functions. The main module (`-M`) ties all peripheral inits together into a single `init()` call.
-
-### Generate main header
-
-```
-python stm32cgen.py g031f8 -M \
-    -D HCLK 16 \
-    --post-init init_systick \
-    -F "__STATIC_FORCEINLINE void init_systick(void) {" \
-    -F "  SysTick->LOAD = HCLK * 1000 / 8 - 1;" \
-    -F "  SysTick->CTRL = SysTick_CTRL_ENABLE_Msk;" \
-    -F "}" \
-    > inc/main.h
-```
-
-### Generate peripheral headers
-
-```
-python stm32cgen.py g031f8 -p GPIOA -m gpio -f init_gpio > inc/gpio.h
-python stm32cgen.py g031f8 -p RCC   -m rcc  -f init_rcc  > inc/rcc.h
-```
-
-### Use in your project
-
-```
-/* main.c */
-#include "main.h"
-
-int main(void) {
-    for (init(); /* call init() once */;);
-}
-```
-
-The generated `init()` calls all peripheral init functions in the correct order.
-
-### Makefile
-
-A plain Makefile that compiles `src/*.c` is sufficient — code generation is done separately by the script, not during build.
-
 ## Project Structure
 
 ```
