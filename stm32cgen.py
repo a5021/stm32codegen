@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import ast
 import re
 import sys
 import textwrap
@@ -215,6 +216,58 @@ def get_peripheral_description(src):
         yield ix[1], pg[0] if pg else ''
 
 
+def safe_eval_int(expr):
+    """Safely evaluate an integer expression made of numeric literals and the
+    bitwise/arithmetic operators used in CMSIS headers (| & ^ << >> ~ + - *).
+
+    Unlike eval(), this walks the AST and refuses anything that is not a
+    constant or one of the allowed operators, so a crafted header cannot
+    execute arbitrary code. Returns '' if the expression cannot be evaluated.
+    """
+    try:
+        node = ast.parse(expr, mode='eval').body
+    except (SyntaxError, ValueError):
+        return ''
+
+    def _eval(n):
+        if isinstance(n, ast.Constant):
+            if isinstance(n.value, (int,)) and not isinstance(n.value, bool):
+                return n.value
+            raise ValueError('non-integer constant')
+        if isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.Invert):
+            return ~_eval(n.operand)
+        if isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.USub):
+            return -_eval(n.operand)
+        if isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.UAdd):
+            return +_eval(n.operand)
+        if isinstance(n, ast.BinOp):
+            left = _eval(n.left)
+            right = _eval(n.right)
+            if isinstance(n.op, ast.BitOr):
+                return left | right
+            if isinstance(n.op, ast.BitAnd):
+                return left & right
+            if isinstance(n.op, ast.BitXor):
+                return left ^ right
+            if isinstance(n.op, ast.LShift):
+                return left << right
+            if isinstance(n.op, ast.RShift):
+                return left >> right
+            if isinstance(n.op, ast.Add):
+                return left + right
+            if isinstance(n.op, ast.Sub):
+                return left - right
+            if isinstance(n.op, ast.Mult):
+                return left * right
+            raise ValueError('unsupported operator')
+        raise ValueError('unsupported expression')
+
+    try:
+        return _eval(node)
+    except (ValueError, TypeError, MemoryError, RecursionError):
+        return ''
+
+
 def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
     while True:
         replaced = 0
@@ -314,10 +367,7 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
 
         es = ''
         if '<<' not in lx[1] and not lx[0].endswith('_Pos'):
-            try:
-                es = eval(lx[1])
-            except (SyntaxError, NameError):
-                pass
+            es = safe_eval_int(lx[1])
 
         if es != '':
             q = hex(es).split('x')
