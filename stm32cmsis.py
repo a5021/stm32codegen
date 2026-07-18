@@ -81,10 +81,11 @@ f4 = {
        '10cx': ('10c8',  '10cb'),
        '10rx': ('10r8',  '10rb'),
        '11xe': ('11cc',  '11rc',  '11vc',  '11ce', '11re', '11ve'),
-       '12cx': ('12ceu', '12cgu'),
-       '12zx': ('12zet', '12zgt', '12zej', '12zgj'),
-       '12vx': ('12vet', '12vgt', '12veh', '12vgh'),
-       '12rx': ('12ret', '12rgt', '12rey', '12rgy'),
+        '12cx': ('12ceu', '12cgu'),
+        '12zx': ('12zet', '12zgt', '12zej', '12zgj'),
+        '12vx': ('12vet', '12vgt', '12veh', '12vgh'),
+        '12rx': ('12ret', '12rgt', '12rey', '12rgy'),
+        '12xx': ('12zg', '12ze', '12vg', '12ve', '12rg', '12re'),
        '13xx': ('13ch',  '13mh',  '13rh',  '13vh', '13zh', '13cg', '13mg', '13rg', '13vg', '13zg'),
        '15xx': ('15rg',  '15vg',  '15zg'),
        '17xx': ('17vg',  '17ve',  '17zg',  '17ze', '17ig', '17ie'),
@@ -93,10 +94,10 @@ f4 = {
        '37xx': ('37vg',  '37vi',  '37zg',  '37zi', '37ig', '37ii'),
        '29xx': ('29vg',  '29vi',  '29zg',  '29zi', '29bg', '29bi', '29ng', '39ni', '29ig', '29ii'),
        '39xx': ('39vg',  '39vi',  '39zg',  '39zi', '39bg', '39bi', '39ng', '39ni', '39ig', '39ii'),
-       '46xx': ('46mc',  '46me',  '46rc',  '46re', '46vc', '46ve', '46zc', '46ze'),
-       '69xx': ('69ai',  '69ii',  '69bi',  '69ni', '69ag', '69ig', '69bg', '69ng', '69ae', '69ie', '69be', '69ne'),
-       '79xx': ('79ai',  '79ii',  '79bi',  '79ni', '79ag', '79ig', '79bg', '79ng')
-     }
+        '46xx': ('46mc',  '46me',  '46rc',  '46re', '46vc', '46ve', '46zc', '46ze'),
+        '69xx': ('69ai',  '69ii',  '69bi',  '69ni', '69ag',  '69ig', '69bg', '69ng', '69ae', '69ie', '69be', '69ne'),
+        '79xx': ('79ai',  '79ii',  '79bi',  '79ni', '79ag',  '79ig', '79bg', '79ng', '79zi', '79zg')
+      }
 
 f7 = {
        '45xx': ('45ve', '45vg', '45zg', '45ze', '45ie', '45ig'),
@@ -192,9 +193,9 @@ mcu = {'f0': ('30x6', '30x8', '30xc', '31x6', '38xx', '42x6', '48xx', '51x8',
        'f3': ('01x8', '02x8', '02xc', '02xe', '03x8', '03xc', '03xe', '18xx',
               '28xx', '34x8', '58xx', '73xc', '78xx', '98xx'),
 
-       'f4': ('01xc', '01xe', '05xx', '07xx', '10cx', '10rx', '10tx', '11xe',
-              '12cx', '12rx', '12vx', '12zx', '13xx', '15xx', '17xx', '23xx',
-              '27xx', '29xx', '37xx', '39xx', '46xx', '69xx', '79xx'),
+        'f4': ('01xc', '01xe', '05xx', '07xx', '10cx', '10rx', '10tx', '11xe',
+               '12cx', '12rx', '12vx', '12zx', '12xx', '13xx', '15xx', '17xx', '23xx',
+               '27xx', '29xx', '37xx', '39xx', '46xx', '69xx', '79xx'),
 
        'f7': ('22xx', '23xx', '30xx', '32xx', '33xx', '45xx', '46xx', '50xx',
               '56xx', '65xx', '67xx', '69xx', '77xx', '79xx'),
@@ -244,7 +245,13 @@ def compose_cmsis_header_file_name(hdr_name):
         hn = hn[5:]
 
     if hn[0] in '0123456789':
-        hn = 'f' + hn
+        # Without a family prefix, default to the F-series. The only numeric
+        # collision with another family is L1 (line 15x); distinguish it by the
+        # 2nd character so bare ids like '152re' map to the L1 table, not F1.
+        if len(hn) >= 2 and hn[1] == '5':
+            hn = 'l' + hn
+        else:
+            hn = 'f' + hn
 
     res = hn[2:6]
     k1 = hn[0:2]
@@ -279,7 +286,7 @@ def compose_cmsis_header_file_name(hdr_name):
         return res
 
     for gx in a:
-        if res in a[gx]:
+        if res == gx or res in a[gx]:
             res = 'stm32' + k1 + gx + '.h'
             return res
 
