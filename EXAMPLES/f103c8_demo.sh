@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 IFS=$'\n\t'        # Safer field splitting
@@ -124,8 +124,8 @@ PY_GEN_PY="$PY_GEN"
 if command -v cygpath &>/dev/null; then
     py_path="$(command -v "$py_name")"
     case "$py_path" in
-        /usr/bin/*|/bin/*) ;;  # Cygwin Python — keep cygwin path
-        *) PY_GEN_PY="$(cygpath -w "$PY_GEN")" ;;  # Windows Python — convert
+        /usr/bin/*|/bin/*) ;;  # Cygwin Python вЂ” keep cygwin path
+        *) PY_GEN_PY="$(cygpath -w "$PY_GEN")" ;;  # Windows Python вЂ” convert
     esac
 fi
 py_gen=("$py_name" "$PY_GEN_PY/stm32cgen.py")
@@ -373,7 +373,7 @@ cat > "MDK-ARM/Project.uvprojx" << 'EOF'
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>STM32F103xx.svd</SFDFile>
+          <SFDFile>..\STM32F103xx.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -766,7 +766,7 @@ cat > "MDK-ARM/Project.uvprojx" << 'EOF'
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>STM32F103xx.svd</SFDFile>
+          <SFDFile>..\STM32F103xx.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -1343,7 +1343,7 @@ download_file() {
 download_file "${url1}/Source/Templates/${fname1[0]}" "${directories[1]}/${fname1[0]}"
 download_file "${url1}/Source/Templates/gcc/${fname1[1]}" "${directories[1]}/${fname1[1]}"
 download_file "${url1}/Source/Templates/arm/${fname1[1]}" "${directories[2]}/${fname1[1]}"
-download_file "${url3}" "${directories[2]}/STM32F103xx.svd"
+download_file "${url3}" "STM32F103xx.svd"
 
 # Download files
 for filename in "${fname2[@]}"
