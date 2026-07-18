@@ -1521,10 +1521,12 @@ the counter ? producing a visible blink with a period of 2^10 = 1024 ticks
 
 ### GNU Make (arm-none-eabi-gcc)
 ```sh
-make            # minimal build -> _build/Project.elf
-make debug      # debug build (-Og -g3, SWD enabled)
-make full       # all peripherals enabled
-make program    # flash via ST-Link (make flash target)
+make            # minimal build -> _build/Project.elf (+ .hex, .bin)
+make debug      # debug build (-Og -g3 -gdwarf)
+make size       # print ELF section sizes
+make program    # flash via ST-Link
+make jprogram   # flash via J-Link
+make clean      # remove build output
 ```
 
 ### Keil MDK-ARM
