@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 set -euo pipefail  # Exit on error, undefined vars, pipe failures
 IFS=$'\n\t'        # Safer field splitting
@@ -124,8 +124,8 @@ PY_GEN_PY="$PY_GEN"
 if command -v cygpath &>/dev/null; then
     py_path="$(command -v "$py_name")"
     case "$py_path" in
-        /usr/bin/*|/bin/*) ;;  # Cygwin Python вЂ” keep cygwin path
-        *) PY_GEN_PY="$(cygpath -w "$PY_GEN")" ;;  # Windows Python вЂ” convert
+        /usr/bin/*|/bin/*) ;;  # Cygwin Python ??? keep cygwin path
+        *) PY_GEN_PY="$(cygpath -w "$PY_GEN")" ;;  # Windows Python ??? convert
     esac
 fi
 py_gen=("$py_name" "$PY_GEN_PY/stm32cgen.py")
@@ -204,7 +204,7 @@ generate_header "main.h" $opt 103c8 -M\
     -F "#endif"\
     -F ""\
     -F "#if defined(__GNUC__) && ! defined(__clang__)" \
-    -F "  void _close_r(void){} void _close(void){} void _lseek_r(void){} void _lseek(void){} void _read_r(void){} void _read(void){} void _write_r(void){}" \
+    -F "  __attribute__((unused)) static void _close_r(void){} __attribute__((unused)) static void _close(void){} __attribute__((unused)) static void _lseek_r(void){} __attribute__((unused)) static void _lseek(void){} __attribute__((unused)) static void _read_r(void){} __attribute__((unused)) static void _read(void){} __attribute__((unused)) static void _write_r(void){}" \
     -F \#endif
 
 func_name=wait_for_clock_stable
@@ -1299,12 +1299,10 @@ __STATIC_FORCEINLINE __SYSTICK_VOLATILE uint64_t * uptime(void) {
  */
 #if YES == SYSTICK_IRQ_EN
 
-/* IRQ mode: Empty inline stub; actual implementation runs in interrupt handler */
-__STATIC_FORCEINLINE void process_systick_event(void) {}
-
-/* SysTick interrupt service routine */
-void SysTick_Handler(void);
-void SysTick_Handler(void) {
+/* IRQ mode: stub here; real work runs inside SysTick_Handler below */
+__STATIC_FORCEINLINE void process_systick_event(void) {
+  }   /* stub */
+  void SysTick_Handler(void) {
 
 #else
 
@@ -1313,14 +1311,12 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
   if (0 == (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) {
     return;  /* No event occurred, exit early */
   }
-  
+
 #endif
 
-  /* ========== Shared implementation (IRQ or polling) ========== */
-  
   /* Increment uptime counter and toggle PC13 LED (BluePill onboard LED)
    * based on bit 9 state. This creates a blink period of 2^10 = 1024 ticks. */
-  GPIOC->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS13 : GPIO_BSRR_BR13;
+  GPIOC->BSRR = (++*uptime() & (1 << 9)) ? GPIO_BSRR_BS13 : GPIO_BSRR_BR13;
 
 }
 
@@ -1441,19 +1437,19 @@ The example is intentionally small: one GPIO pin (PC13), one timer
 
 1. Creates the directory tree (`inc/`, `src/`, `MDK-ARM/`).
 2. Generates the CMSIS-based configuration headers with `stm32cgen`:
-   - `inc/main.h` — top-level config (clock, SysTick, init order) and the
-     `init()` sequence (`init_rcc` → `init_gpio` → `init_systick`).
-   - `inc/rcc.h` — `init_rcc()` and the RCC `APB2ENR` enable bits.
-   - `inc/gpio.h` — the `init_gpio()` function and the GPIO macros
+   - `inc/main.h` ? top-level config (clock, SysTick, init order) and the
+     `init()` sequence (`init_rcc` ? `init_gpio` ? `init_systick`).
+   - `inc/rcc.h` ? `init_rcc()` and the RCC `APB2ENR` enable bits.
+   - `inc/gpio.h` ? the `init_gpio()` function and the GPIO macros
      (`PIN_CFG`, `O_PP`, `O_OD`, `O_AF`, `I_ANALOG`, `I_FLOAT`, `I_PULL`,
-     `O_2MHZ`, …) copied verbatim from BluePill_Project_Generator.
+     `O_2MHZ`, ?) copied verbatim from BluePill_Project_Generator.
 3. Downloads the vendor CMSIS files (device header, startup, system init)
    and the SVD description from upstream sources.
 4. Writes the application source `src/main.c`, the linker script, the Makefile,
    and the three debugger/IDE configurations described below.
 5. Builds the project with `make` to verify everything is consistent.
 
-All downloaded files are cached — re-running the script skips what already
+All downloaded files are cached ? re-running the script skips what already
 exists and only rebuilds.
 
 ---
@@ -1462,28 +1458,28 @@ exists and only rebuilds.
 
 ```
 f103c8_demo/
-├── README.md                 # this file
-├── Makefile                  # GNU make build (arm-none-eabi-gcc)
-├── STM32F103xx.svd           # peripheral description (shared by MDK/Ozone/SES)
-├── project.emProject         # SEGGER Embedded Studio project
-├── project.jdebug            # Ozone debugger script
-├── project.jflash            # J-Link flash script
-├── inc/
-│   ├── main.h                # configuration + init() sequence
-│   ├── rcc.h                 # init_rcc() / RCC clock enables
-│   ├── gpio.h                # init_gpio() + GPIO macros (BluePill style)
-│   ├── stm32f103xb.h         # CMSIS device header (downloaded)
-│   ├── system_stm32f1xx.h
-│   └── …                     # other CMSIS/core headers
-├── src/
-│   ├── main.c                # application: init/process/idle loop, LED toggle
-│   ├── system_stm32f1xx.c    # SystemInit() stub (HSI 8 MHz default)
-│   └── …
-├── MDK-ARM/
-│   ├── Project.uvprojx       # Keil MDK-ARM project
-│   ├── startup_stm32f103xb.s # ARM/Keil assembly startup (for MDK)
-│   └── STM32F103xx.svd       # (same content; see note below)
-└── _build/                   # make output: Project.elf / .hex / .bin / .map
+??? README.md                 # this file
+??? Makefile                  # GNU make build (arm-none-eabi-gcc)
+??? STM32F103xx.svd           # peripheral description (shared by MDK/Ozone/SES)
+??? project.emProject         # SEGGER Embedded Studio project
+??? project.jdebug            # Ozone debugger script
+??? project.jflash            # J-Link flash script
+??? inc/
+?   ??? main.h                # configuration + init() sequence
+?   ??? rcc.h                 # init_rcc() / RCC clock enables
+?   ??? gpio.h                # init_gpio() + GPIO macros (BluePill style)
+?   ??? stm32f103xb.h         # CMSIS device header (downloaded)
+?   ??? system_stm32f1xx.h
+?   ??? ?                     # other CMSIS/core headers
+??? src/
+?   ??? main.c                # application: init/process/idle loop, LED toggle
+?   ??? system_stm32f1xx.c    # SystemInit() stub (HSI 8 MHz default)
+?   ??? ?
+??? MDK-ARM/
+?   ??? Project.uvprojx       # Keil MDK-ARM project
+?   ??? startup_stm32f103xb.s # ARM/Keil assembly startup (for MDK)
+?   ??? STM32F103xx.svd       # (same content; see note below)
+??? _build/                   # make output: Project.elf / .hex / .bin / .map
 ```
 
 > The SVD file lives at the demo root so it can be shared by all three
@@ -1507,7 +1503,7 @@ With `SYSTICK_CLOCK_SOURCE = 0` the SysTick runs from `HCLK / 8`
 (1 MHz), giving a 1 ms period. `SYSTICK_IRQ_ENABLE = NO`, so the tick is
 serviced by polling `SysTick->CTRL COUNTFLAG` in the idle loop.
 
-### GPIO — PC13 LED
+### GPIO ? PC13 LED
 The on-board LED is connected to **PC13** (active-low: writing the pin high
 turns the LED off, low turns it on). `gpio.h` configures it with:
 
@@ -1526,7 +1522,7 @@ the GPIOC peripheral (on STM32F1 each GPIO port is gated by its own APB2 bit).
 `src/main.c` runs the standard `for (init(); process(); idle());` loop. In
 `idle()` (polling mode) `process_systick_event()` waits for the 1 ms SysTick
 flag, increments a 64-bit uptime counter, and toggles PC13 based on bit 9 of
-the counter — producing a visible blink with a period of 2^10 = 1024 ticks
+the counter ? producing a visible blink with a period of 2^10 = 1024 ticks
 (~1 second).
 
 ---
@@ -1542,7 +1538,7 @@ make program    # flash via ST-Link (make flash target)
 ```
 
 ### Keil MDK-ARM
-Open `MDK-ARM/Project.uvprojx` in µVision, or build headlessly:
+Open `MDK-ARM/Project.uvprojx` in ?Vision, or build headlessly:
 ```sh
 UV4.exe -b MDK-ARM/Project.uvprojx -t "Debug"
 ```
@@ -1561,8 +1557,8 @@ is only consumed by the MDK project.
 
 ## Flashing and debugging
 
-Connect a J-Link (or ST-Link) to the board: SWDIO → PA13, SWCLK → PA14,
-GND → GND, 3.3V → 3.3V.
+Connect a J-Link (or ST-Link) to the board: SWDIO ? PA13, SWCLK ? PA14,
+GND ? GND, 3.3V ? 3.3V.
 
 - **Ozone** (J-Link): open `project.jdebug`; it loads `_build/Project.elf`
   and the shared SVD.
@@ -1583,7 +1579,7 @@ The main tunables live at the top of `inc/main.h`:
 
 | Macro                 | Default | Meaning                                  |
 |-----------------------|---------|------------------------------------------|
-| `HCLK`                | `8`     | System clock in MHz (8–72, step 4)       |
+| `HCLK`                | `8`     | System clock in MHz (8?72, step 4)       |
 | `SYSTICK_CLOCK_SOURCE`| `0`     | 0 = HCLK/8, 1 = HCLK                     |
 | `SYSTICK_ENABLE`      | `YES`   | enable SysTick                           |
 | `SYSTICK_IRQ_ENABLE`  | `NO`    | IRQ vs polling mode                      |
@@ -1598,8 +1594,8 @@ same `PIN_CFG` macros) and the matching `IOPx_EN` enable bits.
 
 - STM32F103C8 datasheet, RM0008 (STM32F1 reference manual)
 - [BluePill_Project_Generator](https://github.com/a5021/BluePill_Project_Generator)
-  — source of the GPIO macros and the overall structure
-- [stm32codegen](https://github.com/a5021/stm32codegen) — generates
+  ? source of the GPIO macros and the overall structure
+- [stm32codegen](https://github.com/a5021/stm32codegen) ? generates
   `main.h` / `rcc.h` from the command line
 EOF
 echo "File README.md created."
