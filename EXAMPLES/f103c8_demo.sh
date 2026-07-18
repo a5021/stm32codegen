@@ -246,205 +246,68 @@ generate_header "rcc.h" -l 103c8 -p RCC -m rcc -f init_rcc\
     -F "#undef D"\
     -F "#undef $tag"
 
-generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
-    --exclude-register IDR LCKR\
-    -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 0\
-       ""\
-       GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\
-       PIN_XOR "(0UL)"\
-       ""\
-       PIN_MODE_INPUT "(0x04UL)"\
-       PIN_MODE_OUTPUT "(0x02UL)"\
-       PIN_MODE_AF "(0x0BUL)"\
-       PIN_MODE_ANALOG "(0x00UL)"\
-       ""\
-       "PIN_CFG(PIN, MODE)" "((MODE) << ((PIN) * 4))"\
-       "PIN_CFGH(PIN, MODE)" "((MODE) << (((PIN) - 8) * 4))"\
-       "PIN_MODE(PIN, MODE)" "((MODE) << ((PIN) * 4))"\
-       "PIN_MODEH(PIN, MODE)" "((MODE) << (((PIN) - 8) * 4))"\
-       "PIN_CNF(PIN, CNF)" "(((CNF) & 3UL) << (((PIN) * 4) + 2))"\
-       "PIN_CNFH(PIN, CNF)" "(((CNF) & 3UL) << ((((PIN) - 8) * 4) + 2))"\
-       "PIN_SPEED(PIN, SPEED)" "PIN_MODE(PIN, SPEED)"\
-       "PIN_SPEEDH(PIN, SPEED)" "PIN_MODEH(PIN, SPEED)"\
-       "PIN_OTYPE(PIN, OTYPE)" "PIN_CNF(PIN, OTYPE)"\
-       "PIN_OTYPEH(PIN, OTYPE)" "PIN_CNFH(PIN, OTYPE)"\
-       "PIN_PUPD(PIN, PUPD)" "PIN_CNF(PIN, PUPD)"\
-       "PIN_PUPDH(PIN, PUPD)" "PIN_CNFH(PIN, PUPD)"\
-       "PIN_AF(PIN, AF)" "((AF) << ((PIN) * 4))"\
-       ""\
-       PA0_AF1_USART1_CTS "PIN_AF(0, 1ULL)"\
-       PA1_AF0_EVENTOUT "PIN_AF(1, 0ULL)"\
-       PA1_AF1_USART1_RTS "PIN_AF(1, 1ULL)"\
-       PA2_AF1_USART1_TX "PIN_AF(2, 1ULL)"\
-       PA3_AF1_USART1_RX "PIN_AF(3, 1ULL)"\
-       PA4_AF0_SPI1_NSS "PIN_AF(4, 0ULL)"\
-       PA4_AF1_USART1_CK "PIN_AF(4, 1ULL)"\
-       PA5_AF0_SPI1_SCK "PIN_AF(5, 0ULL)"\
-       PA6_AF0_SPI1_MISO "PIN_AF(6, 0ULL)"\
-       PA6_AF1_TIM3_CH1 "PIN_AF(6, 1ULL)"\
-       PA7_AF0_SPI1_MOSI "PIN_AF(7, 0ULL)"\
-       PA7_AF1_TIM3_CH2 "PIN_AF(7, 1ULL)"\
-       PA8_AF0_EVENTOUT "PIN_AF(8, 0ULL)"\
-       PA9_AF1_USART1_TX "PIN_AF(9, 1ULL)"\
-       PA9_AF4_I2C1_SCL "PIN_AF(9, 4ULL)"\
-       PA10_AF1_USART1_RX "PIN_AF(10, 1ULL)"\
-       PA10_AF4_I2C1_SDA "PIN_AF(10, 4ULL)"\
-       PA13_AF0_SWDIO "PIN_AF(13, 0ULL)"\
-       PA14_AF0_SWCLK "PIN_AF(14, 0ULL)"\
-       PA15_AF0_EVENTOUT "PIN_AF(15, 0ULL)"\
-       ""\
-       PB0_AF1_TIM3_CH3 "PIN_AF(0, 1ULL)"\
-       PB1_AF0_TIM14_CH1 "PIN_AF(1, 0ULL)"\
-       PB1_AF1_TIM3_CH4 "PIN_AF(1, 1ULL)"\
-       PB6_AF0_I2C1_SCL "PIN_AF(6, 0ULL)"\
-       PB7_AF0_I2C1_SDA "PIN_AF(7, 0ULL)"\
-       PB10_AF1_USART3_TX "PIN_AF(10, 1ULL)"\
-       PB11_AF1_USART3_RX "PIN_AF(11, 1ULL)"\
-       ""\
-       PC13_AF0_EVENTOUT "PIN_AF(13, 0ULL)"\
-       ""\
-       PIN_TYPE_PP 0x00UL\
-       PIN_TYPE_OD 0x01UL\
-       ""\
-       PIN_SPEED_10MHZ 0x01UL\
-       PIN_SPEED_2MHZ 0x02UL\
-       PIN_SPEED_50MHZ 0x03UL\
-       ""\
-       PIN_PUPD_NONE 0x00UL\
-       PIN_PUPD_UP 0x01UL\
-       PIN_PUPD_DOWN 0x02UL\
-       ""\
-        _BR\(PIN\) "GPIO_BSRR_BR ## PIN"\
-        BR\(PIN\) _BR\(PIN\)\
-        _BS\(PIN\) "GPIO_BSRR_BS ## PIN"\
-        BS\(PIN\) _BS\(PIN\)\
-       _ODR\(PIN\) "GPIO_ODR_ ## PIN"\
-       ODR\(PIN\) _ODR\(PIN\)\
-       ""\
-        GPIOA_CRL "(GPIO_MODE ^ (GPIOA_MODE))"\
-        GPIOB_CRL "(GPIO_MODE ^ (GPIOB_MODE))"\
-        GPIOC_CRL "(GPIO_MODE ^ (GPIOC_MODE))"\
-        GPIOA_CRH "(GPIO_MODE ^ (GPIOA_MODE))"\
-        GPIOB_CRH "(GPIO_MODE ^ (GPIOB_MODE))"\
-        GPIOC_CRH "(GPIO_MODE ^ (GPIOC_MODE))"\
-     \
-    -H ""\
-    -H "/* Configure a single GPIO pin on F1 (CRL for pins 0-7, CRH for pins 8-15). */"\
-    -H "/* Each pin occupies a 4-bit field: CNF[1:0] (bits 3:2) + MODE[1:0] (bits 1:0). */"\
-    -H "#define CONFIGURE_PIN(GPIOx, PIN, MODE, OTYPE, SPEED, PUPD) do {                                \\"\
-    -H "  if ((PIN) < 8) {                                                                         \\"\
-    -H "    if (MODE)  MODIFY_REG((GPIOx)->CRL, (0x03UL << ((PIN) * 4)),       ((MODE)  << ((PIN) * 4)));       \\"\
-    -H "    if (SPEED) MODIFY_REG((GPIOx)->CRL, (0x03UL << ((PIN) * 4)),       ((SPEED) << ((PIN) * 4)));       \\"\
-    -H "    if (PUPD)  MODIFY_REG((GPIOx)->CRL, (0x0CUL << ((PIN) * 4)),       ((PUPD)  << (((PIN) * 4) + 2))); \\"\
-    -H "    if (OTYPE) MODIFY_REG((GPIOx)->CRL, (0x0CUL << ((PIN) * 4)),       ((OTYPE) << (((PIN) * 4) + 2))); \\"\
-    -H "  } else {                                                                                  \\"\
-    -H "    if (MODE)  MODIFY_REG((GPIOx)->CRH, (0x03UL << (((PIN) - 8) * 4)), ((MODE)  << (((PIN) - 8) * 4)));     \\"\
-    -H "    if (SPEED) MODIFY_REG((GPIOx)->CRH, (0x03UL << (((PIN) - 8) * 4)), ((SPEED) << (((PIN) - 8) * 4)));     \\"\
-    -H "    if (PUPD)  MODIFY_REG((GPIOx)->CRH, (0x0CUL << (((PIN) - 8) * 4)), ((PUPD)  << ((((PIN) - 8) * 4) + 2))); \\"\
-    -H "    if (OTYPE) MODIFY_REG((GPIOx)->CRH, (0x0CUL << (((PIN) - 8) * 4)), ((OTYPE) << ((((PIN) - 8) * 4) + 2))); \\"\
-    -H "  }                                                                                         \\"\
-    -H "} while (0)"\
-    -H ""\
-    -H "#ifndef USART1_EN"\
-    -H "  #define USART1_EN 0"\
-    -H "#endif"\
-    -H ""\
-    -H "#ifndef SPI1_EN"\
-    -H "  #define SPI1_EN 0"\
-    -H "#endif"\
-    -H ""\
-    -H "#ifndef I2C1_EN"\
-    -H "  #define I2C1_EN 0"\
-    -H "#endif"\
-    -H ""\
-    -H "#ifndef SWD_EN"\
-    -H "  #ifndef NDEBUG"\
-    -H "    #define SWD_EN 1"\
-    -H "  #else"\
-    -H "    #define SWD_EN 0"\
-    -H "  #endif"\
-    -H "#endif"\
-    -H ""\
-    -H "/* STM32F1 gates each GPIO port through RCC APB2ENR (IOPxEN). Map the"\
-    -H " * generated GPIOx_EN flags onto the RCC enable macros so init_rcc()"\
-    -H " * clocks the ports we actually use. */"\
-    -H "#ifndef IOPA_EN"\
-    -H "  #define IOPA_EN GPIOA_EN"\
-    -H "#endif"\
-    -H "#ifndef IOPB_EN"\
-    -H "  #define IOPB_EN GPIOB_EN"\
-    -H "#endif"\
-    -H "#ifndef IOPC_EN"\
-    -H "  #define IOPC_EN GPIOC_EN"\
-    -H "#endif"\
-    -H ""\
-    -H "#define GPIO_MODE_EXAMPLE (       \\"\
-    -H "  + PIN_MODE(0,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(1,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(2,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(3,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(4,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(5,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(6,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODE(7,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(8,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(9,  PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(10, PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(11, PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(12, PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(13, PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(14, PIN_MODE_ANALOG) \\"\
-    -H "  + PIN_MODEH(15, PIN_MODE_ANALOG) \\"\
-    -H ")"\
-    -H ""\
-    -H '#define GPIOA_MODE (                                                    \'\
-    -H '  !0         * PIN_MODE(0,  PIN_MODE_OUTPUT) /* PA0  -- OUTPUT     */ | \'\
-    -H '  !0         * PIN_MODE(1,  PIN_MODE_OUTPUT) /* PA1  -- OUTPUT     */ | \'\
-    -H '  !SPI1_EN   * PIN_MODE(4,  PIN_MODE_OUTPUT) /* PA4  -- OUTPUT     */ | \'\
-    -H '  SPI1_EN    * PIN_MODE(4,  PIN_MODE_AF)     /* PA4  -- SPI1 CS    */ | \'\
-    -H '  SPI1_EN    * PIN_MODE(5,  PIN_MODE_AF)     /* PA5  -- SPI1 SCK   */ | \'\
-    -H '  SPI1_EN    * PIN_MODE(6,  PIN_MODE_AF)     /* PA6  -- SPI1 MISO  */ | \'\
-    -H '  SPI1_EN    * PIN_MODE(7,  PIN_MODE_AF)     /* PA7  -- SPI1 MOSI  */ | \'\
-    -H '  USART1_EN  * PIN_MODEH(9,  PIN_MODE_AF)    /* PA9  -- USART1 TX  */ | \'\
-    -H '  USART1_EN  * PIN_MODEH(10, PIN_MODE_AF)    /* PA10 -- USART1 RX  */ | \'\
-    -H '  SWD_EN     * PIN_MODEH(13, PIN_MODE_AF)    /* PA13 -- SWDIO      */ | \'\
-    -H '  SWD_EN     * PIN_MODEH(14, PIN_MODE_AF)    /* PA14 -- SWDCLK     */   \'\
-    -H ')'\
-    -H ""\
-    -H "#define GPIOA_OSPEED (                        \\"\
-    -H "  SPI1_EN   * PIN_SPEED(4,  PIN_SPEED_50MHZ) | \\"\
-    -H "  SPI1_EN   * PIN_SPEED(5,  PIN_SPEED_50MHZ) | \\"\
-    -H "  SPI1_EN   * PIN_SPEED(6,  PIN_SPEED_50MHZ) | \\"\
-    -H "  SPI1_EN   * PIN_SPEED(7,  PIN_SPEED_50MHZ)   \\"\
-    -H ")"\
-    -H ""\
-    -H "#define GPIOA_AF (                            \\"\
-    -H "  SPI1_EN   * PA4_AF0_SPI1_NSS              | \\"\
-    -H "  SPI1_EN   * PA5_AF0_SPI1_SCK              | \\"\
-    -H "  SPI1_EN   * PA6_AF0_SPI1_MISO             | \\"\
-    -H "  SPI1_EN   * PA7_AF0_SPI1_MOSI             | \\"\
-    -H "  USART1_EN * PA9_AF1_USART1_TX             | \\"\
-    -H "  USART1_EN * PA10_AF1_USART1_RX            | \\"\
-    -H "  SWD_EN    * PA13_AF0_SWDIO                | \\"\
-    -H "  SWD_EN    * PA14_AF0_SWCLK                  \\"\
-    -H ")"\
-    -H ""\
-    -H "#define GPIOB_MODE                     PIN_MODE(1,  PIN_MODE_AF)"\
-    -H "#define GPIOB_OSPEED                   PIN_SPEED(1, PIN_SPEED_50MHZ)"\
-    -H ""\
-    -H "#define GPIOB_AF                       PB6_AF0_I2C1_SCL"\
-    -H ""\
-    -H "#define GPIOC_MODE (                          \\"\
-    -H "  PIN_MODEH(13, PIN_MODE_OUTPUT)           | \\"\
-    -H "  PIN_MODEH(14, PIN_MODE_INPUT)              \\"\
-    -H ")"\
-    -H ""\
-    -H "#define GPIOC_PUPDR (                         \\"\
-    -H "  PIN_PUPDH(14, PIN_PUPD_UP)                \\"\
-    -H ")"\
-    \
-    $force_inline\
-    --no-def
+# GPIO pin configuration header (BluePill_Project_Generator style).
+# Replaces the stm32cgen-generated gpio.h: the macros and the init logic
+# are copied verbatim from https://github.com/a5021/BluePill_Project_Generator
+# so the example uses the same proven, reviewed GPIO handling as that project.
+cat > "gpio.h" << 'EOF'
+#ifndef __GPIO_H__
+#define __GPIO_H__
+
+#include <stdint.h>
+#include "stm32f103xb.h"
+
+/* ------------------------------------------------------------------ */
+/* Pin configuration field builder (4-bit field: CNF[1:0] + MODE[1:0]) */
+/* Source: BluePill_Project_Generator (create_stm32f1_project)        */
+/* ------------------------------------------------------------------ */
+#define PIN_CFG(PIN, MODE)              ((MODE) << ((PIN) * 4))
+
+/* Input mode (MODE[1:0] = 00) */
+#define I_ANALOG                        (0ULL << 2)   /* Analog mode                  */
+#define I_FLOAT                         (1ULL << 2)   /* Floating input               */
+#define I_PULL                          (2ULL << 2)   /* Input with pull-up / down    */
+
+/* Output mode (MODE[1:0] > 00) */
+#define O_PP                            (0ULL << 2)   /* General purpose push-pull    */
+#define O_OD                            (1ULL << 2)   /* General purpose open-drain   */
+#define O_AF                            (2ULL << 2)   /* Alternate function            */
+
+/* MODE[1:0]: output speed */
+#define O_10MHZ                         1ULL          /* Max speed 10 MHz             */
+#define O_2MHZ                          2ULL          /* Max speed 2 MHz              */
+#define O_50MHZ                         3ULL          /* Max speed 50 MHz             */
+
+/* BSRR bit masks */
+#define _BR(PIN)                        GPIO_BSRR_BR ## PIN
+#define _BS(PIN)                        GPIO_BSRR_BS ## PIN
+#define BR(PIN)                         _BR(PIN)
+#define BS(PIN)                         _BS(PIN)
+#define PIN_HIGH(PIN)                   GPIO_BSRR_BS ## PIN
+#define PIN_LOW(PIN)                    GPIO_BSRR_BR ## PIN
+#define PULL_UP(PIN)                    GPIO_BSRR_BS ## PIN
+#define PULL_DOWN(PIN)                  GPIO_BSRR_BR ## PIN
+
+/* ------------------------------------------------------------------ */
+/* Port C: on-board LED on PC13 (Blue Pill, active-low)               */
+/* ------------------------------------------------------------------ */
+#define PORT_C_CONFIG   PIN_CFG(13, O_2MHZ)          /* PC13: output, push-pull, 2 MHz */
+#define PORT_C_STATE    PIN_HIGH(13)                 /* PC13 HIGH = LED off            */
+#define IOPC_EN         (PORT_C_CONFIG != 0)
+
+__STATIC_FORCEINLINE void init_gpio(void) {
+#if defined GPIOC_BASE
+  /* State (pull/level) first, then CRL/CRH (mode) */
+  if (PORT_C_STATE) GPIOC->BSRR = (uint32_t)PORT_C_STATE;
+  *(__IO uint64_t *)GPIOC_BASE = (uint64_t)PORT_C_CONFIG;
+#endif
+}
+
+#endif /* __GPIO_H__ */
+EOF
+echo "File gpio.h created."
+((++op_counter))
+
 
 cd ..
 
