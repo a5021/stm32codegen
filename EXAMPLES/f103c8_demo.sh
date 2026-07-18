@@ -1291,8 +1291,8 @@ __STATIC_FORCEINLINE __SYSTICK_VOLATILE uint64_t * uptime(void) {
 
 /* IRQ mode: stub here; real work runs inside SysTick_Handler below */
 __STATIC_FORCEINLINE void process_systick_event(void) {
-  }   /* stub */
-  void SysTick_Handler(void) {
+}   /* stub */
+void SysTick_Handler(void) {
 
 #else
 
