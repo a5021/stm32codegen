@@ -1159,8 +1159,7 @@ EOF
 cat > "project.jdebug" << 'EOF'
 void OnProjectLoad (void) {
   Project.AddPathSubstitute (".", "$(ProjectDir)");
-  Project.AddPathSubstitute (".", "$(ProjectDir)");
-  Project.SetDevice ("STM32F103C8");
+  Project.SetDevice ("STM32F103CB");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
