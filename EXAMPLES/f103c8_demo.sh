@@ -248,20 +248,20 @@ generate_header "rcc.h" -l 103c8 -p RCC -m rcc -f init_rcc\
 
 generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
     --exclude-register IDR LCKR\
-    -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
+    -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 0\
        ""\
        GPIO_MODE "(USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT * UINT32_MAX)"\
-       PIN_XOR "(GPIO_MODE & 3UL)"\
+       PIN_XOR "(0UL)"\
        ""\
-       PIN_MODE_INPUT "(0x00UL ^ PIN_XOR)"\
-       PIN_MODE_OUTPUT "(0x01UL ^ PIN_XOR)"\
-       PIN_MODE_AF "(0x02UL ^ PIN_XOR)"\
-       PIN_MODE_ANALOG "(0x03UL ^ PIN_XOR)"\
+       PIN_MODE_INPUT "(0x04UL)"\
+       PIN_MODE_OUTPUT "(0x02UL)"\
+       PIN_MODE_AF "(0x0BUL)"\
+       PIN_MODE_ANALOG "(0x00UL)"\
        ""\
        "PIN_CFG(PIN, MODE)" "((MODE) << ((PIN) * 4))"\
        "PIN_CFGH(PIN, MODE)" "((MODE) << (((PIN) - 8) * 4))"\
-       "PIN_MODE(PIN, MODE)" "(((MODE) & 3UL) << ((PIN) * 4))"\
-       "PIN_MODEH(PIN, MODE)" "(((MODE) & 3UL) << (((PIN) - 8) * 4))"\
+       "PIN_MODE(PIN, MODE)" "((MODE) << ((PIN) * 4))"\
+       "PIN_MODEH(PIN, MODE)" "((MODE) << (((PIN) - 8) * 4))"\
        "PIN_CNF(PIN, CNF)" "(((CNF) & 3UL) << (((PIN) * 4) + 2))"\
        "PIN_CNFH(PIN, CNF)" "(((CNF) & 3UL) << ((((PIN) - 8) * 4) + 2))"\
        "PIN_SPEED(PIN, SPEED)" "PIN_MODE(PIN, SPEED)"\
@@ -321,10 +321,13 @@ generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
        _ODR\(PIN\) "GPIO_ODR_ ## PIN"\
        ODR\(PIN\) _ODR\(PIN\)\
        ""\
-       GPIOA_CRL "(GPIO_MODE ^ (GPIOA_MODE))"\
-       GPIOB_CRL "(GPIO_MODE ^ (GPIOB_MODE))"\
-       GPIOC_CRL "(GPIO_MODE ^ (GPIOC_MODE))"\
-    \
+        GPIOA_CRL "(GPIO_MODE ^ (GPIOA_MODE))"\
+        GPIOB_CRL "(GPIO_MODE ^ (GPIOB_MODE))"\
+        GPIOC_CRL "(GPIO_MODE ^ (GPIOC_MODE))"\
+        GPIOA_CRH "(GPIO_MODE ^ (GPIOA_MODE))"\
+        GPIOB_CRH "(GPIO_MODE ^ (GPIOB_MODE))"\
+        GPIOC_CRH "(GPIO_MODE ^ (GPIOC_MODE))"\
+     \
     -H ""\
     -H "/* Configure a single GPIO pin on F1 (CRL for pins 0-7, CRH for pins 8-15). */"\
     -H "/* Each pin occupies a 4-bit field: CNF[1:0] (bits 3:2) + MODE[1:0] (bits 1:0). */"\
