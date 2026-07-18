@@ -132,7 +132,7 @@ Contributions are welcome. When submitting pull requests:
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f0) – Official STM32 F0 device headers
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f1) – Official STM32 F1 device headers
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f2) – Official STM32 F2 device headers
-- [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f2) – Official STM32 F3 device headers
+ - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f3) – Official STM32 F3 device headers
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f4) – Official STM32 F4 device headers
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_f7) – Official STM32 F7 device headers
 - [STM32 CMSIS Device Headers](https://github.com/STMicroelectronics/cmsis_device_g0) – Official STM32 G0 device headers
