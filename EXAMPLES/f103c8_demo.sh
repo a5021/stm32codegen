@@ -628,7 +628,7 @@ download_file() {
 download_file "${url1}/Source/Templates/${fname1[0]}" "${directories[1]}/${fname1[0]}"
 download_file "${url1}/Source/Templates/gcc/${fname1[1]}" "${directories[1]}/${fname1[1]}"
 download_file "${url1}/Source/Templates/arm/${fname1[1]}" "${directories[2]}/${fname1[1]}"
-download_file "${url3}" "STM32F103xx.svd"
+download_file "${url3}" "${directories[2]}/STM32F103xx.svd"
 
 # Download files
 for filename in "${fname2[@]}"
