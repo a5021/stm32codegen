@@ -1200,6 +1200,73 @@ create_file "stm32f103xb.jflash" << 'EOF'
 /Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4AewAwZdABBhAOGFYzOihg56UIqKCKQrnqKasrAxa6gWaeZG86Pk+G/iEId5CVjqnEwXAprd+mfglT4i426SWo/xS7YaD+CzdQCIqK5WCRH/2RwmT8+YuwJBPpqcRsdUYfOKkq4h0s3MNcWVwMPOzcra1Mz2E7c/ufx7PcVXHoKnnAGUMvm4KmD9CsTR2PmMFFMlH3wr484iM7+vJvsy8EiQQ1nbBIoLenldsybldPbO95PH68xcmlmXJYuhcKYKQVFjBWAmswQvjVHT2Fwde7zHqLfzQa9KvCPkWbD/ALiUhL4Dum0p3xlKrgWSUlBInXyh6b0TsLznCs9ZlguX3w11XmdhG4uPslLk3mxej0M67O3QE/SUKTJU9He8ODHT5mZjCFMhqDzCfeHu7lVBpoL8TSqwEaUlJYxA30zMB13OUSfdRLd7v20DJJyH0+HTKlmlzkOD5DDabNTQJZheesSnHSv8D4iWlPFyWW5Vv67JsOKSl2IR0THA1JU9FqiIMc7/c4NOFKY/9FSx5Sgyjwwa2TUzIgZhFm+mRwzA+Nzy1tK+u4Ac7ldi7nph+o8Oin97fIVEUW48dOkUr1ZyJI2mGcB1IDaHkWlE0ZWCvZdwhe9alKcddHBtVo6LG/Qrr97ZY8xMfxRQYPmfToMwh9gNi8Lc/qamJwdFd1riK4GOKWhCGPcypXvuWzd4J+rmlCjBytqdhPp2EKhqcA/dP2bRMFG9zUNKNkmGex8KwNSIZjSyGwbLdEdobqjABUt9puOl1CMMGJ4gyWAsgeWE3ZKNbYEsS0hoDzrO04Nt/jc+3V0zddOMtpodAn5ZKjI3hr2PuQ3maeqz94m57+4beTf+sYd0YNxV9lEckzBJribIGHBnyu4BHhM1nvKKZcW4FKPDd9nVesB3ea6nHdkeAMkCHwyLqqnx7qSRxrZV/ppKZxc8XaN5qPClUBfig0Iya7UGyHNxXoGcnPVQ0yK+HxbKal4NRMQNVzrXginnC9j32tqE5pHuUvlbWQ0BrHhXKQDYweOiClDt01GWAAAAAJ84fh2c2eeFAAGiBrEPAABa/1O2scRn+wIAAAAABFla
 EOF
 
+# Create SEGGER Embedded Studio project (mirrors BluePill_Project_Generator 'ses' target).
+# References the same sources/headers/SVD as the MDK and Ozone configs.
+cat > "project.emProject" << 'EOF'
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="project" target="8" version="2">
+  <configuration Name="Debug" inherited_configurations="Internal;Debug" />
+  <configuration Name="Internal" Platform="ARM" hidden="Yes" />
+  <configuration Name="Release" inherited_configurations="Internal;Release" />
+  <project Name="BluePill_F103C8">
+    <configuration
+      Name="Common"
+      WARNING_LEVEL="4 (All)"
+      arm_assembler_variant="SEGGER"
+      arm_compiler_variant="SEGGER"
+      arm_core_type="Cortex-M3"
+      arm_endian="Little"
+      arm_linker_treat_warnings_as_errors="Yes"
+      arm_linker_variant="SEGGER"
+      arm_target_device_name="STM32F103CB"
+      arm_target_interface_type="SWD"
+      c_preprocessor_definitions="STM32F103xB"
+      c_user_include_directories="./inc"
+      debug_svd_file="$(ProjectDir)/STM32F103xx.svd"
+      debug_start_from_entry_point_symbol="No"
+      debug_target_connection="J-Link"
+      gcc_c_language_standard="gnu17"
+      gcc_enable_all_warnings="Yes"
+      gcc_strict_prototypes_warning="Yes"
+      gcc_uninitialized_variables_warning="Yes"
+      gcc_unused_variable_warning="Yes"
+      link_linker_script_file="$(StudioDir)/samples/SEGGER_Flash.icf"
+      link_map_file="Detailed"
+      linker_log_file="Yes"
+      linker_output_format="hex"
+      linker_section_placements_segments="FLASH1 RX 0x08000000 0x00010000;RAM1 RWX 0x20000000 0x00005000;"
+      project_type="Executable" />
+    <configuration
+      Name="Debug"
+      gcc_debugging_level="Level 3"
+      gcc_dwarf_version="dwarf-5" />
+    <configuration
+      LIBRARY_IO_TYPE="SEMIHOST (host-formatted)"
+      Name="Internal" />
+    <configuration
+      Name="Release"
+      c_preprocessor_definitions="NDEBUG"
+      gcc_debugging_level="None"
+      gcc_dwarf_version="None"
+      gcc_optimization_level="Level 2 for size"
+      gcc_strip_symbols="Yes"
+      link_dedupe_code="Yes"
+      link_dedupe_data="Yes"
+      link_inline="Yes"
+      linker_strip_debug_information="Yes" />
+    <folder Name="app">
+      <file file_name="./src/main.c" />
+    </folder>
+    <folder Name="startup">
+      <file file_name="./MDK-ARM/startup_stm32f103xb.s" />
+      <file file_name="./src/system_stm32f1xx.c" />
+    </folder>
+  </project>
+</solution>
+EOF
+echo "File project.emProject created."
+((++op_counter))
+
 # Create main.c file in src directory from embedded data using Here Document
 main_c_file="${directories[1]}/main.c"
 if [ ! -f "$main_c_file" ]; then
