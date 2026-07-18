@@ -42,6 +42,19 @@ init_macro_name = set()     # set of generated macro names
 irq_list = []
 
 
+def strip_trailing_or(x_out):
+    """Remove a dangling " || " separator (with an optional line continuation)
+    at the end of a generated "#if (...)" condition.
+
+    stm32cgen appends a "\\\\n    " continuation every 5th register. When a
+    peripheral's register count is a multiple of 5 that continuation lands
+    after the last register, and a plain trailing-char strip leaves a
+    dangling "|| \\" that breaks the preprocessor. This drops the trailing
+    "||" together with any line continuation that may precede it.
+    """
+    return re.sub(r'\s*\|\|\s*(?:\\\s*)?$', '', x_out)
+
+
 class Bit:
     """Microcontroller's peripheral register bit class"""
 
@@ -1207,7 +1220,7 @@ if __name__ == '__main__':
                             x_out += f'\\\n    '
 
                     #  x_out = x_out.strip().strip('\\').strip().strip('|').strip()
-                    x_out = x_out.rstrip(' \\|')
+                    x_out = strip_trailing_or(x_out)
 
                     if 'DMA' == name[:3] and len(name) < 6:
                         name = name + '_STATUS'

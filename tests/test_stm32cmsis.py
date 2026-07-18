@@ -95,5 +95,61 @@ class TestGetRegSetModerDefensive(unittest.TestCase):
         self.assertNotIn('GPIOA_MODER_MODE15', yielded)
 
 
+class TestStripTrailingOr(unittest.TestCase):
+    """Regression guard for the dangling "|| \\" in generated peripheral _EN.
+
+    stm32cgen appends a "\\n    " continuation every 5th register. When a
+    peripheral's register count is a multiple of 5 that continuation lands
+    after the last register, and only a plain trailing-char strip was used the
+    result kept a dangling "|| \\" that broke the preprocessor
+    ("operator '||' has no right operand"). STM32F1 GPIOA has exactly 5
+    registers (BRR, BSRR, CRH, CRL, ODR) and hit this; STM32F0 GPIOA has 9 and
+    did not. This guards the fix for register counts of 5, 10, 15, ...
+    """
+
+    def _join(self, regs, cont_every=5):
+        out = '#if '
+        for cnt, r in enumerate(regs, start=1):
+            out += f'({r} != 0) || '
+            if cnt % cont_every == 0:
+                out += '\\\n    '
+        return out
+
+    def test_f1_gpioa_5_registers_no_dangling_or(self):
+        regs = ['GPIOA_BRR', 'GPIOA_BSRR', 'GPIOA_CRH', 'GPIOA_CRL', 'GPIOA_ODR']
+        out = stm32cgen.strip_trailing_or(self._join(regs))
+        # 5 regs -> no line continuation at all, clean single-line condition
+        self.assertEqual(
+            out, '#if ' + ' || '.join(f'({r} != 0)' for r in regs))
+        self.assertNotRegex(out, r'\|\|\s*\\?\s*$')
+
+    def test_10_registers_keeps_interior_continuations(self):
+        regs = [f'P_R{i}' for i in range(10)]
+        out = stm32cgen.strip_trailing_or(self._join(regs))
+        # interior "|| \" every 5 regs must survive; only trailing removed
+        self.assertIn('(P_R4 != 0) || \\', out)
+        self.assertIn('(P_R9 != 0)', out)
+        self.assertNotRegex(out, r'\|\|\s*\\?\s*$')
+
+    def test_normal_9_registers_unchanged(self):
+        regs = [f'P_R{i}' for i in range(9)]
+        out = stm32cgen.strip_trailing_or(self._join(regs))
+        # 9 regs -> interior continuation at reg 5 (cnt % 5 == 0) is kept,
+        # but the final register (cnt=9) ends with " || " which is stripped,
+        # so there is no dangling separator (matches the prior correct output)
+        self.assertIn('(P_R4 != 0) || \\', out)
+        self.assertIn('(P_R8 != 0)', out)
+        self.assertNotRegex(out, r'\|\|\s*\\?\s*$')
+
+    def test_15_registers(self):
+        regs = [f'P_R{i}' for i in range(15)]
+        out = stm32cgen.strip_trailing_or(self._join(regs))
+        # interior continuations survive, only the trailing one is removed
+        self.assertIn('(P_R4 != 0) || \\', out)
+        self.assertIn('(P_R9 != 0) || \\', out)
+        self.assertIn('(P_R14 != 0)', out)
+        self.assertNotRegex(out, r'\|\|\s*\\?\s*$')
+
+
 if __name__ == '__main__':
     unittest.main()

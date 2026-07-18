@@ -431,17 +431,6 @@ generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
     $force_inline\
     --no-def
 
-# Workaround for stm32cgen issue on STM32F1: the auto-generated peripheral
-# enable block ("#if (GPIOx_BRR != 0) || ... || \") may leave a dangling
-# "|| \" separator followed by a blank line. Remove it so the header compiles.
-python - <<'PY'
-import re
-p = "gpio.h"
-s = open(p, encoding="utf-8").read()
-s = re.sub(r' \|\| \\\n[ \t]*\n', '\n', s)
-open(p, "w", encoding="utf-8").write(s)
-PY
-
 cd ..
 
 create_file() {
