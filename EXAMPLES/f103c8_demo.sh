@@ -1258,7 +1258,8 @@ cat > "project.emProject" << 'EOF'
       <file file_name="./src/main.c" />
     </folder>
     <folder Name="startup">
-      <file file_name="./MDK-ARM/startup_stm32f103xb.s" />
+      <file file_name="$(StudioDir)/samples/Cortex_M_Startup.s" />
+      <file file_name="$(StudioDir)/samples/SEGGER_THUMB_Startup.s" />
       <file file_name="./src/system_stm32f1xx.c" />
     </folder>
   </project>
