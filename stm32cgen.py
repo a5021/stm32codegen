@@ -428,7 +428,7 @@ def get_reg_set(reg_str, macro_def_list):
                     continue
 
             if args.cpu[:2] != 'h7' and args.cpu[:2] != 'L0':
-                if '_MODER_MODE' in gx[0] and gx[0][15] in '0123456789':
+                if '_MODER_MODE' in gx[0] and len(gx[0]) > 15 and gx[0][15] in '0123456789':
                     continue
 
             if args.cpu[:1] != '0' and args.cpu[:1] != '3' and args.cpu[:2] != 'L0' and args.cpu[:2] != 'L1':
