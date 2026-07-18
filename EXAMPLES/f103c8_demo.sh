@@ -419,12 +419,11 @@ generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
     -H "#define GPIOB_AF                       PB6_AF0_I2C1_SCL"\
     -H ""\
     -H "#define GPIOC_MODE (                          \\"\
-    -H "  PIN_MODEH(13, PIN_MODE_INPUT)            | \\"\
+    -H "  PIN_MODEH(13, PIN_MODE_OUTPUT)           | \\"\
     -H "  PIN_MODEH(14, PIN_MODE_INPUT)              \\"\
     -H ")"\
     -H ""\
     -H "#define GPIOC_PUPDR (                         \\"\
-    -H "  PIN_PUPDH(13, PIN_PUPD_UP)              | \\"\
     -H "  PIN_PUPDH(14, PIN_PUPD_UP)                \\"\
     -H ")"\
     \
@@ -524,11 +523,9 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
 
   /* ========== Shared implementation (IRQ or polling) ========== */
   
-  /* Increment uptime counter and toggle PA4 LED based on bit 9 state
-   * When bit 9 of uptime is set: turn LED on (BSRR BS4)
-   * When bit 9 of uptime is clear: turn LED off (BSRR BR4)
-   * This creates a blink period of 2^10 = 1024 ticks */
-  GPIOA->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS4 : GPIO_BSRR_BR4;
+  /* Increment uptime counter and toggle PC13 LED (BluePill onboard LED)
+   * based on bit 9 state. This creates a blink period of 2^10 = 1024 ticks. */
+  GPIOC->BSRR = ++*uptime() & (1 << 9) ? GPIO_BSRR_BS13 : GPIO_BSRR_BR13;
 
 }
 
