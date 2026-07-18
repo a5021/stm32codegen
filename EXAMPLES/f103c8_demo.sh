@@ -362,6 +362,19 @@ generate_header "gpio.h" -l 103c8 -p GPIOA GPIOB GPIOC -m gpio -f init_gpio\
     -H "  #endif"\
     -H "#endif"\
     -H ""\
+    -H "/* STM32F1 gates each GPIO port through RCC APB2ENR (IOPxEN). Map the"\
+    -H " * generated GPIOx_EN flags onto the RCC enable macros so init_rcc()"\
+    -H " * clocks the ports we actually use. */"\
+    -H "#ifndef IOPA_EN"\
+    -H "  #define IOPA_EN GPIOA_EN"\
+    -H "#endif"\
+    -H "#ifndef IOPB_EN"\
+    -H "  #define IOPB_EN GPIOB_EN"\
+    -H "#endif"\
+    -H "#ifndef IOPC_EN"\
+    -H "  #define IOPC_EN GPIOC_EN"\
+    -H "#endif"\
+    -H ""\
     -H "#define GPIO_MODE_EXAMPLE (       \\"\
     -H "  + PIN_MODE(0,  PIN_MODE_ANALOG) \\"\
     -H "  + PIN_MODE(1,  PIN_MODE_ANALOG) \\"\
