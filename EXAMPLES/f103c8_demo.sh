@@ -184,18 +184,8 @@ generate_header "main.h" $opt 103c8 -M\
     -F "} /* $func_name() */"\
     -F ""\
     -F ""\
-    -F "__STATIC_FORCEINLINE void idle(void); // {"\
-    -F "  /* Routine to handle idle state (waiting for an event) */"\
-    -F ""\
-    -F ""\
-    -F "//} /* idle() */"\
-    -F ""\
-    -F ""\
-    -F "__STATIC_FORCEINLINE unsigned process(void); // {"\
-    -F "  /* Routine to perform main loop operations */"\
-    -F ""\
-    -F ""\
-    -F "//} /* process() */"\
+    -F "__STATIC_FORCEINLINE void idle(void);"\
+    -F "__STATIC_FORCEINLINE unsigned process(void);"\
     -F ""\
     -F "#if YES == SYSTICK_IRQ_ENABLE"\
     -F "  #define __SYSTICK_VOLATILE volatile"\
