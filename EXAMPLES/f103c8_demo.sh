@@ -1295,9 +1295,9 @@ __STATIC_FORCEINLINE __SYSTICK_VOLATILE uint64_t * uptime(void) {
 /**
  * @brief  SysTick event processing - handles uptime increment and LED toggle
  * @note   Implementation is shared between polling and interrupt modes
- *         depending on SYSTICK_IRQ_EN configuration
+ *         depending on SYSTICK_IRQ_ENABLE configuration
  */
-#if YES == SYSTICK_IRQ_EN
+#if YES == SYSTICK_IRQ_ENABLE
 
 /* IRQ mode: stub here; real work runs inside SysTick_Handler below */
 __STATIC_FORCEINLINE void process_systick_event(void) {
