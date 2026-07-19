@@ -204,7 +204,7 @@ generate_header "main.h" $opt g031f8 -M\
     -F "#endif"\
     -F ""\
     -F "#if defined(__GNUC__) && ! defined(__clang__)" \
-    -F "  void _close_r(void){} void _close(void){} void _lseek_r(void){} void _lseek(void){} void _read_r(void){} void _read(void){} void _write_r(void){}" \
+    -F "  __attribute__((used)) void _close_r(void){} __attribute__((used)) void _close(void){} __attribute__((used)) void _lseek_r(void){} __attribute__((used)) void _lseek(void){} __attribute__((used)) void _read_r(void){} __attribute__((used)) void _read(void){} __attribute__((used)) void _write_r(void){} __attribute__((used)) void _write(void){}" \
     -F \#endif
 
 func_name=wait_for_clock_stable
