@@ -304,8 +304,11 @@ def read_cmsis_header_file(mcu_name, fetch=True, save=False):
                 with open(hdr_file_name, 'bw') as f:
                     f.write(bytes(txt, 'utf-8'))
     else:
-        with open(hdr_file_name) as f:
-            txt = f.read()
+        try:
+            with open(hdr_file_name, encoding='utf-8') as f:
+                txt = f.read()
+        except FileNotFoundError:
+            txt = ''
 
     return txt
 
