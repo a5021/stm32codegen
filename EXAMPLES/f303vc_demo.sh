@@ -233,7 +233,7 @@ generate_header "rcc.h" -l 303vc -p RCC -m rcc -f init_rcc\
     --post-init $func_name\
     -F "__STATIC_FORCEINLINE void configure_flash(void) {"\
     -F "  /* F3: 2 wait states + prefetch for 72MHz */"\
-    -F "  FLASH->ACR = FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY_2;"\
+    -F "  FLASH->ACR = FLASH_ACR_PRFTBE | (2U << FLASH_ACR_LATENCY_Pos);"\
     -F "}"\
     -F ""\
     -F "__STATIC_FORCEINLINE void $func_name(void) {"\
@@ -561,14 +561,16 @@ EOF
 create_file "stm32f303vcux_flash.ld" << 'EOF'
 ENTRY(Reset_Handler)
 
-_estack = ORIGIN(RAM) + LENGTH(RAM);
+_estack = 0x2000A000;
 
+_Min_Heap_Size  = 0x200;
 _Min_Stack_Size = 0x400;
 
 MEMORY
 {
-  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 256K
-  RAM   (rw)  : ORIGIN = 0x20000000, LENGTH =  48K
+  FLASH  (rx)  : ORIGIN = 0x08000000, LENGTH = 256K
+  RAM    (rw)  : ORIGIN = 0x20000000, LENGTH =  40K
+  CCMRAM (rw)  : ORIGIN = 0x10000000, LENGTH =   8K
 }
 
 SECTIONS
@@ -647,6 +649,18 @@ SECTIONS
     _edata = .;
   } >RAM AT> FLASH
 
+  _siccmram = LOADADDR(.ccmram);
+
+  .ccmram :
+  {
+    . = ALIGN(4);
+    _sccmram = .;
+    *(.ccmram)
+    *(.ccmram*)
+    . = ALIGN(4);
+    _eccmram = .;
+  } >CCMRAM AT> FLASH
+
   .bss :
   {
     . = ALIGN(4);
@@ -660,17 +674,18 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM
 
-  . = ALIGN(8);
-  PROVIDE(end = .);
-  PROVIDE(_end = .);
+  ._user_heap_stack :
+  {
+    . = ALIGN(8);
+    PROVIDE(end = .);
+    PROVIDE(_end = .);
+    . = . + _Min_Heap_Size;
+    . = . + _Min_Stack_Size;
+    . = ALIGN(8);
+  } >RAM
 
   ASSERT(_estack - _end >= _Min_Stack_Size,
-    "RAM overflow: .data + .bss + stack exceeds 48 KB")
-
-  /DISCARD/ :
-  {
-    *(.ARM.attributes)
-  }
+    "RAM overflow: .data + .bss + stack exceeds 40 KB")
 }
 EOF
 
@@ -1665,19 +1680,20 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
   /* ========== Shared implementation (IRQ or polling) ========== */
   
   /* Increment uptime counter and cycle through 8 LEDs on PE8-PE15
-   * Bit [9] of uptime selects LED on/off (512 ms period)
+   * Bit [8] of uptime selects LED on/off (256 ms period)
    * Bits [11:9] select which LED (0-7) is active
-   * This creates a sequential chase pattern with ~100 ms per LED */
+   * This creates a sequential chase pattern with ~256 ms per LED */
   uint64_t t = ++*uptime();
   uint32_t led_bit = (t >> 9) & 7;       /* LED index 0-7, changes every 512 ms */
   uint32_t led_mask = 1UL << (8 + led_bit); /* PE8-PE15 */
 
-  if (t & (1 << 9)) {
-    /* LED on phase: turn on current LED, turn off all others */
-    GPIOE->BSRR = (led_mask << 16) | led_mask;
+  if (t & (1 << 8)) {
+    /* LED on phase: turn off all, turn on current */
+    GPIOE->BRR = 0xFF00;
+    GPIOE->BSRR = led_mask;
   } else {
     /* LED off phase: turn off current LED */
-    GPIOE->BSRR = led_mask << 16;
+    GPIOE->BRR = led_mask;
   }
 
 }
