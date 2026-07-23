@@ -689,15 +689,15 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
 
   <Targets>
     <Target>
-      <TargetName>Debug</TargetName>
-      <ToolsetNumber>0x4</ToolsetNumber>
-      <ToolsetName>ARM-ADS</ToolsetName>
-      <uAC6>1</uAC6>
-      <TargetOption>
-        <TargetCommonOption>
-          <Device>STM32F303VCTx</Device>
-          <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000,0x0000C000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
+          <TargetName>Debug</TargetName>
+          <ToolsetNumber>0x4</ToolsetNumber>
+          <ToolsetName>ARM-ADS</ToolsetName>
+          <uAC6>1</uAC6>
+          <TargetOption>
+            <TargetCommonOption>
+              <Device>STM32F303VCTx</Device>
+              <Vendor>STMicroelectronics</Vendor>
+              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -865,7 +865,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <hadIRAM2>0</hadIRAM2>
+            <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
             <useUlib>1</useUlib>
@@ -925,7 +925,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x0000C000</Size>
+                <Size>0x0000A000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -979,8 +979,8 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x0000C000</Size>
+                <StartAddress>0x10000000</StartAddress>
+                <Size>0x00002000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -1082,15 +1082,15 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
       </Groups>
     </Target>
     <Target>
-      <TargetName>Release</TargetName>
-      <ToolsetNumber>0x4</ToolsetNumber>
-      <ToolsetName>ARM-ADS</ToolsetName>
-      <uAC6>1</uAC6>
-      <TargetOption>
-        <TargetCommonOption>
-          <Device>STM32F303VCTx</Device>
-          <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000,0x0000C000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
+          <TargetName>Release</TargetName>
+          <ToolsetNumber>0x4</ToolsetNumber>
+          <ToolsetName>ARM-ADS</ToolsetName>
+          <uAC6>1</uAC6>
+          <TargetOption>
+            <TargetCommonOption>
+              <Device>STM32F303VCTx</Device>
+              <Vendor>STMicroelectronics</Vendor>
+              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -1258,7 +1258,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <hadIRAM2>0</hadIRAM2>
+            <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
             <useUlib>1</useUlib>
@@ -1318,7 +1318,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x0000C000</Size>
+                <Size>0x0000A000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -1372,8 +1372,8 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x0000C000</Size>
+                <StartAddress>0x10000000</StartAddress>
+                <Size>0x00002000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -1570,7 +1570,7 @@ create_file "stm32f303vc.jflash" << 'EOF'
   ScriptFile = ""
   UseRAM = 1
   RAMAddr = 0x20000000
-  RAMSize = 0x0000C000
+  RAMSize = 0x0000A000
   CheckCoreID = 1
   CoreID = 0x0BA00477
   CoreIDMask = 0x0F000FFF

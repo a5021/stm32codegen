@@ -286,14 +286,20 @@ Result: one LED lights at a time, cycling PE8 → PE9 → … → PE15 → PE8.
 
 ### Linker script
 
-`_estack = 0x2000A000` (top of SRAM1). RAM region is 40 KB — matching the
-official ST linker scripts which do not place stack in SRAM2. An assertion
+GCC linker script places `_estack = 0x2000A000` (top of SRAM1, 40 KB) — matching
+the official ST linker scripts which do not place stack in SRAM2. An assertion
 guards against overflow:
 
 ```ld
 ASSERT(_estack - _end >= _Min_Stack_Size,
   "RAM overflow: .data + .bss + stack exceeds 40 KB")
 ```
+
+The Keil auto-generated scatter file behaves differently: it places stack + BSS
+in CCM (0x10000000, 8 KB). Keil defaults to placing ZI/stack in the last IRAM
+region, and CCM (`IRAM2`) is configured as the last region in the project
+settings. Both builds work correctly. This is specific to the F303 — it is the
+only example with CCM mapped at a separate address (0x10000000).
 
 ### Building and flashing
 
