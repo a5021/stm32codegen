@@ -1749,19 +1749,14 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
   /* Increment uptime counter and cycle through 4 LEDs on PD12-PD15
    * Bit [8] of uptime selects LED on/off (256 ms period)
    * Bits [10:9] select which LED (0-3) is active
-   * LEDs are active LOW (pin LOW = LED ON)
    * This creates a sequential chase pattern with ~256 ms per LED */
   uint64_t t = ++*uptime();
   uint32_t led_bit = (t >> 9) & 3;       /* LED index 0-3, changes every 512 ms */
   uint32_t led_mask = 1UL << (12 + led_bit); /* PD12-PD15 */
 
+  GPIOD->BSRR = 0xF0000000;              /* all LOW = all off */
   if (t & (1 << 8)) {
-    /* LED on phase: all off, then current on (active LOW) */
-    GPIOD->BSRR = 0xF000;                 /* PD12-PD15 HIGH = all off */
-    GPIOD->BSRR = 1UL << (16 + 12 + led_bit); /* current LOW = on */
-  } else {
-    /* LED off phase: current off (active LOW: set HIGH = off) */
-    GPIOD->BSRR = led_mask;
+    GPIOD->BSRR = led_mask;              /* current HIGH = current on */
   }
 
 }
