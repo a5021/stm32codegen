@@ -273,7 +273,7 @@ generate_header "rcc.h" -l 303vc -p RCC -m rcc -f init_rcc\
     -F "#undef $tag"
 
 
-"${py_gen[@]}" -l 303vc -p GPIOA GPIOE -m gpio -f init_gpio\
+generate_header "gpio.h" -l 303vc -p GPIOA GPIOE -m gpio -f init_gpio\
     --exclude-register IDR LCKR\
     -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
@@ -365,17 +365,7 @@ generate_header "rcc.h" -l 303vc -p RCC -m rcc -f init_rcc\
     -H "#define GPIOE_OSPEED ( 0 )"\
     \
     $force_inline\
-    --no-def\
-    > gpio.h
-
-# Check if the previous command was successful
-status=$?
-if [ $status -eq 0 ]
-then
-    echo "File gpio.h created."
-else
-    echo "Creation of gpio.h failed with status $status"
-fi
+    --no-def
 
 cd ..
 
