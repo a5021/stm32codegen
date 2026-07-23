@@ -18,9 +18,10 @@ J-Link for flashing and debugging).
 | `g031f8_demo.sh`      | STM32G031F8       | NUCLEO-G031, **PA5**    | Cortex-M0+, 16 MHz HSI | G0 needs flash wait states above 48 MHz. |
 | `f401cc_demo.sh`      | STM32F401CC       | BlackPill, **PC13**     | Cortex-M4F, 100 MHz HSE | Overclocked (max rated 84 MHz). HSE 25 MHz crystal, PLL 25/15×120/2. |
 | `f303vc_demo.sh`      | STM32F303VC       | STM32F3 Discovery, **PE8–PE15** | Cortex-M4F, 72 MHz HSE | 8 on-board LEDs; LED chase via SysTick. HSE 8 MHz from ST-LINK MCO, PLL ×9. |
+| `f407vg_demo.sh`      | STM32F407VG       | STM32F4 Discovery, **PD12–PD15** | Cortex-M4F, 168 MHz HSE | 4 on-board LEDs (active LOW); LED chase via SysTick. HSE 8 MHz crystal, PLL ×21. |
 
 The generated output folders (`f103c8_demo/`, `f030f4_demo/`, `g031f8_demo/`,
-`f401cc_demo/`, `f303vc_demo/`) are build artifacts produced by running the
+`f401cc_demo/`, `f303vc_demo/`, `f407vg_demo/`) are build artifacts produced by running the
 matching script; they are **not** checked into the repository. Re-run a script
 to regenerate.
 
@@ -316,4 +317,75 @@ while the MCU is running:
 
 ```sh
 ST-LINK_CLI.exe -c SWD SWCLK=4000 UR -P _build/Project.hex -Rst -Run
+```
+
+---
+
+## F407VG Discovery demo
+
+### Board
+
+STM32F4 Discovery (MB997C, STM32F407VGT6). 4 user LEDs on **PD12–PD15**
+(active-low: pin LOW = LED ON). 8 MHz HSE crystal. On-board ST-LINK does
+**not** route MCO to the target.
+
+### Clock
+
+`main.h` sets `HCLK = 168` MHz. `wait_for_clock_stable()` in `rcc.h`
+configures:
+
+- HSE = 8 MHz (crystal)
+- PLLM = 8, PLLN = 336, PLLP = 2 → 168 MHz
+- PLLQ = 7 → USB clock = 48 MHz
+- AHB prescaler = ÷1 → HCLK = 168 MHz
+- APB1 prescaler = ÷4 → PCLK1 = 42 MHz
+- APB2 prescaler = ÷2 → PCLK2 = 84 MHz
+
+PWR voltage scaling set to VOS1. Flash latency = 5 wait states with
+prefetch + I-cache + D-cache.
+
+### GPIO — PD12–PD15 LEDs
+
+```c
+#define GPIOD_MODE (                              \
+  !0 * PIN_MODE(12, PIN_MODE_OUTPUT) /* PD12 -- LD3  Green   */ | \
+  !0 * PIN_MODE(13, PIN_MODE_OUTPUT) /* PD13 -- LD4  Orange  */ | \
+  !0 * PIN_MODE(14, PIN_MODE_OUTPUT) /* PD14 -- LD5  Red     */ | \
+  !0 * PIN_MODE(15, PIN_MODE_OUTPUT) /* PD15 -- LD6  Blue    */   \
+)
+```
+
+### LED chase
+
+LEDs are **active LOW** (pin LOW = ON). The chase logic uses `BSRR` only
+(F4 has no BRR register):
+
+```c
+uint64_t t = ++*uptime();
+uint32_t led_bit = (t >> 9) & 3;            /* LED index 0–3          */
+uint32_t led_mask = 1UL << (12 + led_bit);  /* PD12–PD15              */
+
+if (t & (1 << 8)) {
+  GPIOD->BSRR = 0xF000;                     /* all HIGH = off         */
+  GPIOD->BSRR = 1UL << (16 + 12 + led_bit); /* current LOW = on      */
+} else {
+  GPIOD->BSRR = led_mask;                   /* current HIGH = off    */
+}
+```
+
+### Linker script
+
+GCC linker: `_estack` at top of SRAM1 (0x2001C000, 112 KB). CCM (64 KB at
+0x10000000) available for `__attribute__((section(".ccmram")))` data.
+
+Keil: IRAM = 112 KB @ 0x20000000, IRAM2 = 64 KB CCM @ 0x10000000.
+
+### Building and flashing
+
+```sh
+bash ./f407vg_demo.sh        # generate + build (debug target)
+# or from the generated directory:
+cd f407vg_demo
+make debug                   # debug build (-Og -g3 -gdwarf)
+make program                 # flash via ST-Link CLI
 ```
