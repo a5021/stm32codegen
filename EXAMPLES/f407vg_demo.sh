@@ -1754,9 +1754,9 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
   uint32_t led_bit = (t >> 9) & 3;       /* LED index 0-3, changes every 512 ms */
   uint32_t led_mask = 1UL << (12 + led_bit); /* PD12-PD15 */
 
-  GPIOD->BSRR = 0xF0000000;              /* all LOW = all off */
+  GPIOD->BSRR = 0xF0000000;              /* all LOW = all on (active LOW) */
   if (t & (1 << 8)) {
-    GPIOD->BSRR = led_mask;              /* current HIGH = current on */
+    GPIOD->BSRR = led_mask;              /* current HIGH = current off */
   }
 
 }

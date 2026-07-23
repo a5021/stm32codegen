@@ -358,18 +358,16 @@ prefetch + I-cache + D-cache.
 ### LED chase
 
 LEDs are **active LOW** (pin LOW = ON). The chase logic uses `BSRR` only
-(F4 has no BRR register):
+(F4 has no BRR register — all resets are done via BSRR[31:16]):
 
 ```c
 uint64_t t = ++*uptime();
 uint32_t led_bit = (t >> 9) & 3;            /* LED index 0–3          */
 uint32_t led_mask = 1UL << (12 + led_bit);  /* PD12–PD15              */
 
+GPIOD->BSRR = 0xF0000000;                   /* all LOW = all on       */
 if (t & (1 << 8)) {
-  GPIOD->BSRR = 0xF000;                     /* all HIGH = off         */
-  GPIOD->BSRR = 1UL << (16 + 12 + led_bit); /* current LOW = on      */
-} else {
-  GPIOD->BSRR = led_mask;                   /* current HIGH = off    */
+  GPIOD->BSRR = led_mask;                   /* current HIGH = off     */
 }
 ```
 
