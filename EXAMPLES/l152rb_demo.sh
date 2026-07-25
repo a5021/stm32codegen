@@ -1061,17 +1061,22 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <FileType>2</FileType>
               <FilePath>..\MDK-ARM\startup_stm32l152xb.s</FilePath>
             </File>
-            <File>
-              <FileName>system_stm32l1xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\system_stm32l1xx.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-      </Groups>
-    </Target>
-    <Target>
-      <TargetName>Release</TargetName>
+             <File>
+               <FileName>system_stm32l1xx.c</FileName>
+               <FileType>1</FileType>
+               <FilePath>..\src\system_stm32l1xx.c</FilePath>
+             </File>
+             <File>
+               <FileName>hardfault.c</FileName>
+               <FileType>1</FileType>
+               <FilePath>..\src\hardfault.c</FilePath>
+             </File>
+           </Files>
+         </Group>
+       </Groups>
+     </Target>
+     <Target>
+       <TargetName>Release</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <uAC6>1</uAC6>
@@ -1454,16 +1459,21 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <FileType>2</FileType>
               <FilePath>..\MDK-ARM\startup_stm32l152xb.s</FilePath>
             </File>
-            <File>
-              <FileName>system_stm32l1xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\system_stm32l1xx.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-      </Groups>
-    </Target>
-  </Targets>
+             <File>
+               <FileName>system_stm32l1xx.c</FileName>
+               <FileType>1</FileType>
+               <FilePath>..\src\system_stm32l1xx.c</FilePath>
+             </File>
+             <File>
+               <FileName>hardfault.c</FileName>
+               <FileType>1</FileType>
+               <FilePath>..\src\hardfault.c</FilePath>
+             </File>
+           </Files>
+         </Group>
+       </Groups>
+     </Target>
+   </Targets>
 
   <RTE>
     <apis/>
@@ -1777,6 +1787,78 @@ do
 done
 
 echo -e "\nBuilding sources..\n"
+
+
+create_file "src/hardfault.c" << 'EOF'
+#include "hardfault.h"
+#include "stm32l152xb.h"
+
+volatile hardfault_regs_t hardfault_ctx;
+
+__attribute__((naked)) void HardFault_Handler(void)
+{
+  __asm volatile (
+    "TST   lr, #4          \n"
+    "ITE   EQ              \n"
+    "MRSEQ r0, MSP         \n"
+    "MRSNE r0, PSP         \n"
+    "B     hardfault_c     \n"
+  );
+}
+
+void hardfault_c(uint32_t* sp)
+{
+  volatile hardfault_regs_t* p = &hardfault_ctx;
+
+  p->r0    = sp[0];
+  p->r1    = sp[1];
+  p->r2    = sp[2];
+  p->r3    = sp[3];
+  p->r12   = sp[4];
+  p->lr    = sp[5];
+  p->pc    = sp[6];
+  p->psr   = sp[7];
+  p->cfsr  = SCB->CFSR;
+  p->hfsr  = SCB->HFSR;
+  p->mmfar = SCB->MMFAR;
+  p->bfar  = SCB->BFAR;
+
+  while (1)
+  {
+  }
+}
+EOF
+  echo "File src/hardfault.c created."
+
+
+create_file "inc/hardfault.h" << 'EOF'
+#ifndef __HARDFAULT_H__
+#define __HARDFAULT_H__
+
+#include <stdint.h>
+
+typedef struct
+{
+  uint32_t r0;
+  uint32_t r1;
+  uint32_t r2;
+  uint32_t r3;
+  uint32_t r12;
+  uint32_t lr;
+  uint32_t pc;
+  uint32_t psr;
+  uint32_t cfsr;
+  uint32_t hfsr;
+  uint32_t mmfar;
+  uint32_t bfar;
+} hardfault_regs_t;
+
+extern volatile hardfault_regs_t hardfault_ctx;
+
+#endif /* __HARDFAULT_H__ */
+EOF
+  echo "File inc/hardfault.h created."
+
 
 if make debug; then
     echo ""
