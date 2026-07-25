@@ -96,7 +96,7 @@ cd "${directories[0]}"
 
 PY_GEN="$(realpath "${PY_GEN:-../../..}")"
 
-if [ -e stm32l152xe.h ]; then
+if [ -e stm32l152xb.h ]; then
     # File exists
     opt=-l
 else
@@ -150,7 +150,7 @@ generate_header() {
     fi
 }
 
-generate_header "main.h" $opt 152re -M\
+generate_header "main.h" $opt 152rb -M\
     -D NO                     0\
        NONE                   NO\
        OFF                    NO\
@@ -212,7 +212,7 @@ generate_header "main.h" $opt 152re -M\
     -F \#endif
 
 
-generate_header "rcc.h" -l 152re -p RCC -m rcc -f init_rcc\
+generate_header "rcc.h" -l 152rb -p RCC -m rcc -f init_rcc\
     \
     --exclude-register CR CFGR ICSCR\
     \
@@ -261,7 +261,7 @@ generate_header "rcc.h" -l 152re -p RCC -m rcc -f init_rcc\
     -F "} /* setup_sysclk() */"
 
 
-generate_header "gpio.h" -l 152re -p GPIOB -m gpio -f init_gpio\
+generate_header "gpio.h" -l 152rb -p GPIOB -m gpio -f init_gpio\
     --exclude-register IDR LCKR\
     -D USE_ANALOG_MODE_FOR_ALL_PINS_BY_DEFAULT 1\
        ""\
@@ -378,7 +378,7 @@ HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
 MCU = -mcpu=cortex-m3 -mthumb
-DEF = -DSTM32L152xE
+DEF = -DSTM32L152xB
 INC = -I./inc
 
 FLG := $(MCU) $(DEF) $(INC)
@@ -1005,7 +1005,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>-Wpedantic -Wextra</MiscControls>
-              <Define>DEBUG,STM32L152xE</Define>
+              <Define>DEBUG,STM32L152xB</Define>
               <Undefine></Undefine>
               <IncludePath>../inc</IncludePath>
             </VariousControls>
@@ -1057,9 +1057,9 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>startup_stm32l152xe.s</FileName>
+              <FileName>startup_stm32l152xb.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\MDK-ARM\startup_stm32l152xe.s</FilePath>
+              <FilePath>..\MDK-ARM\startup_stm32l152xb.s</FilePath>
             </File>
             <File>
               <FileName>system_stm32l1xx.c</FileName>
@@ -1398,7 +1398,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>-Wpedantic -Wextra</MiscControls>
-              <Define>NDEBUG,STM32L152xE</Define>
+              <Define>NDEBUG,STM32L152xB</Define>
               <Undefine></Undefine>
               <IncludePath>../inc</IncludePath>
             </VariousControls>
@@ -1450,9 +1450,9 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>startup_stm32l152xe.s</FileName>
+              <FileName>startup_stm32l152xb.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\MDK-ARM\startup_stm32l152xe.s</FilePath>
+              <FilePath>..\MDK-ARM\startup_stm32l152xb.s</FilePath>
             </File>
             <File>
               <FileName>system_stm32l1xx.c</FileName>
@@ -1710,12 +1710,12 @@ fi
 
 # URLs for files
 #    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Source/Templates/system_stm32l1xx.c
-#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Source/Templates/gcc/startup_stm32l152xe.s
-#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Source/Templates/arm/startup_stm32l152xe.s
+#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Source/Templates/gcc/startup_stm32l152xb.s
+#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Source/Templates/arm/startup_stm32l152xb.s
 #
 #    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Include/system_stm32l1xx.h
 #    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Include/stm32l1xx.h
-#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Include/stm32l152xe.h
+#    https://raw.githubusercontent.com/STMicroelectronics/cmsis_device_l1/master/Include/stm32l152xb.h
 #
 #    https://raw.githubusercontent.com/ARM-software/CMSIS_5/master/CMSIS/Core/Include/cmsis_compiler.h
 #    https://raw.githubusercontent.com/ARM-software/CMSIS_5/master/CMSIS/Core/Include/cmsis_armclang.h
@@ -1728,8 +1728,8 @@ fi
 #
 #    https://raw.githubusercontent.com/cmsis-svd/cmsis-svd-data/master/data/STMicro/STM32L15xC.svd
 
-fname1=("system_stm32l1xx.c" "startup_stm32l152xe.s")
-fname2=("system_stm32l1xx.h" "stm32l1xx.h" "stm32l152xe.h")
+fname1=("system_stm32l1xx.c" "startup_stm32l152xb.s")
+fname2=("system_stm32l1xx.h" "stm32l1xx.h" "stm32l152xb.h")
 fname3=("cmsis_compiler.h" "cmsis_armclang.h" "cmsis_gcc.h" "cmsis_iccarm.h" "cmsis_version.h" "core_cm3.h" "cmsis_armcc.h" "mpu_armv7.h")
 
 raw_github="https://raw.githubusercontent.com/"
