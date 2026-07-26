@@ -220,10 +220,20 @@ generate_header "rcc.h" -l 152rb -p RCC -m rcc -f init_rcc\
     --pre-init configure_flash\
     --post-init setup_sysclk\
     -F "__STATIC_FORCEINLINE void configure_flash(void) {"\
+    -F "  #if (HCLK > 4)"\
+    -F "    /* Default VOS after reset is Range 3 (1.2V, max ~4.2 MHz). */"\
+    -F "    /* Increase to Range 2 (1.5V) to support higher frequencies. */"\
+    -F "    RCC->APB1ENR |= RCC_APB1ENR_PWREN;"\
+    -F "    (void)RCC->APB1ENR;"\
+    -F "    PWR->CR = (PWR->CR & ~PWR_CR_VOS) | PWR_CR_VOS_0;"\
+    -F "    while (PWR->CSR & PWR_CSR_VOSF) {}"\
+    -F "  #endif"\
     -F "  #if (HCLK > 16)"\
-    -F "    PWR->CR |= PWR_CR_VOS_0;"\
-    -F "    while(!(PWR->CSR & PWR_CSR_VOSF)) {}"\
     -F "    FLASH->ACR = FLASH_ACR_ACC64 | FLASH_ACR_PRFTEN | FLASH_ACR_LATENCY;"\
+    -F "  #elif (HCLK > 8)"\
+    -F "    FLASH->ACR = FLASH_ACR_PRFTEN | FLASH_ACR_LATENCY;"\
+    -F "  #else"\
+    -F "    FLASH->ACR = FLASH_ACR_PRFTEN;"\
     -F "  #endif"\
     -F "}"\
     -F ""\
@@ -393,7 +403,7 @@ LIB := -lc -lm -lnosys
 LDF := $(MCU) -specs=nano.specs -T$(LDS) $(LIB) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
 LDF += -Wl,--cref,--gc-sections,--print-memory-usage
 
-OPT = -Os -g0 -DNDEBUG
+OPT = -O2 -g0 -DNDEBUG
 
 ifeq ($(findstring -flto,$(OPT)), -flto)
   LST =
