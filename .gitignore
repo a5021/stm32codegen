@@ -11,3 +11,10 @@ EXAMPLES/*/*.svd
 EXAMPLES/*/*.jdebug
 EXAMPLES/*/*.jflash
 EXAMPLES/*/project.jdebug
+EXAMPLES/_blob_*
+EXAMPLES/_gen_blobs.py
+EXAMPLES/_test*.txt
+EXAMPLES/*/*.elf
+EXAMPLES/*/*.hex
+EXAMPLES/*/*.map
+EXAMPLES/*/*.d
