@@ -421,7 +421,7 @@ space := $(subst ,, )
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
-MCU = -mcpu=cortex-m4 -mthumb
+MCU = -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard
 DEF = -DSTM32F401xC
 INC = -I./inc
 
@@ -692,7 +692,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
         <TargetCommonOption>
           <Device>STM32F401CCUx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000,0x00010000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") CLOCK(100000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00010000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU CLOCK(100000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -1085,7 +1085,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
         <TargetCommonOption>
           <Device>STM32F401CCUx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <Cpu>IRAM(0x20000000,0x00010000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") CLOCK(100000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00010000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU CLOCK(100000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>

@@ -697,7 +697,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <TargetCommonOption>
               <Device>STM32F303VCTx</Device>
               <Vendor>STMicroelectronics</Vendor>
-              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
+              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU CLOCK(72000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -1090,7 +1090,7 @@ create_file "MDK-ARM/Project.uvprojx" << 'UVEOF'
             <TargetCommonOption>
               <Device>STM32F303VCTx</Device>
               <Vendor>STMicroelectronics</Vendor>
-              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU2 CLOCK(72000000) ELITTLE</Cpu>
+              <Cpu>IRAM(0x20000000,0x0000A000) IROM(0x08000000,0x00040000) CPUTYPE("Cortex-M4") FPU CLOCK(72000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
