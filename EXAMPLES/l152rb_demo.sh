@@ -1692,11 +1692,11 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
 
   if (t & (1 << 8)) {
     /* LED on phase: turn off all, turn on current */
-    GPIOB->BRR = 0x00C0;
+    GPIOB->BSRR = (0x00C0UL << 16);
     GPIOB->BSRR = led_mask;
   } else {
     /* LED off phase: turn off current LED */
-    GPIOB->BRR = led_mask;
+    GPIOB->BSRR = ((uint32_t)led_mask << 16);
   }
 
 }

@@ -428,7 +428,7 @@ Both pins are push-pull outputs. `init_rcc()` enables `RCC->AHBENR` bit 1
 
 ### LED chase
 
-SysTick runs at 1 kHz (HCLK/8 = 2 MHz, LOAD = 1999999). The chase pattern
+SysTick runs at 1 kHz (HCLK/8 = 2 MHz, LOAD = 1999). The chase pattern
 alternates between the two LEDs:
 
 ```c
@@ -437,10 +437,10 @@ uint32_t led_bit = (t >> 9) & 1;       /* LED index 0–1, changes every 512 ms 
 uint32_t led_mask = 1UL << (6 + led_bit); /* PB6–PB7                         */
 
 if (t & (1 << 8)) {
-  GPIOB->BRR = 0x00C0;                 /* turn off both LEDs                */
-  GPIOB->BSRR = led_mask;              /* turn on current LED               */
+  GPIOB->BSRR = (0x00C0UL << 16);  /* turn off both LEDs                */
+  GPIOB->BSRR = led_mask;           /* turn on current LED               */
 } else {
-  GPIOB->BRR = led_mask;               /* turn off current LED              */
+  GPIOB->BSRR = ((uint32_t)led_mask << 16); /* turn off current LED    */
 }
 ```
 
