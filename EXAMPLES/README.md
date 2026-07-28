@@ -261,7 +261,7 @@ All 8 LED pins are configured as push-pull outputs:
 ```
 
 `init_gpio()` writes `GPIOE_MODER` (and other registers) directly. The
-`GPIOE_EN` flag is auto-derived: `init_rcc()` sets `RCC->APB2ENR` bit 21 to
+`GPIOE_EN` flag is auto-derived: `init_rcc()` sets `RCC->AHBENR` bit 21 to
 clock GPIOE.
 
 ### LED chase
