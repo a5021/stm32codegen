@@ -138,7 +138,7 @@ bit 9 of the counter — producing a visible blink with a period of
 2^10 = 1024 ticks (~1 second).
 
 In interrupt mode (`SYSTICK_IRQ_ENABLE = YES`) the same toggle logic runs inside
-`SysTick_Handler()` and the `idle()` stub becomes empty.
+`SysTick_Handler()` and the `process_systick_event()` stub becomes empty.
 
 ---
 
