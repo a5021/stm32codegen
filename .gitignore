@@ -11,6 +11,10 @@ EXAMPLES/*/*.svd
 EXAMPLES/*/*.jdebug
 EXAMPLES/*/*.jflash
 EXAMPLES/*/project.jdebug
+EXAMPLES/*/project.emProject
+EXAMPLES/*/README.md
+EXAMPLES/*/build_test.bat
+EXAMPLES/*/ob.bin
 EXAMPLES/_blob_*
 EXAMPLES/_gen_blobs.py
 EXAMPLES/_test*.txt

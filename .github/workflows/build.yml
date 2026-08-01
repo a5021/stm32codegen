@@ -70,3 +70,23 @@ jobs:
         fi
         rm -f "$tmpf"
         exit $rc
+
+    - name: Generate F103C8 project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash f103c8_demo.sh
+
+    - name: Generate F303VC project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash f303vc_demo.sh
+
+    - name: Generate F401CC project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash f401cc_demo.sh
+
+    - name: Generate F407VG project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash f407vg_demo.sh
+
+    - name: Generate L152RB project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash l152rb_demo.sh
