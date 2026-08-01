@@ -45,7 +45,7 @@ op_counter=0
 check_dependencies() {
     local missing=()
     
-    for cmd in curl arm-none-eabi-gcc base64 xz make; do
+    for cmd in curl arm-none-eabi-gcc make; do
         if ! command -v "$cmd" &>/dev/null; then
             missing+=("$cmd")
         fi
@@ -306,81 +306,406 @@ cd ..
 
 create_file() {
     local filename="$1"
-    
     if [ ! -f "$filename" ]; then
-        if base64 -d | xz -qdc > "$filename"; then
-            if [ -s "$filename" ]; then  # Check file is not empty
-                ((++op_counter))
-                echo "File $filename created."
-            else
-                echo "Error: $filename is empty after creation" >&2
-                rm -f "$filename"
-                return 1
-            fi
+        cat > "$filename"
+        if [ -s "$filename" ]; then
+            ((++op_counter))
+            echo "File $filename created."
         else
-            echo "Error: Failed to decode/decompress $filename" >&2
+            echo "Error: $filename is empty after creation" >&2
+            rm -f "$filename"
             return 1
         fi
     fi
 }
-
-# Base64-encoded xz-compressed Makefile (generated with: cat Makefile | xz -9c | base64)
 create_file "Makefile" << 'EOF'
-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
+# Define the target name and build directory.
+TARGET    := Project
+BUILD_DIR := _build
+
+# ------------------------------------------------------------------
+#   Declare the default goal so that plain "make" builds everything
+# ------------------------------------------------------------------
+.DEFAULT_GOAL := all
+
+# ------------------------------------------------------------------
+#   Race-free build-directory creation
+# ------------------------------------------------------------------
+$(shell mkdir -p $(BUILD_DIR))
+
+# Find all source files.
+SRC := $(wildcard ./src/*.c)
+ASM := $(wildcard ./src/*.s)
+
+# Define the toolchain used.
+# If GCC_PATH is set, use that as prefix for the toolchain path,
+# otherwise, assume the toolchain is in the PATH.
+TOOLCHAIN := $(if $(GCC_PATH),$(GCC_PATH)/,)arm-none-eabi-
+
+# Wrapper to quote paths with spaces
+Q = $(if $(findstring $(space),$(1)),"$(1)",$(1))
+
+CC = $(call Q,$(TOOLCHAIN)gcc)
+LD = $(call Q,$(TOOLCHAIN)ld)
+AS = $(call Q,$(TOOLCHAIN)gcc) -x assembler-with-cpp
+CP = $(call Q,$(TOOLCHAIN)objcopy)
+SZ = $(call Q,$(TOOLCHAIN)size)
+
+# Define space for the Q function
+space := $(subst ,, )
+
+# Define the binary format we want to generate.
+HEX = $(CP) -O ihex
+BIN = $(CP) -O binary -S
+
+# Define the CPU we are targeting, as well as any relevant flags.
+MCU = -mcpu=cortex-m3 -mthumb
+DEF = -DSTM32F103xB
+INC = -I./inc
+
+# Define the compiler flags.
+FLG := $(MCU) $(DEF) $(INC) 
+
+# Use the GNU dialect of the C11 standard, which includes specific extensions and conventions provided by GCC.
+FLG += -std=gnu11
+
+# Enable strict warnings and treat warnings as errors.
+FLG += -Wall -Werror -Wextra -Wpedantic
+
+# Place each variable and function into its own separate section and generate verbose assembly code.
+FLG += -fdata-sections -ffunction-sections -fverbose-asm
+
+# The -MMD flag generates a dependency file containing only user-defined headers,
+# while the -MP flag adds phony targets to the Makefile for each dependency to ensure they exist.
+FLG += -MMD -MP
+
+# Prevent common symbols (multiple definitions of uninitialized globals)
+# This ensures all global variables have explicit storage allocation
+FLG += -fno-common
+
+# Define the linker flags.
+LDS := stm32f103xb_flash.ld
+LIB := -lc -lm -lnosys
+LDF := $(MCU) -specs=nano.specs -T$(LDS) $(LIB) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
+LDF += -Wl,--cref,--gc-sections,--print-memory-usage 
+
+# Set optimization flags
+# ======================
+# -Os:      optimize for size
+# -g0:      disable generation of debug information
+# -DNDEBUG: define a preprocessor macro to disable debugging functionality
+# -flto:    enable link-time optimization for smaller binaries (~10-20% reduction)
+#           increases build time and complicates debugging (incompatible with LST generation)
+OPT = -Os -g0 -DNDEBUG # -flto
+
+# Set the LST variable to generate an assembly listing file if -flto is not set in OPT.
+ifeq ($(findstring -flto,$(OPT)), -flto)
+  LST =
+  LDF += -flto
+else
+  LST = -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst))
+endif
+
+# ------------------------------------------------------------------
+#   Rebuild when compiler/linker flags change
+# ------------------------------------------------------------------
+
+# Write the current flags into a stamp file; objects depend on it.
+FLAG_STAMP := $(BUILD_DIR)/.flags
+$(FLAG_STAMP): Makefile
+	@echo 'FLG=$(FLG)' >  $@.tmp
+	@echo 'LDF=$(LDF)' >> $@.tmp
+	@echo 'OPT=$(OPT)' >> $@.tmp
+	@cmp -s $@.tmp $@ || mv $@.tmp $@
+	@rm -f $@.tmp
+
+JLINK_FLAGS = -openprj./stm32f103xb.jflash -open$(BUILD_DIR)/$(TARGET).hex -hide -auto -exit -jflashlog./jflash.log
+
+ifeq ($(OS), Windows_NT)
+
+    FLG += -D WIN32
+    ifeq ($(PROCESSOR_ARCHITEW6432), AMD64)
+        FLG += -D AMD64
+    else
+        ifeq ($(PROCESSOR_ARCHITECTURE), AMD64)
+            FLG += -D AMD64
+        endif
+        ifeq ($(PROCESSOR_ARCHITECTURE), x86)
+            FLG += -D IA32
+        endif
+    endif
+
+    STLINK ?= ST-LINK_CLI.exe
+    STLINK_FLAGS = -c UR -V -P $(BUILD_DIR)/$(TARGET).hex -Rst -Run
+
+    JLINK ?= JFlash.Exe
+
+else
+
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        FLG += -D LINUX
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        FLG += -D OSX
+    endif
+    UNAME_P := $(shell uname -p)
+    ifeq ($(UNAME_P), x86_64)
+        FLG += -D AMD64
+    endif
+    ifneq ($(filter %86, $(UNAME_P)),)
+        FLG += -D IA32
+    endif
+    ifneq ($(filter arm%, $(UNAME_P)),)
+        FLG += -D ARM
+    endif
+
+    STLINK ?= st-flash
+    STLINK_FLAGS = --reset --format ihex write $(BUILD_DIR)/$(TARGET).hex
+
+    JLINK ?= JFlashExe
+
+endif
+
+# ---------- compiler / linker version detection ----------
+GCC_INFO    := $(shell $(CC) -dumpfullversion 2>/dev/null | awk -F. '{print $$0, ($$1*10000+$$2*100+$$3>=120000)}')
+GCC_VERSION := $(word 1,$(GCC_INFO))
+GCC_GE_12   := $(word 2,$(GCC_INFO))
+
+LD_INFO     := $(shell $(LD) --version 2>/dev/null | awk '/^GNU ld/ {match($$NF,/([0-9]+)\.([0-9]+)/,v); print v[0], (v[1]*100+v[2]>=239); exit}')
+LD_VERSION  := $(word 1,$(LD_INFO))
+LD_GE_2_39  := $(word 2,$(LD_INFO))
+
+$(info using GCC $(GCC_VERSION), Binutils $(LD_VERSION))
+
+# ---------- suppress RWX segment warnings ----------
+ifneq ($(or $(filter 1,$(GCC_GE_12)),$(filter 1,$(LD_GE_2_39))),)
+  LDF += -Wl,--no-warn-rwx-segments
+endif
+
+# Define the build targets and commands.
+
+# Default target builds all targets: elf, hex and bin files.
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+
+# Object files are placed into BUILD_DIR directory.
+OBJ = $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.c=.o)))
+vpath %.c $(sort $(dir $(SRC)))
+
+OBJ += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM:.s=.o)))
+vpath %.s $(sort $(dir $(ASM)))
+
+# ------------------------------------------------------------------
+#   Parallel-safe dependency handling
+# ------------------------------------------------------------------
+DEP := $(OBJ:.o=.d)
+
+# Compile C files.
+$(BUILD_DIR)/%.o: %.c Makefile $(FLAG_STAMP) | $(BUILD_DIR)
+	$(CC) -c $(FLG) $(OPT) -MF"$(@:%.o=%.d)" $(LST) $< -o $@
+
+# Compile assembly files.
+$(BUILD_DIR)/%.o: %.s Makefile $(FLAG_STAMP) | $(BUILD_DIR)
+	$(AS) -c $(FLG) $(OPT) $< -o $@
+
+# Link all object files together into a single ELF file.
+$(BUILD_DIR)/$(TARGET).elf: $(OBJ) Makefile
+	$(CC) $(OBJ) $(OPT) $(LDF) -o $@
+
+# Generate a hex file from the ELF file.
+$(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
+	$(HEX) $< $@
+	
+# Generate a binary file from the ELF file.
+$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
+	$(BIN) $< $@
+
+# ------------------------------------------------------------------
+#   Quick size summary
+# ------------------------------------------------------------------
+size: $(BUILD_DIR)/$(TARGET).elf
+	$(SZ) $<
+
+# Create the build directory if it doesn't exist yet.
+$(BUILD_DIR):
+	mkdir -p $@
+
+# Set optimization and debugging flags for the debug target.
+debug:	OPT = -Og -g3 -gdwarf
+debug:	all
+
+# Clean up all generated files.
+clean:
+	-rm -fR $(BUILD_DIR)
+
+.PHONY: clean all size
+
+# Print GCC version information.
+gccversion :
+	@$(CC) --version
+
+# ------------------------------------------------------------------
+#   Tool overrides (example)
+#   make STLINK=/opt/stlink/bin/st-flash size
+# ------------------------------------------------------------------
+
+# Program the microcontroller using ST-Link.
+program: $(BUILD_DIR)/$(TARGET).hex
+	$(STLINK) $(STLINK_FLAGS)
+
+# Program the device using jlink.
+jprogram: $(BUILD_DIR)/$(TARGET).hex
+	$(JLINK) $(JLINK_FLAGS)
+
+# Include any dependency files.
+-include $(DEP)
 EOF
 
 create_file "stm32f103xb_flash.ld" << 'EOF'
-/Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4A8NBIpdABeKgCRDWZigxFgAKUhK1Ev7lGpI9l8XUoFV5/QHJi6P4/TdOYJw3WwqJ3YkQNxliitnsSeWQRVTcXAeaRrSbZuvr1yyI6JOM6SBLRq5rX68Himl7Dw69JMmTCKn3g7UAQpOuI0wOZBBGyIOktyFNOUAfT3MoUEGc4Sbvh6rScR5iHXtHvpaSsNcMTSyrg9nTyXmb4boMIsd0afdV0/rXGPX6M4Z7STaEbgOUcNFnt0+w959DsmhPgIdz7Vay5s8qh7I2hV3Kz6zrcqN6BKT58DUnE9cjrSDFVV22n2j9kzLR/0dTGxPFV3HHCHKFzhccLYQNTggriO8bxKa/UOwFTzYIvIVOWivVee7py8DeqcmjfrUzCqusAieeeSa0JMmqHw6ie56bz16gwQhP/QGXapkPtoUeOUHi8hJcR8A7URnD2fDqcWVASw+Eqvo2iuMBazqZpMXWVIzkFom/hNJkJZRRLiWdz02uRHm0A2gmfqyECey8ewmrtvh9nIYwlh2Nvgo/zBpcl2xYdfdS2sLnuarf6MEqcILwxb/CoxXPTtloB884pt3EFgtPXtj3TlpXkXdp5TZ4OEsF8BtFx/IL4hSueaS+zmJEZPIFPtFCfK8ai6oXuA/va+26rOiMm70RpknyFz7ITRZyJSf+iSoTpt1VEALW7vsSfO65UrX8kN/qRrxxjlDErx1hLw1a5L1m/1NCPggCE+Nazh4ufrfVMU6+/96Iqzg5VzdAfN7Pqv1/sr5bvZ6N4vKfb+64PLHZf2xx2nKfSUDCdRW7r8sVeJU8LGFB/ygTtDcDaViLXkYhty1zWkY2BEUV0A9WXYB/K5u8AsFNUoajiEKWhKFHnwlZ7lNOagmFoUhpLGp85vVkgzpv9UUaaFnJ62uLH8ZivVDYqge/kBdMWYO4Szq2N6q3oEUTyVYJybIy+HRfABVxJMe2JTa1cPCgWdtzyGWG1mFY3wDT5X3BGcFnuF7DsWXnyCKESxToneXyeKSzlSqla4mlsudZJLOT8vhfIsqe7rTWjDiicNtO7X1b+QQaZqd1K9DpV17QLsfXSse5QBATp6AqQZdpW0OhNL/l9mythii5ph9JFIwns/Q+UFDs/bGAxO++6RgALZDSDpS7zLyMXGqIjNhTaqsF7EEvrm1K+WI2a+QTXLUbHZ8eXe0iQ0UObikrhKGuCv4QOm1b87IpWN97kFQLwsjssuYISKij2RTXKdILgiLC4T6nYCx370V+3O5RROL/vpBWvImOECzrSQWBCEOpyAm+qHqpZK8/oVZmAptEMHlFpr5UzYKO5NSBx+lkc8z6VbnQ5qSmpywzXjx9xxsBodhZO00Sfn+iZLHE6uYen+PnoJVfC9tsp7TmtpEcDdTTtxo6Q5yj5iKaTlkrxS4O9zady1nRLSy5c/U8kAxwsIpatQu+Tk7KU+dZreANDFEZVt3Ib6eyxS6mKfv1W1MwKRiriuu5MBlaeV0PmW7K0acJste/saemeyp7KGzGOWWq6Sxrg9b0wJ3n1i4vciNsAa3y/31XNpC+4nIf9OEWcOgzSAAAACO8oDZLul0PAABpgmOHgAALQs+GrHEZ/sCAAAAAARZWg==
+/* Entry Point */
+ENTRY(Reset_Handler)
+
+/* Highest address of the user mode stack */
+_estack = 0x20005000;    /* end of RAM (20K) */
+
+/* Generate a link error if heap and stack don't fit into RAM */
+_Min_Heap_Size = 0x0;    /* required amount of heap  */
+_Min_Stack_Size = 0x200; /* required amount of stack */
+
+/* Specify the memory areas */
+MEMORY
+{
+    RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 20K
+    FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 128K
+}
+
+/* Define output sections */
+SECTIONS
+{
+    /* The startup code goes first into FLASH */
+    .isr_vector :
+    {
+        . = ALIGN(4);
+        KEEP(*(.isr_vector)) /* Startup code */
+        . = ALIGN(4);
+    } >FLASH
+
+    /* The program code and other data goes into FLASH */
+    .text :
+    {
+        . = ALIGN(4);
+        *(.text)           /* .text sections (code) */
+        *(.text*)          /* .text* sections (code) */
+        *(.glue_7)         /* glue arm to thumb code */
+        *(.glue_7t)        /* glue thumb to arm code */
+        *(.eh_frame)
+
+        KEEP (*(.init))
+        KEEP (*(.fini))
+
+        . = ALIGN(4);
+        _etext = .;        /* define a global symbols at end of code */
+    } >FLASH
+
+    /* Constant data goes into FLASH */
+    .rodata :
+    {
+        . = ALIGN(4);
+        *(.rodata)         /* .rodata sections (constants, strings, etc.) */
+        *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
+        . = ALIGN(4);
+    } >FLASH
+
+    .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+    .ARM : {
+        __exidx_start = .;
+        *(.ARM.exidx*)
+        __exidx_end = .;
+    } >FLASH
+
+    .preinit_array     :
+    {
+        . = ALIGN(4);
+        PROVIDE_HIDDEN (__preinit_array_start = .);
+        KEEP (*(.preinit_array*))
+        PROVIDE_HIDDEN (__preinit_array_end = .);
+        . = ALIGN(4);
+    } >FLASH
+
+    .init_array :
+    {
+        . = ALIGN(4);
+        PROVIDE_HIDDEN (__init_array_start = .);
+        KEEP (*(SORT(.init_array.*)))
+        KEEP (*(.init_array*))
+        PROVIDE_HIDDEN (__init_array_end = .);
+        . = ALIGN(4);
+    } >FLASH
+
+    .fini_array :
+    {
+        . = ALIGN(4);
+        PROVIDE_HIDDEN (__fini_array_start = .);
+        KEEP (*(SORT(.fini_array.*)))
+        KEEP (*(.fini_array*))
+        PROVIDE_HIDDEN (__fini_array_end = .);
+        . = ALIGN(4);
+    } >FLASH
+
+    /* Used by the startup to initialize data */
+    _sidata = LOADADDR(.data);
+
+    /* Initialized data sections goes into RAM, load LMA copy after code */
+    .data :
+    {
+        . = ALIGN(4);
+        _sdata = .;        /* create a global symbol at data start */
+        *(.data)           /* .data sections */
+        *(.data*)          /* .data* sections */
+        *(.RamFunc)        /* .RamFunc sections */
+        *(.RamFunc*)       /* .RamFunc* sections */
+
+        . = ALIGN(4);
+        _edata = .;        /* define a global symbol at data end */
+    } >RAM AT> FLASH
+
+    /* Uninitialized data section */
+    . = ALIGN(4);
+    .bss :
+    {
+        /* This is used by the startup in order to initialize the .bss section */
+        _sbss = .;         /* define a global symbol at bss start */
+        __bss_start__ = _sbss;
+        *(.bss)
+        *(.bss*)
+        *(COMMON)
+
+        . = ALIGN(4);
+        _ebss = .;         /* define a global symbol at bss end */
+        __bss_end__ = _ebss;
+    } >RAM
+
+    /* User_heap_stack section, used to check that there is enough RAM left */
+    ._user_heap_stack :
+    {
+        . = ALIGN(8);
+        PROVIDE ( end = . );
+        PROVIDE ( _end = . );
+        . = . + _Min_Heap_Size;
+        . = . + _Min_Stack_Size;
+        . = ALIGN(8);
+    } >RAM
+
+    /* Remove information from the standard libraries */
+    /DISCARD/ :
+    {
+        libc.a ( * )
+        libm.a ( * )
+        libgcc.a ( * )
+    }
+
+    .ARM.attributes 0 : { *(.ARM.attributes) }
+}
 EOF
 
 cat > "MDK-ARM/Project.uvprojx" << 'EOF'
@@ -1240,7 +1565,88 @@ void _SetupTarget(void) {
 EOF
 
 create_file "stm32f103xb.jflash" << 'EOF'
-/Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4AewAwZdABBhAOGFYzOihg56UIqKCKQrnqKasrAxa6gWaeZG86Pk+G/iEId5CVjqnEwXAprd+mfglT4i426SWo/xS7YaD+CzdQCIqK5WCRH/2RwmT8+YuwJBPpqcRsdUYfOKkq4h0s3MNcWVwMPOzcra1Mz2E7c/ufx7PcVXHoKnnAGUMvm4KmD9CsTR2PmMFFMlH3wr484iM7+vJvsy8EiQQ1nbBIoLenldsybldPbO95PH68xcmlmXJYuhcKYKQVFjBWAmswQvjVHT2Fwde7zHqLfzQa9KvCPkWbD/ALiUhL4Dum0p3xlKrgWSUlBInXyh6b0TsLznCs9ZlguX3w11XmdhG4uPslLk3mxej0M67O3QE/SUKTJU9He8ODHT5mZjCFMhqDzCfeHu7lVBpoL8TSqwEaUlJYxA30zMB13OUSfdRLd7v20DJJyH0+HTKlmlzkOD5DDabNTQJZheesSnHSv8D4iWlPFyWW5Vv67JsOKSl2IR0THA1JU9FqiIMc7/c4NOFKY/9FSx5Sgyjwwa2TUzIgZhFm+mRwzA+Nzy1tK+u4Ac7ldi7nph+o8Oin97fIVEUW48dOkUr1ZyJI2mGcB1IDaHkWlE0ZWCvZdwhe9alKcddHBtVo6LG/Qrr97ZY8xMfxRQYPmfToMwh9gNi8Lc/qamJwdFd1riK4GOKWhCGPcypXvuWzd4J+rmlCjBytqdhPp2EKhqcA/dP2bRMFG9zUNKNkmGex8KwNSIZjSyGwbLdEdobqjABUt9puOl1CMMGJ4gyWAsgeWE3ZKNbYEsS0hoDzrO04Nt/jc+3V0zddOMtpodAn5ZKjI3hr2PuQ3maeqz94m57+4beTf+sYd0YNxV9lEckzBJribIGHBnyu4BHhM1nvKKZcW4FKPDd9nVesB3ea6nHdkeAMkCHwyLqqnx7qSRxrZV/ppKZxc8XaN5qPClUBfig0Iya7UGyHNxXoGcnPVQ0yK+HxbKal4NRMQNVzrXginnC9j32tqE5pHuUvlbWQ0BrHhXKQDYweOiClDt01GWAAAAAJ84fh2c2eeFAAGiBrEPAABa/1O2scRn+wIAAAAABFla
+  AppVersion =
+  FileVersion = 2
+[GENERAL]
+  aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  ConnectMode = 0
+  CurrentFile = ""
+  DataFileSAddr = 0x00000000
+  GUIMode = 0
+  HostName = ""
+  TargetIF = 1
+  USBPort = 0
+  USBSerialNo = 0x00000000
+  UseATEModuleSelection = 0
+[JTAG]
+  IRLen = 0
+  MultipleTargets = 0
+  NumDevices = 0
+  Speed0 = 4000
+  Speed1 = 4000
+  TAP_Number = 0
+  UseAdaptive0 = 0
+  UseAdaptive1 = 0
+  UseMaxSpeed0 = 0
+  UseMaxSpeed1 = 0
+[CPU]
+  NumInitSteps = 1
+  InitStep0_Action = "Reset"
+  InitStep0_Value0 = 0x00000000
+  InitStep0_Value1 = 0x00000000
+  InitStep0_Comment = "Reset and halt target"
+  NumExitSteps = 0
+  UseScriptFile = 0
+  ScriptFile = ""
+  UseRAM = 1
+  RAMAddr = 0x20000000
+  RAMSize = 0x00001000
+  CheckCoreID = 1
+  CoreID = 0x0BB11477
+  CoreIDMask = 0x0F000FFF
+  UseAutoSpeed = 0x00000001
+  ClockSpeed = 0x00000000
+  EndianMode = 0
+  ChipName = "ST STM32F103C8"
+[FLASH]
+  aRangeSel[1] = 0-31
+  BankName = "Internal flash"
+  BankSelMode = 1
+  BaseAddr = 0x08000000
+  NumBanks = 1
+[PRODUCTION]
+  AutoPerformsDisconnect = 0
+  AutoPerformsErase = 1
+  AutoPerformsProgram = 1
+  AutoPerformsSecure = 0
+  AutoPerformsStartApp = 0
+  AutoPerformsUnsecure = 0
+  AutoPerformsVerify = 1
+  EnableFixedVTref = 0
+  EnableTargetPower = 0
+  EraseType = 1
+  FixedVTref = 0x00000CE4
+  MonitorVTref = 0
+  MonitorVTrefMax = 0x0000157C
+  MonitorVTrefMin = 0x000003E8
+  OverrideTimeouts = 0
+  ProgramSN = 0
+  SerialFile = ""
+  SNAddr = 0x00000000
+  SNInc = 0x00000001
+  SNLen = 0x00000004
+  SNListFile = ""
+  SNValue = 0x00000001
+  StartAppType = 0
+  TargetPowerDelay = 0x00000014
+  TimeoutErase = 0x00003A98
+  TimeoutProgram = 0x00002710
+  TimeoutVerify = 0x00002710
+  VerifyType = 1
+[PERFORMANCE]
+  DisableSkipBlankDataOnProgram = 0x00000000
+  PerfromBlankCheckPriorEraseChip = 0x00000001
+  PerfromBlankCheckPriorEraseSelectedSectors = 0x00000001
 EOF
 
 # Create SEGGER Embedded Studio project (mirrors BluePill_Project_Generator 'ses' target).
