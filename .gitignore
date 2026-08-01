@@ -4,7 +4,7 @@ venv/
 EXAMPLES/*/inc/
 EXAMPLES/*/src/
 EXAMPLES/*/MDK-ARM/
-EXAMPLES/*/_build/
+EXAMPLES/*/_build_/
 EXAMPLES/*/Makefile
 EXAMPLES/*/*.ld
 EXAMPLES/*/*.svd
@@ -22,3 +22,7 @@ EXAMPLES/*/*.elf
 EXAMPLES/*/*.hex
 EXAMPLES/*/*.map
 EXAMPLES/*/*.d
+tests/fixtures/cache/
+.coverage
+htmlcov_/
+.coverage.*

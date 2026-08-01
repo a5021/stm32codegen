@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stm32codegen"
+version = "0.086"
+description = "CMSIS-based bare-metal initialization code generator for STM32"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.6"
+dependencies = [
+    "requests>=2.20",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Embedded Systems",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",
+]
+
+[tool.setuptools]
+py-modules = ["stm32cgen", "stm32cmsis"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=stm32cgen",
+    "--cov=stm32cmsis",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "network: marks tests that require network access",
+    "integration: marks end-to-end integration tests using real CMSIS headers",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py36"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP"]
+ignore = [
+    "E501",
+    "W605",
+    "F401",
+    "F841",
+    "F811",
+]
