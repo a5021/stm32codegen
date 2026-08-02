@@ -4,8 +4,8 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import stm32cmsis
 import stm32cgen
+import stm32cmsis
 
 
 class TestComposeCmsisHeaderFileName(unittest.TestCase):

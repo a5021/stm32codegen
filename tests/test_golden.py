@@ -102,6 +102,26 @@ def g0_header_file():
         os.remove(local_path)
 
 
+@pytest.fixture
+def family_header_file(request):
+    """Generic fixture: makes ``request.param`` header available locally."""
+    header_name = request.param
+    cache_path = os.path.join(CACHE_DIR, header_name)
+    local_path = os.path.join(REPO_ROOT, header_name)
+
+    fetch_and_cache_header(header_name)
+
+    created = False
+    if not os.path.exists(local_path):
+        shutil.copy(cache_path, local_path)
+        created = True
+
+    yield local_path
+
+    if created:
+        os.remove(local_path)
+
+
 def run_codegen(args_list):
     """Run stm32cgen.py with the given argument list, return stdout."""
     cmd = [sys.executable, os.path.join(REPO_ROOT, "stm32cgen.py")] + args_list
@@ -265,11 +285,10 @@ class TestGoldenF1Adc:
         result = run_codegen(["-l", "-m", "adc", "-f", "init_adc", "103c8", "-p", "ADC1"])
         assert result.returncode == 0, result.stderr
 
-        if result.returncode != 0:
-            pytest.skip("ADC generation not supported for this MCU")
-
         out = result.stdout
-        assert "CR1" in out or "CR2" in out
+        assert "ADC1->CR1" in out
+        assert "ADC1->CR2" in out
+        assert "ADC1->DR" in out
 
     @pytest.mark.network
     def test_adc1_address(self, f1_header_file):
@@ -357,6 +376,46 @@ class TestGoldenG0Gpio:
         # G0 GPIOA address depends on the exact base address in the header
         # Just verify some register address is correct
         assert "0x50000000" in result.stdout
+
+
+# --------------------------------------------------------------------------- #
+#  F4 / L4 / F7 family golden tests
+# --------------------------------------------------------------------------- #
+
+class TestGoldenF4Tim:
+    """Verify TIM generation from the real stm32f411xe.h header."""
+
+    @pytest.mark.network
+    @pytest.mark.parametrize("family_header_file", ["stm32f411xe.h"], indirect=True)
+    def test_f4_tim2_generation(self, family_header_file):
+        result = run_codegen(["-l", "-m", "tim", "-f", "init_tim", "f411ce", "-p", "TIM2"])
+        assert result.returncode == 0, result.stderr
+        assert "TIM2->CR1" in result.stdout
+        assert "0x40000000" in result.stdout  # TIM2_BASE
+
+
+class TestGoldenL4Gpio:
+    """Verify GPIO generation from the real stm32l476xx.h header."""
+
+    @pytest.mark.network
+    @pytest.mark.parametrize("family_header_file", ["stm32l476xx.h"], indirect=True)
+    def test_l4_gpioa_generation(self, family_header_file):
+        result = run_codegen(["-l", "-m", "gpio", "-f", "init_gpio", "l476re", "-p", "GPIOA"])
+        assert result.returncode == 0, result.stderr
+        assert "GPIOA->MODER" in result.stdout
+        assert "0x48000000" in result.stdout  # GPIOA_BASE on L4
+
+
+class TestGoldenF7Usart:
+    """Verify USART generation from the real stm32f746xx.h header."""
+
+    @pytest.mark.network
+    @pytest.mark.parametrize("family_header_file", ["stm32f746xx.h"], indirect=True)
+    def test_f7_usart1_generation(self, family_header_file):
+        result = run_codegen(["-l", "-m", "usart", "-f", "init_usart", "f746ve", "-p", "USART1"])
+        assert result.returncode == 0, result.stderr
+        assert "USART1->CR1" in result.stdout
+        assert "0x40011000" in result.stdout  # USART1_BASE
 
 
 # --------------------------------------------------------------------------- #

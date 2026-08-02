@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import ast
+import os
 import re
 import sys
 import textwrap
 
 try:
-    from stm32cmsis import read_cmsis_header_file, compose_cmsis_header_file_name
+    from stm32cmsis import compose_cmsis_header_file_name, read_cmsis_header_file
 except ImportError:
     print('Could not import STM32 CMSIS library')
     sys.exit(1)
@@ -223,6 +224,8 @@ def get_cmsis_header_file(hdr_name, fetch=True, save=False):
 
 def get_peripheral_description(src):
     m = re.findall(r'Peripheral_registers_structures(.*?)Peripheral_memory_map', src, re.MULTILINE | re.DOTALL)
+    if not m:
+        return []
     type_def = re.findall(r'(.*?)\s*}\s*(\w*?TypeDef);', m[0], re.MULTILINE | re.DOTALL)
     for ix in type_def:
         pg = re.findall(r'/\*\*[^*].*?@brief\s*(.*?)\s*\*/', ix[0], re.MULTILINE | re.DOTALL)
@@ -440,7 +443,7 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_AFRL_AFRL' in gx[0] or '_AFRH_AFRH' in gx[0]:
                     continue
 
-            if args.cpu[:2] != 'h7' and args.cpu[:2] != 'L0':
+            if args.cpu[:2].upper() not in ('H7', 'L0'):
                 if '_MODER_MODE' in gx[0] and len(gx[0]) > 15 and gx[0][15] in '0123456789':
                     continue
 
@@ -556,19 +559,6 @@ def ch_def_name(def_name):
     return d_name
 
 
-def find_bit_tag(bit_name):
-    if args.tag_bit:
-        for tags in args.tag_bit:
-            if bit_name in tags[1:]:
-                return tags[0]
-
-    if args.tag_bit:
-        if bit_name in args.set_bit:
-            return '1'
-
-    return ''
-
-
 def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
     s0 = bit_def_base = bitfield_block = assign_block = rcc_enabler = ''
     global init_macro_name
@@ -623,7 +613,7 @@ def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
                             if bit_mnem == bf:
                                 bitfield_enable = tags[0].ljust(bitfield_indent) if 'ENR_' in lx[0] else tags[0]
 
-            if not args.no_macro and bitfield_enable == '0':
+            if not args.no_macro and not args.disable_rcc_macro and bitfield_enable == '0':
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                     bf = lx[0].split('_')
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
@@ -631,7 +621,7 @@ def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
 
                         rcc_enabler += f'#if !defined({bitfield_enable})\n'
                         rcc_enabler += f'{indent}#define {bitfield_enable} 0\n'
-                        rcc_enabler += f'#endif\n\n'
+                        rcc_enabler += '#endif\n\n'
 
                         bitfield_enable = bitfield_enable.ljust(bitfield_indent)
 
@@ -984,8 +974,11 @@ def sort_code_block(code_block, rep_list):
         d1 = xtr % 10
         d2 = xtr // 10
         tm = tim + str(xtr)
-        if tm in ret_name:
-            ret_name = ret_name.replace(tm, tim + chr(ord('A') + d1) + chr(ord('A') + d2))
+        # only replace 2-digit timer names; a trailing digit (e.g. TIM100)
+        # must not be matched by the shorter prefix (TIM10)
+        ret_name = re.sub(re.escape(tm) + r'(?!\d)',
+                          tim + chr(ord('A') + d1) + chr(ord('A') + d2),
+                          ret_name)
 
     return ret_name
 
@@ -1046,10 +1039,20 @@ def make_definition_block():
     return dstr
 
 
-if __name__ == '__main__':
+def main():
+    global args, indent, modifier, init_macro_name
 
     if '-V' in sys.argv or '--version' in sys.argv:
-        print('0.086\n')
+        version = '0.086'
+        try:
+            with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pyproject.toml'),
+                      encoding='utf-8') as pf:
+                m = re.search(r'^\s*version\s*=\s*"([^"]+)"', pf.read(), re.MULTILINE)
+                if m:
+                    version = m.group(1)
+        except OSError:
+            pass
+        print(version + '\n')
         exit()
 
     import argparse
@@ -1058,7 +1061,6 @@ if __name__ == '__main__':
     parser.add_argument('-V', '--version', action="store_true", help="show version and exit")
     parser.add_argument('cpu', metavar='cpu_name', help='abbreviated MCU name. I.e. "103c8", "g031f6", "h757xi" etc.')
     parser.add_argument('-d', '--direct', action="store_true", default=False, help="No predefined macros")
-    parser.add_argument('--dummy', nargs='+', help="dummy parameter(s)")
     parser.add_argument('-D', '--define', nargs='+', help="add a MACRO to the header")
     parser.add_argument('-H', '--header', action='append', help="add strings to header")
     parser.add_argument('-E', '--peripheral-enable', nargs='+', help="add _EN MACRO to the footer")
@@ -1117,6 +1119,8 @@ if __name__ == '__main__':
         exit()
 
     args.cpu = cpu_name
+
+    indent = ' ' * args.indent
 
     if args.verbose:
         print('Parameters passed', len(sys.argv))
@@ -1212,12 +1216,12 @@ if __name__ == '__main__':
 
                 if args.undef is False:
                     extra_lf = False
-                    x_out = f'#if '
+                    x_out = '#if '
                     for cnt, ds in enumerate(sorted(init_macro_name), start=1):
                         x_out += f'({ds} != 0) || '
                         if cnt % 5 == 0:
                             extra_lf = True
-                            x_out += f'\\\n    '
+                            x_out += '\\\n    '
 
                     #  x_out = x_out.strip().strip('\\').strip().strip('|').strip()
                     x_out = strip_trailing_or(x_out)
@@ -1330,7 +1334,7 @@ if __name__ == '__main__':
             irqstr += f'{xirq[0]}, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 0));\n'
             irqstr += f'{ind}ClearPendingIRQ({xirq[0]});\n'
             irqstr += f'{ind}EnableIRQ({xirq[0]});\n'
-            irqstr += f'#endif\n'
+            irqstr += '#endif\n'
 
         if irqstr:
             init_block += f'\n{irqstr}'
@@ -1479,7 +1483,7 @@ if __name__ == '__main__':
 
                     s += f'{indent}init_{periph_name}();\n\n'
                 else:
-                    s += f'#if'
+                    s += '#if'
                     for y in xp[x]:
                         s += f'(defined({y}_EN) && {y}_EN)' + (' || ' if y != xp[x][-1] else '\n')
                     s += f'{indent}init_{periph_name}();\n#endif\n\n'
@@ -1540,3 +1544,7 @@ if __name__ == '__main__':
         print('#endif /* __cplusplus */')
         print('#endif /* __MAIN_H__ */')
         print()
+
+
+if __name__ == '__main__':
+    main()

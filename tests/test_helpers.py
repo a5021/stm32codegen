@@ -10,7 +10,6 @@ import stm32cgen as sc
 import stm32cmsis
 from tests.conftest import make_mock_args
 
-
 # --------------------------------------------------------------------------- #
 #  strip_suffix — remove trailing digits from peripheral names
 # --------------------------------------------------------------------------- #

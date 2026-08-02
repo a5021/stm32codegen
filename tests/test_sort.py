@@ -28,10 +28,20 @@ class TestSortCodeBlock:
         assert sc.sort_code_block(["", "CR1"], [("A", "B")]) == ""
 
     def test_tim_number_to_letters(self):
-        """TIM10 → TIMAB, TIM23 → TIMDB etc. (sort key transform)."""
+        """TIM10 → TIMAB, TIM23 → TIMDC etc. (sort key transform)."""
         block = ["TIM10_CR1"]
         result = sc.sort_code_block(block, [])
         assert "TIMAB" in result
+
+    def test_tim23_letters(self):
+        # d1 = 23 % 10 = 3 -> 'D', d2 = 23 // 10 = 2 -> 'C'
+        result = sc.sort_code_block(["TIM23_CR1"], [])
+        assert result == "TIMDC_CR1"
+
+    def test_tim100_untouched(self):
+        # only 2-digit timers (10..98) are transformed; 3-digit names pass through
+        result = sc.sort_code_block(["TIM100_CR1"], [])
+        assert result == "TIM100_CR1"
 
     def test_multiple_replacements(self):
         block = ["LPUART1_SR"]

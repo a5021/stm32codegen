@@ -49,7 +49,6 @@ def make_mock_args(**overrides):
     defaults = {
         "cpu": "103c8",
         "direct": False,
-        "dummy": None,
         "define": [],
         "header": [],
         "peripheral_enable": None,

@@ -14,7 +14,6 @@ import pytest
 
 import stm32cgen as sc
 
-
 # --------------------------------------------------------------------------- #
 #  Correctness — expressions that should evaluate to known integers
 # --------------------------------------------------------------------------- #

@@ -165,6 +165,33 @@ typedef struct
   uint16_t      RESERVED3;
 } USART_TypeDef;
 
+/**
+  * @brief Power control
+  */
+
+typedef struct
+{
+  __IO uint32_t CR;
+  __IO uint32_t CSR;
+} PWR_TypeDef;
+
+/**
+  * @brief FLASH
+  */
+
+typedef struct
+{
+  __IO uint32_t ACR;
+  __IO uint32_t KEYR;
+  __IO uint32_t OPTKEYR;
+  __IO uint32_t SR;
+  __IO uint32_t CR;
+  __IO uint32_t AR;
+  __IO uint32_t RESERVED;
+  __IO uint32_t OBR;
+  __IO uint32_t WRPR;
+} FLASH_TypeDef;
+
 /** @addtogroup Peripheral_memory_map
   * @{
   */
@@ -184,6 +211,8 @@ typedef struct
 #define ADC1_BASE             (APB2PERIPH_BASE + 0x00002000UL)
 #define ADC2_BASE             (APB2PERIPH_BASE + 0x00002400UL)
 #define RCC_BASE              (AHBPERIPH_BASE  + 0x00001000UL)
+#define PWR_BASE              (APB1PERIPH_BASE + 0x00007000UL)
+#define FLASH_R_BASE          (AHBPERIPH_BASE  + 0x00002000UL)
 
 /* ==================================================================== */
 /*  Peripheral_declaration                                               */
@@ -199,6 +228,8 @@ typedef struct
 #define ADC1                ((ADC_TypeDef *) ADC1_BASE)
 #define ADC2                ((ADC_TypeDef *) ADC2_BASE)
 #define RCC                 ((RCC_TypeDef *) RCC_BASE)
+#define PWR                 ((PWR_TypeDef *) PWR_BASE)
+#define FLASH               ((FLASH_TypeDef *) FLASH_R_BASE)
 
 /* ==================================================================== */
 /*  Bit-field definitions — TIM CR1                                      */
@@ -334,5 +365,33 @@ typedef struct
 #define GPIO_CRH_CNF_Msk       (0x3UL << GPIO_CRH_CNF_Pos)
 #define GPIO_CRH_CNF           GPIO_CRH_CNF_Msk
 /*!<PORTC CNF */
+
+/* ==================================================================== */
+/*  Bit-field definitions — RCC APB1ENR (power clock enable)              */
+/* ==================================================================== */
+
+#define RCC_APB1ENR_PWREN_Pos    (28U)
+#define RCC_APB1ENR_PWREN_Msk    (0x1UL << RCC_APB1ENR_PWREN_Pos)
+#define RCC_APB1ENR_PWREN        RCC_APB1ENR_PWREN_Msk
+/*!<Power interface clock enable */
+
+/* ==================================================================== */
+/*  Bit-field definitions — PWR CR / FLASH ACR and SR                    */
+/* ==================================================================== */
+
+#define PWR_CR_CWUF_Pos         (2U)
+#define PWR_CR_CWUF_Msk         (0x1UL << PWR_CR_CWUF_Pos)
+#define PWR_CR_CWUF             PWR_CR_CWUF_Msk
+/*!<Clear wakeup flag */
+
+#define FLASH_ACR_LATENCY_Pos   (0U)
+#define FLASH_ACR_LATENCY_Msk   (0x7UL << FLASH_ACR_LATENCY_Pos)
+#define FLASH_ACR_LATENCY       FLASH_ACR_LATENCY_Msk
+/*!<Latency */
+
+#define FLASH_SR_BSY_Pos        (0U)
+#define FLASH_SR_BSY_Msk        (0x1UL << FLASH_SR_BSY_Pos)
+#define FLASH_SR_BSY            FLASH_SR_BSY_Msk
+/*!<Busy */
 
 #endif /* __STM32F103xB_TEST_H */

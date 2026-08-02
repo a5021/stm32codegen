@@ -10,13 +10,24 @@ These tests verify argument parsing, CPU name normalization, and that the
 correct code path is taken for each mode.
 """
 
+import os
+import re
 import subprocess
 import sys
-import os
 
 import pytest
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _expected_version():
+    """The version printed by -V must match pyproject.toml (single source)."""
+    with open(os.path.join(REPO_ROOT, "pyproject.toml"), encoding="utf-8") as f:
+        for line in f:
+            m = re.match(r'^\s*version\s*=\s*"([^"]+)"', line)
+            if m:
+                return m.group(1)
+    raise RuntimeError("version not found in pyproject.toml")
 
 
 class TestCpuNameNormalization:
@@ -60,16 +71,17 @@ class TestSubprocessInvocation:
     """
 
     @pytest.fixture(autouse=True)
-    def _save_and_restore_header(self, tmp_path):
-        """Save the synthetic header as the file the tool would look for."""
-        from tests.conftest import make_mock_args
+    def _save_and_restore_header(self):
+        """Save the synthetic header as the file the tool would look for.
+
+        The header must live in REPO_ROOT because the subprocess tests run
+        with ``cwd=REPO_ROOT`` and the tool reads it from the current dir."""
         import stm32cgen as sc
 
         # Determine what filename compose_cmsis_header_file_name returns
         header_name = sc.compose_cmsis_header_file_name("103c8")
-        header_path = os.path.join(os.getcwd(), header_name)
+        header_path = os.path.join(REPO_ROOT, header_name)
 
-        # Save synthetic content if the file doesn't exist
         fixture_path = os.path.join(REPO_ROOT, "tests", "fixtures", "synthetic_f1.h")
         created = False
         if not os.path.exists(header_path):
@@ -83,13 +95,13 @@ class TestSubprocessInvocation:
             os.remove(header_path)
 
     def test_version_flag(self):
-        """``-V`` should print version and exit 0."""
+        """``-V`` should print the pyproject version and exit 0."""
         result = subprocess.run(
             [sys.executable, "stm32cgen.py", "-V"],
             capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
         )
         assert result.returncode == 0
-        assert "0.086" in result.stdout
+        assert _expected_version() in result.stdout
 
     def test_version_long_flag(self):
         result = subprocess.run(
@@ -97,7 +109,7 @@ class TestSubprocessInvocation:
             capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
         )
         assert result.returncode == 0
-        assert "0.086" in result.stdout
+        assert _expected_version() in result.stdout
 
     def test_no_peripheral_lists_peripherals(self):
         """Without -p, just the cpu name lists peripherals."""
@@ -140,21 +152,45 @@ class TestSubprocessInvocation:
         assert "CRL" in result.stdout or "MODER" in result.stdout
 
     def test_main_module_generation(self):
-        """``-M`` should produce a main.h with init() function.
+        """``-M`` should produce a full main.h with the init() function.
 
-        Note: main module mode requires several essential peripherals (PWR,
-        RCC, FLASH, GPIO) that may not be present in the synthetic header,
-        causing a KeyError.  We accept that and still verify the output shape
-        when it does work."""
+        Requires PWR/RCC/FLASH/GPIO typedefs in the header (the synthetic
+        fixture provides them)."""
         result = subprocess.run(
             [sys.executable, "stm32cgen.py", "-l", "-M", "103c8"],
             capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
         )
-        # May fail with the synthetic header (missing PWR_TypeDef etc.)
-        # but if it succeeds, the output should contain init() and include guard
-        if result.returncode == 0:
-            assert "init" in result.stdout
-            assert "MAIN_H" in result.stdout or "#ifndef" in result.stdout
+        assert result.returncode == 0, result.stderr
+        out = result.stdout
+        assert "#ifndef __MAIN_H__" in out
+        assert "__STATIC_INLINE void init(void)" in out
+        assert '#include "stm32f103xb.h"' in out
+        # essential peripherals are initialised unconditionally
+        assert "init_rcc();" in out
+        assert "init_gpio();" in out
+        # flash is in the essential list but only guarded (not unconditional)
+        assert "#if(defined(FLASH_EN) && FLASH_EN)" in out
+        assert "init_flash();" in out
+        # non-essential peripherals are gated behind their _EN macros
+        assert "#if(defined(PWR_EN) && PWR_EN)" in out
+        assert "init_pwr();" in out
+        assert "#if(defined(TIM2_EN) && TIM2_EN) || (defined(TIM3_EN) && TIM3_EN)" in out
+        assert "init_tim();" in out
+        assert "} /* init() */" in out
+        assert "#endif /* __MAIN_H__ */" in out
+
+    def test_main_module_uncomment(self):
+        """``--uncomment flash`` uncomments the flash.h include."""
+        result = subprocess.run(
+            [sys.executable, "stm32cgen.py", "-l", "-M", "103c8", "--uncomment", "flash"],
+            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
+        )
+        assert result.returncode == 0, result.stderr
+        out = result.stdout
+        assert '#include "flash.h"' in out
+        assert '// #include "flash.h"' not in out
+        # pwr is not uncommented, so it stays commented out
+        assert '// #include "pwr.h"' in out
 
     def test_help_flag(self):
         """``-h`` should print help and exit."""
@@ -179,9 +215,9 @@ class TestArgparseOptions:
     """Test that argparse accepts various option combinations."""
 
     @pytest.fixture(autouse=True)
-    def _save_header(self, tmp_path):
+    def _save_header(self):
         header_name = "stm32f103xb.h"
-        header_path = os.path.join(os.getcwd(), header_name)
+        header_path = os.path.join(REPO_ROOT, header_name)
         fixture_path = os.path.join(REPO_ROOT, "tests", "fixtures", "synthetic_f1.h")
         created = False
         if not os.path.exists(header_path):
@@ -192,60 +228,84 @@ class TestArgparseOptions:
         if created:
             os.remove(header_path)
 
-    def test_combined_short_flags(self):
-        """``-lmf`` style combined short flags should work."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
+    def _run(self, *extra):
+        return subprocess.run(
+            [sys.executable, "stm32cgen.py", "-l", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2", *extra],
             capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
         )
-        # May fail if TIM2 not in synthetic header, but should not crash
-        # unexpectedly
-        assert result.returncode in (0, 1)
+
+    def test_combined_short_flags(self):
+        """``-p TIM2`` generation should produce a function with TIM2 code."""
+        result = self._run()
+        assert result.returncode == 0, result.stderr
+        assert "init_tim" in result.stdout
+        assert "TIM2" in result.stdout
 
     def test_strict_flag(self):
         """``--strict`` should be accepted as a flag."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "--strict", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        result = self._run("--strict")
+        assert result.returncode == 0, result.stderr
+        assert "init_tim" in result.stdout
 
     def test_light_flag(self):
         """``--light`` should be accepted."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "--light", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        result = self._run("--light")
+        assert result.returncode == 0, result.stderr
+        assert "init_tim" in result.stdout
+        # light mode skips the '#if defined <macro>' branch
+        assert "#if defined" not in result.stdout
 
     def test_no_def_flag(self):
-        """``--no-def`` should be accepted."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "--no-def", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        """``--no-def`` should be accepted and suppress the definitions block."""
+        result = self._run("--no-def")
+        assert result.returncode == 0, result.stderr
+        assert "init_tim" in result.stdout
 
     def test_force_inline_flag(self):
-        """``--force-inline`` should be accepted."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "--force-inline", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        """``--force-inline`` should use __STATIC_FORCEINLINE."""
+        result = self._run("--force-inline")
+        assert result.returncode == 0, result.stderr
+        assert "__STATIC_FORCEINLINE" in result.stdout
+        assert "__STATIC_INLINE void" not in result.stdout
 
     def test_set_bit_flag(self):
         """``--set-bit`` should be accepted with arguments."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "-b", "TIM_CR1_CEN", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        result = self._run("-b", "TIM_CR1_CEN")
+        assert result.returncode == 0, result.stderr
+        assert "init_tim" in result.stdout
 
     def test_define_flag(self):
         """``-D`` should be accepted with macro definitions."""
-        result = subprocess.run(
-            [sys.executable, "stm32cgen.py", "-l", "-D", "HCLK", "16", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"],
-            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
-        )
-        assert result.returncode in (0, 1)
+        result = self._run("-D", "HCLK", "16")
+        assert result.returncode == 0, result.stderr
+        assert "#define HCLK" in result.stdout
+        assert "16" in result.stdout
+
+    def test_disable_rcc_macro_flag(self):
+        """``-R`` must suppress the auto-generated ``_EN`` macros."""
+        base = [sys.executable, "stm32cgen.py", "-l", "-m", "rcc", "-f", "init_rcc", "103c8", "-p", "RCC"]
+        normal = subprocess.run(base, capture_output=True, text=True, cwd=REPO_ROOT, timeout=10)
+        disabled = subprocess.run(base + ["-R"], capture_output=True, text=True, cwd=REPO_ROOT, timeout=10)
+        assert normal.returncode == 0, normal.stderr
+        assert disabled.returncode == 0, disabled.stderr
+        assert "DMA1_EN" in normal.stdout
+        assert "DMA1_EN" not in disabled.stdout
+
+    def test_indent_flag(self):
+        """``-i`` must scale the generated code indentation."""
+        base = [sys.executable, "stm32cgen.py", "-l", "-m", "tim", "-f", "init_tim", "103c8", "-p", "TIM2"]
+        default = subprocess.run(base, capture_output=True, text=True, cwd=REPO_ROOT, timeout=10)
+        indented = subprocess.run(base + ["-i", "8"], capture_output=True, text=True, cwd=REPO_ROOT, timeout=10)
+        assert default.returncode == 0, default.stderr
+        assert indented.returncode == 0, indented.stderr
+
+        def leading(line):
+            return len(line) - len(line.lstrip(" "))
+
+        def assignment(stream):
+            return next(line for line in stream.splitlines() if "TIM2->CR1 =" in line)
+
+        default_indent = leading(assignment(default.stdout))
+        indented_indent = leading(assignment(indented.stdout))
+        assert default_indent == 6
+        assert indented_indent == 4 * default_indent

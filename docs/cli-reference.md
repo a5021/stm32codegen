@@ -247,10 +247,6 @@ Verbose output — print parsed registers and generated code structure to stderr
 
 Generate IRQ-related register initialization.
 
-### `--dummy DUMMY [DUMMY ...]`
-
-Dummy parameter(s) — ignored, for compatibility with wrapper scripts.
-
 ### `--test`
 
 Enable experimental features (use at your own risk).
