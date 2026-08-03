@@ -19,10 +19,11 @@ J-Link for flashing and debugging).
 | `f401cc_demo.sh`      | STM32F401CC       | BlackPill, **PC13**     | Cortex-M4F, 100 MHz HSE | Overclocked (max rated 84 MHz). HSE 25 MHz crystal, PLL 25/15×120/2. |
 | `f303vc_demo.sh`      | STM32F303VC       | STM32F3 Discovery, **PE8–PE15** | Cortex-M4F, 72 MHz HSE | 8 on-board LEDs; LED chase via SysTick. HSE 8 MHz from ST-LINK MCO, PLL ×9. |
 | `f407vg_demo.sh`      | STM32F407VG       | STM32F4 Discovery, **PD12–PD15** | Cortex-M4F, 168 MHz HSE | 4 on-board LEDs (active LOW); LED chase via SysTick. HSE 8 MHz crystal, PLL ×21. |
+| `f446re_demo.sh`      | STM32F446RE       | WeAct/Clone F446RE 64-pin, **PB2** | Cortex-M4F, 180 MHz HSE | 4 LED effects (blink/fast/SOS/steady) toggled by **PC13** (B1, active HIGH, pull-down); USART2 console (115200 8N1). PLL HSE 8 MHz, PLLM=8/N=360/P=2, PWR Scale 1 + VOSRDY, 6 WS + I/D cache; 180 MHz verified on board, `SystemCoreClock` hard-coded (no auto-calibration). |
 | `l152rb_demo.sh`      | STM32L152RB       | STM32L1 Discovery, **PB6–PB7**  | Cortex-M3, 16 MHz HSI | 2 LEDs (active HIGH); LED chase via SysTick. No HSE — HSI direct, VOS Range 2. |
 
 The generated output folders (`f103c8_demo/`, `f030f4_demo/`, `g031f8_demo/`,
-`f401cc_demo/`, `f303vc_demo/`, `f407vg_demo/`, `l152rb_demo/`) are build artifacts produced by running the
+`f401cc_demo/`, `f303vc_demo/`, `f407vg_demo/`, `f446re_demo/`, `l152rb_demo/`) are build artifacts produced by running the
 matching script; they are **not** checked into the repository. Re-run a script
 to regenerate.
 
@@ -472,3 +473,132 @@ ST-LINK_CLI.exe -c UR -V -P _build/Project.hex -Rst -Run
 
 The ST-LINK CLI `-Halt` option always catches the MCU in reset state on this
 board. Use `-Rst -Run` for reliable flash-and-run.
+
+---
+
+## F446RE demo
+
+### Board
+
+WeAct/Clone STM32F446RE 64-pin board (STM32F446RET6, 512 KB Flash, 128 KB
+RAM). One user LED on **PB2** (active HIGH: pin HIGH = LED on) and one user
+button **B1 on PC13**. Note that on this board the button is **active HIGH** —
+pressing it connects PC13 to 3.3 V — so the pin is configured with an internal
+**pull-down** and the firmware samples for a HIGH level. This is the opposite
+of NUCLEO boards, where B1 is active-low on a pull-up. The board has no
+on-board ST-LINK (its OB clone is unreliable), so J-Link is used for flashing
+and debugging.
+
+### Clock — 180 MHz
+
+`main.h` sets `HCLK = 180`. `wait_for_clock_stable()` in `rcc.h` configures:
+
+- HSE = 8 MHz (crystal)
+- PLLM = 8, PLLN = 360, PLLP = 2 → 180 MHz
+- PLLQ = 6 (unused — no USB)
+- AHB prescaler = ÷1 → HCLK = 180 MHz
+- APB1 prescaler = ÷4 → PCLK1 = 45 MHz
+- APB2 prescaler = ÷2 → PCLK2 = 90 MHz
+
+`configure_flash()` enables the PWR clock, selects regulator **Scale 1**
+(`PWR_CR_VOS_1`), waits for `VOSRDY`, then programs the flash with **6 wait
+states** plus prefetch and I/D-cache.
+
+The 180 MHz PLL output was verified on this board (TIM2 counting the 8 MHz
+HSE over 5 s), so `SystemCoreClock` is hard-coded to `180000000u` — no
+auto-calibration is needed. Register values read back via J-Link:
+
+- `RCC_PLLCFGR = 0x06405A08` (M=8, N=360, P=/2, SRC=HSE)
+- `RCC_CFGR    = 0x0000940A` (SW=PLL, PPRE1=/4, PPRE2=/2)
+- `FLASH->ACR  = 0x00000706` (6 WS + prefetch + I/D-cache)
+- `SystemCoreClock = 0x0ABA9500` (180 MHz), SysTick ticking at exactly 1000/s
+
+Beware the classic pitfall: with `RCC_PLLCFGR_PLLP_1` also set (PLLP = /6),
+the same `HSE/PLLM × PLLN / PLLP` chain gives exactly **60 MHz** instead of
+180 MHz.
+
+### GPIO — PB2 LED, PC13 button, PA2 USART2_TX
+
+```c
+#define GPIOA_MODE (                                             \
+  SWD_EN     * PIN_MODE(13, PIN_MODE_AF)    /* PA13 -- SWDIO */ | \
+  SWD_EN     * PIN_MODE(14, PIN_MODE_AF)    /* PA14 -- SWCLK */ | \
+  USART2_TX_EN  * PIN_MODE(2,  PIN_MODE_AF) /* PA2  -- USART2 TX */ )
+#define GPIOB_MODE ( PIN_MODE(2, PIN_MODE_OUTPUT) /* PB2 -- LED */ )
+#define GPIOC_MODE ( PIN_MODE(13, PIN_MODE_INPUT) /* PC13 -- B1  Button */ )
+#define GPIOC_PUPDR ( PIN_PUPD(13, PIN_PUPD_DOWN) /* active HIGH button */ )
+```
+
+`SWD_EN` is hard-coded to 1: `init_gpio()` must not switch PA13/PA14 to
+analog, or the debug port dies with the firmware running. `init_rcc()`
+auto-enables the GPIOA/B/C clock gates from the `GPIOx_EN` flags; PA2's AF7
+is written by `uart_init()`.
+
+### SysTick and LED effects
+
+SysTick runs at 1 kHz (`HCLK / 8` = 22.5 MHz, `LOAD = 22499`). In polling
+mode `idle()` picks up the 1 ms `COUNTFLAG` and updates the 64-bit uptime:
+
+```c
+uint64_t t = ++*uptime();
+switch (led_mode) {
+  case LED_EFFECT_BLINK:  /* bit [9]: toggle every 512 ms          */
+    GPIOB->BSRR = (t & (1ULL << 9)) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
+  case LED_EFFECT_FAST:   /* bit [6]: toggle every 64 ms           */
+    GPIOB->BSRR = (t & (1ULL << 6)) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
+  case LED_EFFECT_SOS:    /* S O S : dot=100 ms, dash=300 ms       */
+    GPIOB->BSRR = sos[(t / 100) % 26] ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
+  case LED_EFFECT_STEADY:
+  default:
+    GPIOB->BSRR = GPIO_BSRR_BS2; break;
+}
+```
+
+While **B1 is held down** the LED lights solid as visual feedback.
+
+### Button debounce
+
+PC13 is sampled once per SysTick into a 10-bit shift register (10 ms
+debounce); ten consecutive equal samples mean a stable level:
+
+```c
+uint32_t tick = (uint32_t)*uptime();
+if (tick != last_sample) {
+  last_sample = tick;
+  history = (history << 1) | (0u != (GPIOC->IDR & GPIO_IDR_ID13));
+}
+if ((history & 0x3FFu) == 0x3FFu) { /* debounced press  -> advance led_mode */ }
+else if ((history & 0x3FFu) == 0u)  { /* debounced release */ }
+```
+
+Each debounced press advances `led_mode` (`0=blink 1=fast 2=SOS 3=steady`)
+and prints a message over the UART console.
+
+### UART console
+
+`inc/uart.h` is a small hand-written, header-only USART2 driver: **PA2 = TX
+(AF7), 115200 8N1**, TX-only. `UART2_PCLK = SystemCoreClock / 4u` (PCLK1 =
+45 MHz), and the BRR is computed with rounding:
+
+```c
+RCC->APB1ENR |= RCC_APB1ENR_USART2EN;        /* USART2 on APB1       */
+uint32_t clk = UART2_PCLK, div = 16UL * UART2_BAUD;
+USART2->BRR = ((clk / div) << 4) | (((clk % div) * 16UL) / div);
+USART2->CR1 = USART_CR1_UE | USART_CR1_TE;
+```
+
+On startup the banner prints the HCLK, SysTick period and baud rate; then a
+`t = ... s, mode = ...` line is emitted once per second.
+
+### Building and flashing
+
+```sh
+bash ./f446re_demo.sh        # generate + build (debug target)
+# or from the generated directory:
+cd f446re_demo
+make debug                   # debug build (-Og -g3 -gdwarf)
+make jprogram                # flash via J-Link (J-Flash)
+```
+
+J-Link is used because the board has no on-board ST-LINK (the OB clone is
+unreliable).
