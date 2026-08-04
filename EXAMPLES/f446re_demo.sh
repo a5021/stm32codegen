@@ -174,8 +174,8 @@ generate_header "main.h" $opt 446re -M\
     -F ""\
     -F "  /* Initialize SysTick to 1 ms period */"\
     -F "  /* By default the clock source of SysTick is AHB/8. */"\
-    -F "  /* LOAD uses SystemCoreClock, which init_rcc() sets to the real PLL"\
-    -F "   * output, so SysTick ticks at 1 ms on any silicon. */"\
+    -F "  /* LOAD uses SystemCoreClock, which init_rcc() sets to the verified"\
+    -F "   * 180 MHz PLL output, so SysTick ticks at exactly 1 ms. */"\
     -F ""\
     -F "  SysTick->LOAD = (SystemCoreClock / (8 - SYSTICK_CLOCK_SOURCE * 7)) / 1000 - 1;"\
     -F "  SysTick->VAL  = SysTick->LOAD;"\
@@ -509,7 +509,9 @@ HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
 
 MCU = -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard
-DEF = -DSTM32F446xx
+# The board uses an 8 MHz HSE crystal; override the vendor default (25 MHz)
+# in system_stm32f4xx.c so any SystemCoreClockUpdate() call computes 180 MHz.
+DEF = -DSTM32F446xx -DHSE_VALUE=8000000u
 INC = -I./inc
 
 FLG := $(MCU) $(DEF) $(INC)
