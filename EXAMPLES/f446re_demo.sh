@@ -449,11 +449,10 @@ create_file "uart.h" << 'EOF'
 #define UART2_PCLK (SystemCoreClock / 4u)
 
 __STATIC_FORCEINLINE void uart_init(void) {
-  /* USART2 on APB1; enable its clock and route PA2 to USART2_TX (AF7) */
+  /* USART2 on APB1. PA2 is already routed to USART2_TX (AF7, high speed)
+   * by init_gpio() from gpio.h (PA2_AF7_USART2_TX), so here only the
+   * clock, the baud rate and UE/TE are set. */
   RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
-  GPIOA->MODER   = (GPIOA->MODER   & ~(0x3UL <<  4)) | (0x2UL <<  4); /* PA2 = AF  */
-  GPIOA->AFR[0] |= (7UL << (2 * 4));                                /* AF7      */
-  GPIOA->OSPEEDR = (GPIOA->OSPEEDR & ~(0x3UL <<  4)) | (0x3UL <<  4); /* high     */
   /* BRR = PCLK1 / (16 * BAUD) with rounding */
   { uint32_t clk = UART2_PCLK, div = 16UL * UART2_BAUD;
     USART2->BRR = ((clk / div) << 4) | (((clk % div) * 16UL) / div); }
@@ -1856,15 +1855,15 @@ __STATIC_FORCEINLINE void process_systick_event(void) {
       GPIOB->BSRR = (t & (1ULL << 6)) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2;
       break;
 
-    case LED_EFFECT_SOS:     /* S O S : dot=100 ms, dash=300 ms, 100 ms gap */
+    case LED_EFFECT_SOS:     /* S O S : dot=100 ms, dash=300 ms, letter gap 300 ms */
       {
-        static const uint8_t sos[26] = {
-          1,0,1,0,1,0,  0,              /* S                                */
-          1,1,1, 0,  1,1,1, 0,  1,1,1,  /* O                                */
-          0, 0,                         /* letter gap                       */
-          1,0,1,0,1,0                   /* S                                */
+        static const uint8_t sos[30] = {
+          1,0,1,0,1,0,  0,0,             /* S, then letter gap (300 ms after last dot) */
+          1,1,1, 0,  1,1,1, 0,  1,1,1,   /* O                                           */
+          0, 0, 0,                        /* letter gap                                 */
+          1,0,1,0,1,0,  0,0             /* S, then letter gap so the cycle wraps cleanly */
         };
-        GPIOB->BSRR = sos[(t / 100) % 26] ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2;
+        GPIOB->BSRR = sos[(t / 100) % 30] ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2;
       }
       break;
 
@@ -2158,10 +2157,12 @@ USART2 header (PA2 TX):
 
 `USART2` is deliberately kept out of the generated RCC/GPIO `*_EN` auto-wiring:
 keeping those macros undefined means `main.h`'s `init()` never tries to call a
-generated `init_usart()`. Instead `uart_init()` enables `RCC_APB1ENR_USART2EN`
-and routes PA2 to AF7 itself, so the driver is fully self-contained. The
-auto-wiring is still demonstrated by `GPIOA_EN`/`GPIOB_EN`/`GPIOC_EN`, which the
-generated `rcc.h` picks up from `gpio.h` to clock the GPIO ports.
+generated `init_usart()`. The pin is still declared once in `gpio.h` as
+`PA2_AF7_USART2_TX`, so `init_gpio()` routes PA2 to USART2_TX (AF7, high speed);
+`uart_init()` only enables `RCC_APB1ENR_USART2EN`, programs the baud rate and
+raises UE/TE, keeping the pin setup in a single place. The auto-wiring is still
+demonstrated by `GPIOA_EN`/`GPIOB_EN`/`GPIOC_EN`, which the generated `rcc.h`
+picks up from `gpio.h` to clock the GPIO ports.
 
 ---
 
@@ -2176,7 +2177,7 @@ uint64_t t = ++*uptime();
 switch (led_mode) {
   case LED_EFFECT_BLINK: GPIOB->BSRR = (t & (1ULL << 9)) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
   case LED_EFFECT_FAST:  GPIOB->BSRR = (t & (1ULL << 6)) ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
-  case LED_EFFECT_SOS:   GPIOB->BSRR = sos[(t / 100) % 26] ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
+  case LED_EFFECT_SOS:   GPIOB->BSRR = sos[(t / 100) % 30] ? GPIO_BSRR_BS2 : GPIO_BSRR_BR2; break;
   case LED_EFFECT_STEADY: GPIOB->BSRR = GPIO_BSRR_BS2; break;
 }
 ```
