@@ -176,3 +176,80 @@ class TestTrailingUnderscoreDigits:
         md = [['X_FOO', '(1 << 0)', 'desc', '']]
         out = list(sc.get_reg_set('X_', md))
         assert out[0][2] == 'desc'
+
+
+class TestLegacyAliasDedupe:
+    """Legacy aliases (same bit defined under another name) must be dropped.
+
+    ST CMSIS headers keep the canonical name first and append legacy aliases
+    after it (e.g. ``RCC_APB2RSTR_SPI1RST`` then ``RCC_APB2RSTR_SPI1``), so a
+    per-register deduplication by resolved mask keeps the canonical name.
+    """
+
+    def _regset(self, cpu, reg_str, pairs):
+        sc.args = make_mock_args(cpu=cpu)
+        macro_def_list = [[n, v, 'd', ''] for n, v in pairs]
+        return [g[0] for g in sc.get_reg_set(reg_str, macro_def_list)]
+
+    def test_duplicate_mask_keeps_first(self, scm_globals):
+        """SPI1RST then its legacy alias SPI1: only SPI1RST is kept."""
+        out = self._regset('446RE', 'RCC_APB2RSTR_', [
+            ['RCC_APB2RSTR_SPI1RST', '(1 << 12)'],
+            ['RCC_APB2RSTR_SPI1', '(1 << 12)'],
+        ])
+        assert out == ['RCC_APB2RSTR_SPI1RST']
+
+    def test_alias_first_keeps_alias(self, scm_globals):
+        """If a header broke the convention and put the alias first, the
+        first (alias) name is kept - still one name per bit, no duplicate."""
+        out = self._regset('446RE', 'RCC_APB2RSTR_', [
+            ['RCC_APB2RSTR_SPI1', '(1 << 12)'],
+            ['RCC_APB2RSTR_SPI1RST', '(1 << 12)'],
+        ])
+        assert out == ['RCC_APB2RSTR_SPI1']
+
+    def test_distinct_masks_all_kept(self, scm_globals):
+        out = self._regset('446RE', 'RCC_APB2RSTR_', [
+            ['RCC_APB2RSTR_TIM1RST', '(1 << 0)'],
+            ['RCC_APB2RSTR_TIM8RST', '(1 << 1)'],
+            ['RCC_APB2RSTR_USART1RST', '(1 << 4)'],
+        ])
+        assert out == ['RCC_APB2RSTR_TIM1RST', 'RCC_APB2RSTR_TIM8RST', 'RCC_APB2RSTR_USART1RST']
+
+    def test_normalised_hex_form_also_deduped(self, scm_globals):
+        """Values without a shift are normalised to '0x%08X' by the pipeline;
+        an alias pair in that form must be deduplicated too."""
+        out = self._regset('446RE', 'RCC_APB2RSTR_', [
+            ['RCC_APB2RSTR_SPI1RST', '0x00001000'],
+            ['RCC_APB2RSTR_SPI1', '0x00001000'],
+        ])
+        assert out == ['RCC_APB2RSTR_SPI1RST']
+
+    def test_mixed_shift_and_hex_forms_are_same_bit(self, scm_globals):
+        """Canonical as shift expression, alias as plain hex - still the same
+        mask, evaluated numerically, so the alias is dropped."""
+        out = self._regset('446RE', 'RCC_APB2RSTR_', [
+            ['RCC_APB2RSTR_SPI1RST', '(1 << 12)'],
+            ['RCC_APB2RSTR_SPI1', '0x00001000'],
+        ])
+        assert out == ['RCC_APB2RSTR_SPI1RST']
+
+    def test_non_hex_values_not_deduped(self, scm_globals):
+        """Synthetic/non-normalised values are never deduplicated, so fields
+        that fail to resolve to a hex mask keep their old behaviour."""
+        out = self._regset('103C8', 'X_', [
+            ['X_FOO', 'v'],
+            ['X_BAR', 'v'],
+        ])
+        assert out == ['X_FOO', 'X_BAR']
+
+    def test_dedupe_is_per_register(self, scm_globals):
+        """The seen-set is scoped to a single get_reg_set call (one register),
+        so the same mask in different registers is not affected."""
+        out = self._regset('446RE', 'RCC_CSR_', [
+            ['RCC_CSR_PINRSTF', '(1 << 26)'],
+            ['RCC_CSR_IWDGRSTF', '(1 << 29)'],
+            ['RCC_CSR_PADRSTF', '(1 << 26)'],
+            ['RCC_CSR_WDGRSTF', '(1 << 29)'],
+        ])
+        assert out == ['RCC_CSR_PINRSTF', 'RCC_CSR_IWDGRSTF']

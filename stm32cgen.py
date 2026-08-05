@@ -434,6 +434,7 @@ def is_num_ended(a_str):
 
 
 def get_reg_set(reg_str, macro_def_list):
+    seen_mask = set()
     for gx in macro_def_list:
         if gx[0].startswith(reg_str):
             if gx[0][-4] == '_' and gx[0][-3:] in {'Pos', 'Msk'}:
@@ -467,6 +468,16 @@ def get_reg_set(reg_str, macro_def_list):
             if args.cpu[0:1] != '0' and args.cpu[0:1] != '3' and args.cpu[0:2] != 'L0' and args.cpu[:2] != 'L1':
                 if '_BSRR_BS_' in gx[0] or '_BSRR_BR_' in gx[0]:
                     continue
+
+            # drop legacy aliases: a bit already defined under another name
+            # (ST headers keep the canonical name first, aliases afterwards).
+            # Values are either normalized hex or a numeric shift expression
+            # like '(1 << 12)'; both evaluate to the same mask for an alias.
+            mask = safe_eval_int(gx[1])
+            if mask != '' and 0 <= mask <= 0xFFFFFFFF:
+                if mask in seen_mask:
+                    continue
+                seen_mask.add(mask)
 
             sa1, sb1 = is_num_ended(gx[0])
             if sa1[-1] == '_' and sb1 != '':  # if string ends with _1 or _2 or .. _9876543210 etc.
