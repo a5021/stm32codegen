@@ -628,7 +628,10 @@ def compose_reg_init_block(reg_name, bit_def, comment=('', '')):
                 if lx[0].startswith('RCC_') and lx[0].endswith('EN'):
                     bf = lx[0].split('_')
                     if 'ENR' in bf[1] and 'SMENR' not in bf[1]:
-                        bitfield_enable = f'{bf[-1][:-2]}_EN'
+                        # tag from the full field name (relative to the register)
+                        # so multi-segment fields like *_CKEN get a unique tag
+                        fld = lx[0].replace(bit_def_base, '')
+                        bitfield_enable = f'{fld[:-2]}_EN'
 
                         rcc_enabler += f'#if !defined({bitfield_enable})\n'
                         rcc_enabler += f'{indent}#define {bitfield_enable} 0\n'

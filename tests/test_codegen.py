@@ -333,6 +333,25 @@ class TestComposeRegInitBlockRccEnabler:
         )
         assert "#if !defined(" not in bitfield
 
+    def test_multisegment_field_gets_unique_tag(self, scm_globals):
+        """CKGATENR fields (AHB2APB1_CKEN, CM4DBG_CKEN, ...) must each get a
+        distinct tag built from the full field name, not a shared CK_EN."""
+        sc.args = make_mock_args()
+        sc.max_field_len = [0, 0, 0]
+
+        bitfield, _ = sc.compose_reg_init_block("RCC->CKGATENR", [
+            ["RCC_CKGATENR_AHB2APB1_CKEN", "(1 << 0)", "", "0x00000001"],
+            ["RCC_CKGATENR_AHB2APB2_CKEN", "(1 << 1)", "", "0x00000002"],
+            ["RCC_CKGATENR_CM4DBG_CKEN", "(1 << 2)", "", "0x00000004"],
+        ])
+        assert "#if !defined(AHB2APB1_CK_EN)" in bitfield
+        assert "#define AHB2APB1_CK_EN 0" in bitfield
+        assert "#if !defined(AHB2APB2_CK_EN)" in bitfield
+        assert "#if !defined(CM4DBG_CK_EN)" in bitfield
+        assert "#if !defined(CK_EN)" not in bitfield
+        assert "AHB2APB1_CK_EN * RCC_CKGATENR_AHB2APB1_CKEN" in bitfield
+        assert "CM4DBG_CK_EN  * RCC_CKGATENR_CM4DBG_CKEN" in bitfield
+
     def test_non_rcc_bit_no_enabler(self, scm_globals):
         sc.args = make_mock_args()
         sc.max_field_len = [0, 0, 0]
