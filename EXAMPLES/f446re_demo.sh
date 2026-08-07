@@ -294,11 +294,11 @@ generate_header "rcc.h" -l 446re -p RCC -m rcc -f init_rcc\
     -F "    /* HPRE=D1, PPRE1=D4, PPRE2=D2, SW=PLL */"\
     -F "    RCC->CFGR = RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV4 | RCC_CFGR_PPRE2_DIV2 | RCC_CFGR_SW_PLL;"\
     -F "    while (RCC_CFGR_SWS_PLL != (RCC->CFGR & RCC_CFGR_SWS)) {}"\
-    -F "  #endif"\
     -F ""\
-    -F "  /* PLL verified on this board at 180 MHz (PLLM=8, N=360, P=2, HSE=8 MHz). */"\
-    -F "  /* APB1 (PCLK1) = HCLK / 4 = 45 MHz. */"\
-    -F "  SystemCoreClock = 180000000u;"\
+    -F "    /* PLL verified on this board at 180 MHz (PLLM=8, N=360, P=2, HSE=8 MHz). */"\
+    -F "    /* APB1 (PCLK1) = HCLK / 4 = 45 MHz. */"\
+    -F "    SystemCoreClock = 180000000u;"\
+    -F "  #endif"\
     -F "} /* $func_name() */"\
     -F ""\
     -F "#undef PLLM_0"\
