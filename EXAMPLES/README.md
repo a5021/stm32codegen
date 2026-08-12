@@ -20,10 +20,12 @@ J-Link for flashing and debugging).
 | `f303vc_demo.sh`      | STM32F303VC       | STM32F3 Discovery, **PE8–PE15** | Cortex-M4F, 72 MHz HSE | 8 on-board LEDs; LED chase via SysTick. HSE 8 MHz from ST-LINK MCO, PLL ×9. |
 | `f407vg_demo.sh`      | STM32F407VG       | STM32F4 Discovery, **PD12–PD15** | Cortex-M4F, 168 MHz HSE | 4 on-board LEDs (active LOW); LED chase via SysTick. HSE 8 MHz crystal, PLL ×21. |
 | `f446re_demo.sh`      | STM32F446RE       | WeAct/Clone F446RE 64-pin, **PB2** | Cortex-M4F, 180 MHz HSE | 4 LED effects (blink/fast/SOS/steady) toggled by **PC13** (B1, active HIGH, pull-down); USART2 console (115200 8N1). PLL HSE 8 MHz, PLLM=8/N=360/P=2, PWR Scale 1 + VOSRDY, 6 WS + I/D cache; 180 MHz verified on board, `SystemCoreClock` hard-coded (no auto-calibration). |
+| `g431cb_demo.sh`     | STM32G431CB       | WeAct G431CB, **PC6** | Cortex-M4F, 170 MHz HSE | Single PLL 8→170 MHz (VOS boost + 4 WS); LED blink verified on board via J-Link at 2 Hz; `SystemCoreClock` hard-coded. |
 | `l152rb_demo.sh`      | STM32L152RB       | STM32L1 Discovery, **PB6–PB7**  | Cortex-M3, 16 MHz HSI | 2 LEDs (active HIGH); LED chase via SysTick. No HSE — HSI direct, VOS Range 2. |
 
 The generated output folders (`f103c8_demo/`, `f030f4_demo/`, `g031f8_demo/`,
-`f401cc_demo/`, `f303vc_demo/`, `f407vg_demo/`, `f446re_demo/`, `l152rb_demo/`) are build artifacts produced by running the
+`f401cc_demo/`, `f303vc_demo/`, `f407vg_demo/`, `f446re_demo/`, `g431cb_demo/`,
+`l152rb_demo/`) are build artifacts produced by running the
 matching script; they are **not** checked into the repository. Re-run a script
 to regenerate.
 
@@ -596,6 +598,90 @@ On startup the banner prints the HCLK, SysTick period and baud rate; then a
 bash ./f446re_demo.sh        # generate + build (debug target)
 # or from the generated directory:
 cd f446re_demo
+make debug                   # debug build (-Og -g3 -gdwarf)
+make jprogram                # flash via J-Link (J-Flash)
+```
+
+J-Link is used because the board has no on-board ST-LINK (the OB clone is
+unreliable).
+
+---
+
+## G431CB demo
+
+### Board
+
+WeAct Studio STM32G431CBU6 (STM32G431CBT6, 128 KB Flash, 32 KB SRAM). One
+user LED on **PC6** (green, active HIGH: pin HIGH = LED on). The board has no
+on-board ST-LINK (its OB clone is unreliable), so J-Link is used for flashing
+and debugging.
+
+### Clock — 170 MHz
+
+`main.h` sets `HCLK = 170`. `init_rcc()` in `rcc.h` configures the **single
+PLLR-based PLL** (G4, like F4, has one PLL):
+
+- HSE = 8 MHz (crystal)
+- PLL input = HSE / PLLM(2) = 4 MHz    (must be 4–16 MHz)
+- VCO = 4 MHz × PLLN(85) = 340 MHz     (must be 128–344 MHz)
+- PLLR = /2 → 170 MHz                  (max 170 MHz)
+- AHB prescaler = ÷1 → HCLK = 170 MHz
+- APB1 prescaler = ÷2 → PCLK1 = 85 MHz
+- APB2 prescaler = ÷2 → PCLK2 = 85 MHz
+
+`configure_flash()` enables the PWR clock, selects regulator **Scale 1** and
+clears `PWR_CR5_R1MODE` to enter boost mode (required to run the core above
+150 MHz), then programs the flash with **4 wait states** plus prefetch and
+I/D-cache. `SystemCoreClock` is hard-coded to `170000000u`.
+
+The 170 MHz PLL output was verified on this board by reading the 64-bit `g_ticks`
+uptime counter over J-Link: it increments at exactly **1000/s**, which only
+holds if the core runs at 170 MHz and SysTick is 1 ms. Register values read
+back via J-Link:
+
+- `RCC_PLLCFGR = 0x01005513` (SRC=HSE, M=2, N=85, R=/2, REN)
+- `RCC_CFGR    = 0x0000240F` (SW=PLL, HPRE=/1, PPRE1=/2, PPRE2=/2)
+- `FLASH->ACR  = 0x00040704` (4 WS + prefetch + I/D-cache)
+- `SystemCoreClock = 170000000u` (170 MHz), SysTick ticking at exactly 1000/s
+
+> **Pitfall — G4 PLLR encoding.** Unlike F4 (where `PLLP` is `÷2` for field
+> value 0, `÷4` for 1, …), the G4 `PLLR` field is encoded as **0=÷2, 1=÷4,
+> 2=÷6, 3=÷8**. Writing `(2-1)` (i.e. `1`) selects **÷4** and yields exactly
+> **85 MHz** — half the intended speed. The firmware was first measured at
+> 85 MHz for this reason; setting `PLLR = 0` restores 170 MHz. The same
+> "off-by-one" trap applies to `PLLQ`/`PLLP` on G4.
+
+### GPIO — PC6 LED
+
+```c
+#define GPIOC_MODE ( PIN_MODE(6, PIN_MODE_OUTPUT) /* PC6 -- on-board LED */ )
+```
+
+The LED is toggled with `GPIO_BSRR_BS6` / `GPIO_BSRR_BR6` (G4 keeps the legacy
+`BRR`-less BSRR model). `init_rcc()` auto-enables `RCC->AHB2ENR.GPIOCEN`.
+
+### SysTick and LED blink
+
+SysTick runs at 1 kHz with `SYSTICK_IRQ_ENABLE = YES` (the `stm32cgen -M`
+output wires `TICKINT`). `SysTick_Handler()` increments a 64-bit `g_ticks`
+counter; `uptime()` returns it. `process()` toggles PC6 every 250 ms:
+
+```c
+if ((now - last_toggle) >= 250u) {
+  last_toggle = now;
+  GPIOC->BSRR = led_on ? GPIO_BSRR_BR6 : GPIO_BSRR_BS6;
+  led_on = !led_on;
+}
+```
+
+Result: a visible **~2 Hz** blink (on 250 ms / off 250 ms).
+
+### Building and flashing
+
+```sh
+bash ./g431cb_demo.sh        # generate + build (debug target)
+# or from the generated directory:
+cd g431cb_demo
 make debug                   # debug build (-Og -g3 -gdwarf)
 make jprogram                # flash via J-Link (J-Flash)
 ```
