@@ -371,7 +371,9 @@ if [ ! -f "$main_c_file" ]; then
 #include "main.h"
 
 /* WeAct Studio STM32G431CBU6: a green LED is wired to PC6 (active HIGH).
- * The loop below toggles it every 250 ms, giving a ~2 Hz blink. */
+ * The loop below blinks it at ~1 Hz using bit 9 of the 1 ms uptime counter
+ * (same scheme as the F1/F4 reference demos: bit 9 flips every 512 ms, so the
+ * LED period is 1024 ms ~= 1 Hz). */
 
 static volatile uint64_t g_ticks;
 
@@ -383,26 +385,18 @@ uint64_t uptime(void) {
   return g_ticks;
 }
 
-static uint32_t last_toggle;
-static int      led_on;
-
 int main(void) {
   /* init() performs: init_rcc() -> init_gpio() -> init_systick(). */
   for (init(); process(); idle());
 }
 
 unsigned process(void) {
-  uint32_t now = (uint32_t)uptime();
-
-  if ((now - last_toggle) >= 250u) {   /* toggle roughly every 250 ms */
-    last_toggle = now;
-    if (led_on) {
-      GPIOC->BSRR = GPIO_BSRR_BR6;     /* PC6 low  -> LED off */
-      led_on = 0;
-    } else {
-      GPIOC->BSRR = GPIO_BSRR_BS6;     /* PC6 high -> LED on  */
-      led_on = 1;
-    }
+  /* Blink at ~1 Hz: bit 9 of the 1 ms uptime counter toggles every 512 ms,
+   * so the LED is on for 512 ms and off for 512 ms (period ~1024 ms). */
+  if (uptime() & (1ULL << 9)) {
+    GPIOC->BSRR = GPIO_BSRR_BS6;       /* PC6 high -> LED on  */
+  } else {
+    GPIOC->BSRR = GPIO_BSRR_BR6;       /* PC6 low  -> LED off */
   }
 
   return !0;  /* Always continue loop */
