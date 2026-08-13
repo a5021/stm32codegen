@@ -23,6 +23,7 @@ EXAMPLES/*/*.elf
 EXAMPLES/*/*.hex
 EXAMPLES/*/*.map
 EXAMPLES/*/*.d
+EXAMPLES/*/jflash.log
 tests/fixtures/cache/
 .coverage
 htmlcov_/

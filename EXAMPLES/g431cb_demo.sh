@@ -366,7 +366,7 @@ generate_header "gpio.h" -l g431cb -p GPIOC -m gpio -f init_gpio\
        ""\
        GPIOC_MODE "( PIN_MODE(6, PIN_MODE_OUTPUT) /* PC6 -- LED */ )"\
        GPIOC_OTYPE "( 0 )"\
-       GPIOC_OSPEED "( PIN_SPEED(6, PIN_SPEED_HIGH) /* PC6 -- high speed */ )"\
+       GPIOC_OSPEED "( 0 ) /* PC6 -- low speed (default) */"\
        GPIOC_PUPD "( 0 )"\
        ""\
        GPIOC_MODER "(GPIO_MODE ^ (GPIOC_MODE))"\
