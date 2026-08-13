@@ -95,6 +95,10 @@ jobs:
       working-directory: EXAMPLES
       run: printf '\n' | bash l152rb_demo.sh
 
+    - name: Generate G431CB project and build
+      working-directory: EXAMPLES
+      run: printf '\n' | bash g431cb_demo.sh
+
   test:
     runs-on: ubuntu-latest
 
