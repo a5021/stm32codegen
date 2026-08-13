@@ -51,6 +51,20 @@ check_dependencies() {
         fi
     done
 
+    # Detect Python once; used later to run stm32cgen.py
+    case $(uname -s | tr '[:upper:]' '[:lower:]') in
+        linux*|darwin*)  py_name='python3' ;;
+        *)               py_name='python' ;;  # Windows and others
+    esac
+
+    if ! command -v "$py_name" &>/dev/null; then
+        missing+=("$py_name")
+    elif ! "$py_name" -c 'import requests' &>/dev/null; then
+        echo "Error: Python module 'requests' not found" >&2
+        echo "Install it with: $py_name -m pip install requests" >&2
+        exit 1
+    fi
+
     if [ ${#missing[@]} -gt 0 ]; then
         echo "Error: Missing required tools: ${missing[*]}" >&2
         echo "" >&2
@@ -94,7 +108,12 @@ done
 
 cd "${directories[0]}"
 
-PY_GEN="$(realpath "${PY_GEN:-../../..}")"
+PY_GEN="${PY_GEN:-../../..}"
+if command -v realpath &>/dev/null; then
+    PY_GEN="$(realpath "$PY_GEN")"
+elif [ -d "$PY_GEN" ]; then
+    PY_GEN="$(cd "$PY_GEN" && pwd -P)"
+fi
 
 if [ -e stm32g431xx.h ]; then
     # File exists
@@ -102,20 +121,6 @@ if [ -e stm32g431xx.h ]; then
 else
     # File does not exist
     opt=-s
-fi
-
-py_name=''
-
-# Detect Python
-case $(uname -s | tr '[:upper:]' '[:lower:]') in
-    linux*|darwin*)  py_name='python3' ;;
-    *)               py_name='python' ;;  # Windows and others
-esac
-
-# Verify Python works
-if ! command -v "$py_name" &>/dev/null; then
-    echo "Error: $py_name not found" >&2
-    exit 1
 fi
 
 force_inline=--force-inline
@@ -258,6 +263,13 @@ create_file "rcc.h" << 'EOF'
   #define CLEAR_BIT(REG, BIT)   ((REG) &= ~(BIT))
 #endif
 
+/* Bounded wait: spin until COND is true (or the timeout budget runs out)
+ * so a missing HSE/clock never hangs the MCU forever. */
+#ifndef WAIT_UNTIL
+  #define WAIT_UNTIL(COND) \
+          do { uint32_t wait_i = 1000000u; while (!(COND) && wait_i) { wait_i--; } } while (0)
+#endif
+
 /* G4 @ 170 MHz from an 8 MHz HSE crystal:
  *
  *   HSE            =  8 MHz
@@ -278,6 +290,10 @@ __STATIC_FORCEINLINE void configure_flash(void) {
   MODIFY_REG(PWR->CR1, PWR_CR1_VOS, PWR_CR1_VOS_0);
   CLEAR_BIT(PWR->CR5, PWR_CR5_R1MODE);
 
+  /* Wait for the voltage regulator to settle (VOSF low) before raising the
+   * clock, as required by RM0440 when changing the voltage scale. */
+  WAIT_UNTIL(!(PWR->SR2 & PWR_SR2_VOSF));
+
   /* Flash: 4 wait states + prefetch + instruction/data caches. */
   MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY,
              FLASH_ACR_LATENCY_4WS | FLASH_ACR_PRFTEN | FLASH_ACR_ICEN | FLASH_ACR_DCEN);
@@ -288,13 +304,13 @@ __STATIC_FORCEINLINE void init_rcc(void) {
 
   /* 1. Make sure we are on HSI while reconfiguring the PLL. */
   MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_HSI);
-  while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI) {}
+  WAIT_UNTIL((RCC->CFGR & RCC_CFGR_SWS) == RCC_CFGR_SWS_HSI);
   CLEAR_BIT(RCC->CR, RCC_CR_PLLON);
-  while (RCC->CR & RCC_CR_PLLRDY) {}
+  WAIT_UNTIL(!(RCC->CR & RCC_CR_PLLRDY));
 
   /* 2. Start the 8 MHz HSE and wait for it to become stable. */
   SET_BIT(RCC->CR, RCC_CR_HSEON);
-  while (!(RCC->CR & RCC_CR_HSERDY)) {}
+  WAIT_UNTIL(RCC->CR & RCC_CR_HSERDY);
 
   /* 3. Configure the PLL: source = HSE, M = 2, N = 85, R = 2, enable R output. */
   RCC->PLLCFGR =
@@ -306,14 +322,14 @@ __STATIC_FORCEINLINE void init_rcc(void) {
 
   /* 4. Enable the PLL and wait for lock. */
   SET_BIT(RCC->CR, RCC_CR_PLLON);
-  while (!(RCC->CR & RCC_CR_PLLRDY)) {}
+  WAIT_UNTIL(RCC->CR & RCC_CR_PLLRDY);
 
   /* 5. Bus prescalers: AHB = /1, APB1 = /2, APB2 = /2. */
   RCC->CFGR |= RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV2;
 
   /* 6. Switch the system clock to the PLL output. */
   MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL);
-  while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {}
+  WAIT_UNTIL((RCC->CFGR & RCC_CFGR_SWS) == RCC_CFGR_SWS_PLL);
 
   /* Enable the GPIOC clock (LED on PC6) before init_gpio() configures pins. */
   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
@@ -1202,7 +1218,6 @@ EOF
 # SEGGER J-Flash project
 create_file "stm32g431cb.jflash" << 'EOF'
   AppVersion =
-  FileVersion = 2
 [GENERAL]
   aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
@@ -1244,12 +1259,22 @@ create_file "stm32g431cb.jflash" << 'EOF'
   ClockSpeed = 0x00000000
   EndianMode = 0
   ChipName = "ST STM32G431CB"
+  HasInternalFlash = 1
 [FLASH]
-  aRangeSel[1] = 0-63
-  BankName = "Internal flash"
+  aSectorSel[8] = 1,0,0,0,0,0,0,0
+  AutoDetect = 0
+  BankName = ""
   BankSelMode = 1
   BaseAddr = 0x08000000
+  CheckId = 0
+  CustomRAMCode = ""
+  DeviceName = "STM32G431xx internal"
+  EndBank = 0
   NumBanks = 1
+  OrgNumBits = 32
+  OrgNumChips = 1
+  StartBank = 0
+  UseCustomRAMCode = 0
 [PRODUCTION]
   AutoPerformsDisconnect = 0
   AutoPerformsErase = 1
@@ -1428,7 +1453,7 @@ is a hand-written, header-only G4 clock/PLL/flash configuration.
 2. Generates the CMSIS-based configuration headers with `stm32cgen`:
    - `inc/main.h` — top-level config (clock, SysTick, init order) and the
      `init()` sequence (`init_rcc` -> `init_gpio` -> `init_systick`).
-   - `inc/gpio.h` — `init_gpio()` configuring PC6 as a high-speed output using
+   - `inc/gpio.h` — `init_gpio()` configuring PC6 as a push-pull output using
      the G4 register bit naming (`GPIO_MODER_MODE*`, `GPIO_OSPEEDR_OSPEED*`).
    - `inc/rcc.h` — `init_rcc()` / `configure_flash()`: the PLL factor bits are
      wired directly for 170 MHz, with the correct G4 voltage-scaling sequence.
@@ -1509,7 +1534,7 @@ stores `SystemCoreClock = 170000000u`, which the 1 ms SysTick in `main.h` uses.
 
 ## GPIO
 
-- **LED — PC6**, active **HIGH** (pin HIGH = LED on), high-speed push-pull output.
+- **LED — PC6**, active **HIGH** (pin HIGH = LED on), push-pull output.
 
 `gpio.h` is generated by `stm32cgen` (`GPIOC`) using the analog-by-default XOR
 scheme, adapted to the G4 register bit naming (`GPIO_MODER_MODE6`,
@@ -1521,14 +1546,18 @@ scheme, adapted to the G4 register bit naming (`GPIO_MODER_MODE6`,
 ## Main loop
 
 `src/main.c` runs the standard `for (init(); process(); idle());` loop with a
-1 kHz SysTick (IRQ mode so `uptime()` advances):
+1 kHz SysTick (IRQ mode so `uptime()` advances). The loop blinks the LED at
+**~1 Hz**: bit 9 of the 1 ms `uptime()` counter flips every 512 ms, so the LED
+is on for 512 ms and off for 512 ms (period ~1024 ms):
 
 ```c
-uint64_t now = uptime();
-if ((now - last_toggle) >= 250u) {   /* toggle every 250 ms -> ~2 Hz */
-  last_toggle = now;
-  if (led_on) GPIOC->BSRR = GPIO_BSRR_BR6;  /* LED off */
-  else        GPIOC->BSRR = GPIO_BSRR_BS6;  /* LED on  */
+unsigned process(void) {
+  if (uptime() & (1ULL << 9)) {
+    GPIOC->BSRR = GPIO_BSRR_BS6;       /* PC6 high -> LED on  */
+  } else {
+    GPIOC->BSRR = GPIO_BSRR_BR6;       /* PC6 low  -> LED off */
+  }
+  return !0;  /* Always continue loop */
 }
 ```
 
