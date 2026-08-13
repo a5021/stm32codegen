@@ -1540,7 +1540,6 @@ EOF
 
 create_file "stm32f407vg.jflash" << 'EOF'
   AppVersion =
-  FileVersion = 2
 [GENERAL]
   aATEModuleSel[24] = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   ConnectMode = 0
