@@ -3,12 +3,34 @@ name: Build
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'stm32cgen.py'
+      - 'stm32cmsis.py'
+      - 'tests/**'
+      - 'EXAMPLES/**'
+      - '.github/workflows/build.yml'
+      - 'pyproject.toml'
+      - 'requirements*.txt'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'stm32cgen.py'
+      - 'stm32cmsis.py'
+      - 'tests/**'
+      - 'EXAMPLES/**'
+      - '.github/workflows/build.yml'
+      - 'pyproject.toml'
+      - 'requirements*.txt'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
 
     steps:
     - uses: actions/checkout@v7
@@ -46,65 +68,69 @@ jobs:
     - name: Install dependencies
       run: pip install requests
 
-    - name: Generate F030F4 project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f030f4_demo.sh
+    - name: Prepare example cache dirs
+      run: |
+        for d in f030f4 f103c8 f303vc f401cc f407vg f446re g031f8 g070rb g431cb l152rb; do
+          mkdir -p "EXAMPLES/${d}_demo/inc" "EXAMPLES/${d}_demo/src"
+        done
 
-    - name: Generate G031F8 project and build
+    - name: Cache CMSIS downloads
+      uses: actions/cache@v6
+      with:
+        path: |
+          EXAMPLES/*_demo/inc
+          EXAMPLES/*_demo/src/startup_*.s
+          EXAMPLES/*_demo/src/system_*.c
+        key: cmsis-${{ runner.os }}-${{ hashFiles('EXAMPLES/*.sh') }}
+
+    - name: Build examples
       working-directory: EXAMPLES
       shell: bash
       run: |
-        set +e
-        tmpf=$(mktemp)
-        printf '\n' | VERBOSE=1 DEBUG=1 bash g031f8_demo.sh 2>&1 | tee "$tmpf"
-        rc=${PIPESTATUS[0]}
-        if [ $rc -ne 0 ]; then
-          # Annotate each compiler error line
-          grep -n -i 'error:' "$tmpf" | while IFS=: read -r ln msg; do
-            echo "::error file=g031f8_demo.sh,line=${ln}::${msg:0:200}"
-          done
-          # If no errors found by grep, dump last 20 lines as fallback
-          if ! grep -qi 'error:' "$tmpf"; then
-            echo "::error title=Build failed (no 'error:' in output)::$(tail -20 "$tmpf" | tr '\n' '|')"
+        set -uo pipefail
+        demos=(f030f4_demo f103c8_demo f303vc_demo f401cc_demo f407vg_demo
+               f446re_demo g031f8_demo g070rb_demo g431cb_demo l152rb_demo)
+        logs="${RUNNER_TEMP}/example-logs"
+        mkdir -p "$logs"
+        failed=0
+        for demo in "${demos[@]}"; do
+          log="$logs/${demo}.log"
+          echo "::group::${demo}"
+          if printf '\n' | timeout 10m bash "${demo}.sh" >"$log" 2>&1; then
+            echo "PASS ${demo}"
+          else
+            failed=1
+            echo "FAIL ${demo}"
+            grep -n -i 'error:' "$log" | tail -20 || true
+            echo "::error title=${demo} failed::$(grep -m1 -i 'error:' "$log" | cut -c1-200 || echo 'see log')"
           fi
-        fi
-        rm -f "$tmpf"
-        exit $rc
+          echo "::endgroup::"
+        done
+        [ "$failed" -eq 0 ]
 
-    - name: Generate F103C8 project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f103c8_demo.sh
+    - name: Upload firmware
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: examples-firmware
+        path: |
+          EXAMPLES/*_demo/_build/Project.bin
+          EXAMPLES/*_demo/_build/Project.hex
+        if-no-files-found: warn
+        retention-days: 14
 
-    - name: Generate F303VC project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f303vc_demo.sh
-
-    - name: Generate F401CC project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f401cc_demo.sh
-
-    - name: Generate F407VG project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f407vg_demo.sh
-
-    - name: Generate F446RE project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash f446re_demo.sh
-
-    - name: Generate L152RB project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash l152rb_demo.sh
-
-    - name: Generate G431CB project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash g431cb_demo.sh
-
-    - name: Generate G070RB project and build
-      working-directory: EXAMPLES
-      run: printf '\n' | bash g070rb_demo.sh
+    - name: Upload example logs
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: examples-logs
+        path: ${{ runner.temp }}/example-logs/*.log
+        if-no-files-found: warn
+        retention-days: 7
 
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
     - uses: actions/checkout@v7
