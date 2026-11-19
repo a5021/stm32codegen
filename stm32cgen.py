@@ -266,6 +266,10 @@ def safe_eval_int(expr):
             if isinstance(n.op, ast.BitXor):
                 return left ^ right
             if isinstance(n.op, ast.LShift):
+                # Refuse absurd shifts from a malformed header; no CMSIS
+                # register field needs more than 64 bits.
+                if right > 64:
+                    raise ValueError('shift too large')
                 return left << right
             if isinstance(n.op, ast.RShift):
                 return left >> right
@@ -285,7 +289,9 @@ def safe_eval_int(expr):
 
 
 def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
+    passes = 0
     while True:
+        passes += 1
         replaced = 0
         for lx in macro_def_list:
             lx[1] = re.sub(r'([()+\-|~&*/])', ' \\1 ', lx[1])  # separate some chars by spaces: '(' --> ' ( '
@@ -302,7 +308,9 @@ def expand_macrodef(src_txt, macro_def_list, macro_def_dict):
                 es += d
             lx[1] = es
 
-        if replaced == 0:
+        # A malformed header can contain a self-referential macro
+        # (``#define A A``), which would otherwise loop forever.
+        if replaced == 0 or passes >= 100:
             break
 
     per_desc = list(get_peripheral_description(src_txt))  # extract peripheral description
@@ -434,7 +442,8 @@ def is_num_ended(a_str):
 
 
 def get_reg_set(reg_str, macro_def_list):
-    seen_mask = set()
+    # mask -> names already emitted for that mask in this register
+    seen_mask = {}
     for gx in macro_def_list:
         if gx[0].startswith(reg_str):
             if gx[0][-4] == '_' and gx[0][-3:] in {'Pos', 'Msk'}:
@@ -444,7 +453,7 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_AFRL_AFRL' in gx[0] or '_AFRH_AFRH' in gx[0]:
                     continue
 
-            if args.cpu[:2].upper() not in ('H7', 'L0'):
+            if args.cpu[:2].upper() not in ('H7', 'L0', 'G0'):
                 if '_MODER_MODE' in gx[0] and len(gx[0]) > 15 and gx[0][15] in '0123456789':
                     continue
 
@@ -469,15 +478,18 @@ def get_reg_set(reg_str, macro_def_list):
                 if '_BSRR_BS_' in gx[0] or '_BSRR_BR_' in gx[0]:
                     continue
 
-            # drop legacy aliases: a bit already defined under another name
-            # (ST headers keep the canonical name first, aliases afterwards).
-            # Values are either normalized hex or a numeric shift expression
-            # like '(1 << 12)'; both evaluate to the same mask for an alias.
+            # Drop aliases that are name variants of the first macro with
+            # this mask (ST headers keep the canonical name first, aliases
+            # afterwards).  Same-mask macros with unrelated names (for
+            # example EXTI_IMR_MR0 and EXTI_IMR_IM0) are kept: dropping
+            # them silently removes valid CMSIS names.
             mask = safe_eval_int(gx[1])
             if mask != '' and 0 <= mask <= 0xFFFFFFFF:
-                if mask in seen_mask:
+                names = seen_mask.setdefault(mask, [])
+                if any(n == gx[0] or n.startswith(gx[0]) or gx[0].startswith(n)
+                       for n in names):
                     continue
-                seen_mask.add(mask)
+                names.append(gx[0])
 
             sa1, sb1 = is_num_ended(gx[0])
             if sa1[-1] == '_' and sb1 != '':  # if string ends with _1 or _2 or .. _9876543210 etc.
@@ -798,18 +810,24 @@ def get_type_list(src):
 
             w = gs.split()
 
-            reg_size = get_reg_size(gs)
-
             rname = ''
             for gz in w:  # for every word in the string...
                 if gz.endswith(';'):
                     rname = gz
                     break
 
+            if not rname:
+                # Opening/closing line of an anonymous union or struct.
+                continue
+
+            reg_size = get_reg_size(gs)
+
             if gs.startswith('__IO') or gs.startswith('__I') or gs.startswith('__O'):
                 register_name = rname[:-1]
-            else:
+            elif len(w) > 1:
                 register_name = w[1][:-1]
+            else:
+                continue
 
             if reg_size == 'X':
                 reg_size = w[0]
@@ -896,7 +914,9 @@ def get_register_size(struct_name):
         return reg_size
 
     if not struct_name.isdigit():
-        for xr in register_dic[struct_name]:
+        # Unknown member types (function pointers, anonymous unions) have no
+        # entry in register_dic; treat them as zero-sized instead of crashing.
+        for xr in register_dic.get(struct_name, []):
             reg_size += get_register_size(xr[1])
     else:
         reg_size = int(struct_name)
@@ -907,9 +927,12 @@ def get_register_size(struct_name):
 def get_register_property(reg_name):
     left_bracket = reg_name[0].find('[')
     right_bracket = reg_name[0].find(']')
-    arr_size = reg_name[0][left_bracket + 1:right_bracket]
+    if left_bracket >= 0 and right_bracket > left_bracket:
+        arr_size = reg_name[0][left_bracket + 1:right_bracket]
+    else:
+        arr_size = ''
 
-    if all([sg.isdigit() for sg in arr_size]):
+    if arr_size and all([sg.isdigit() for sg in arr_size]):
         for x_ndx in range(int(arr_size)):
             yield reg_name[0][:left_bracket + 1] + str(x_ndx) + ']', get_register_size(reg_name[1])
     else:
@@ -1118,6 +1141,10 @@ def main():
 
     cpu_name = args.cpu.upper()
 
+    if not cpu_name:
+        print(f'wrong parameter passed: {args.cpu!r}')
+        exit()
+
     if cpu_name[0:5] == 'STM32':
         cpu_name = cpu_name[5:]
 
@@ -1228,7 +1255,7 @@ def main():
                     if name == xirq[0].split('_')[0]:
                         irqlist.append(xirq)
 
-                if args.undef is False:
+                if args.undef is False and init_macro_name:
                     extra_lf = False
                     x_out = '#if '
                     for cnt, ds in enumerate(sorted(init_macro_name), start=1):
@@ -1422,7 +1449,7 @@ def main():
 
         print(f'\nTotal {len(irq_list)} IRQs.')
 
-    elif len(sys.argv) < 4 and args.cpu != '':
+    elif not any((args.main_module, args.peripheral, args.function, args.module, args.test)) and args.cpu != '':
         for x in peripheral_data:
             print(f'{x[1].ljust(15)} {x[0]}  {x[2][:-1].ljust(20)} "{x[3]}"')
 

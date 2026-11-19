@@ -18,7 +18,7 @@ f0 = {
         '31x6': ('31f4', '31f6'),
         '38xx': ('38f6', '38k6'),
         '42x6': ('42f4', '42f6'),
-        '48xx': ('48f6', '48f6'),
+        '48xx': '48f6',
         '51x8': ('51f4', '51f6', '51k4', '51k6', '51c8'),
         '58xx': '58c8',
         '70x6': ('70f4', '70f6', '70k4', '70k6'),
@@ -82,18 +82,17 @@ f4 = {
        '10cx': ('10c8',  '10cb'),
        '10rx': ('10r8',  '10rb'),
        '11xe': ('11cc',  '11rc',  '11vc',  '11ce', '11re', '11ve'),
-        '12cx': ('12ceu', '12cgu'),
-        '12zx': ('12zet', '12zgt', '12zej', '12zgj'),
-        '12vx': ('12vet', '12vgt', '12veh', '12vgh'),
-        '12rx': ('12ret', '12rgt', '12rey', '12rgy'),
-        '12xx': ('12zg', '12ze', '12vg', '12ve', '12rg', '12re'),
+        '12cx': ('12ce', '12cg'),
+        '12zx': ('12ze', '12zg'),
+        '12vx': ('12ve', '12vg'),
+        '12rx': ('12re', '12rg'),
        '13xx': ('13ch',  '13mh',  '13rh',  '13vh', '13zh', '13cg', '13mg', '13rg', '13vg', '13zg'),
        '15xx': ('15rg',  '15vg',  '15zg'),
        '17xx': ('17vg',  '17ve',  '17zg',  '17ze', '17ig', '17ie'),
        '23xx': ('23ch',  '23rh',  '23vh',  '23zh'),
        '27xx': ('27vg',  '27vi',  '27zg',  '27zi', '27ig', '27ii'),
        '37xx': ('37vg',  '37vi',  '37zg',  '37zi', '37ig', '37ii'),
-       '29xx': ('29vg',  '29vi',  '29zg',  '29zi', '29bg', '29bi', '29ng', '39ni', '29ig', '29ii'),
+       '29xx': ('29vg',  '29vi',  '29zg',  '29zi', '29bg', '29bi', '29ng', '29ni', '29ig', '29ii'),
        '39xx': ('39vg',  '39vi',  '39zg',  '39zi', '39bg', '39bi', '39ng', '39ni', '39ig', '39ii'),
         '46xx': ('46mc',  '46me',  '46rc',  '46re', '46vc', '46ve', '46zc', '46ze'),
         '69xx': ('69ai',  '69ii',  '69bi',  '69ni', '69ag',  '69ig', '69bg', '69ng', '69ae', '69ie', '69be', '69ne'),
@@ -106,7 +105,7 @@ f7 = {
        '46xx': ('46ve', '46vg', '46ze', '46zg', '46ie', '46ig', '46be', '46bg', '46ne', '46ng'),
        '65xx': ('65bi', '65bg', '65ni', '65ng', '65ii', '65ig', '65zi', '65zg', '65vi', '65vg'),
        '67xx': ('67bg', '67bi', '67ig', '67ii', '67ng', '67ni', '67vg', '67vi', '67zg', '67zi'),
-       '69xx': ('69ag', '69ai', '69bg', '69bi', '69ig', '69ii', '69ng', '69ni', '68ai'),
+       '69xx': ('69ag', '69ai', '69bg', '69bi', '69ig', '69ii', '69ng', '69ni'),
        '22xx': ('22ie', '22ze', '22ve', '22re', '22ic', '22zc', '22vc', '22rc'),
        '32xx': ('32ie', '32ze', '32ve', '32re'),
        '77xx': ('77vi', '77zi', '77ii', '77bi', '77ni'),
@@ -177,7 +176,7 @@ l1 = {
        '52xdx': '52vd-x',
        '52xe':  ('52qe', '52re', '52ve', '52ze'),
        '62xc':  '62rc',
-       '62xca': ('62rc-a', '62vc-a', '62qc', '62zc'),
+       '62xca': ('62rc-a', '62vc', '62vc-a', '62qc', '62zc'),
        '62xd':  ('62qd', '62rd', '62vd', '62zd'),
        '62xdx': '62vd-x',
        '62xe':  ('62re', '62ve', '62ze')
@@ -195,7 +194,7 @@ mcu = {'f0': ('30x6', '30x8', '30xc', '31x6', '38xx', '42x6', '48xx', '51x8',
               '28xx', '34x8', '58xx', '73xc', '78xx', '98xx'),
 
         'f4': ('01xc', '01xe', '05xx', '07xx', '10cx', '10rx', '10tx', '11xe',
-               '12cx', '12rx', '12vx', '12zx', '12xx', '13xx', '15xx', '17xx', '23xx',
+               '12cx', '12rx', '12vx', '12zx', '13xx', '15xx', '17xx', '23xx',
                '27xx', '29xx', '37xx', '39xx', '46xx', '69xx', '79xx'),
 
        'f7': ('22xx', '23xx', '30xx', '32xx', '33xx', '45xx', '46xx', '50xx',
@@ -298,7 +297,8 @@ def read_cmsis_header_file(mcu_name, fetch=True, save=False):
     hdr_file_name = compose_cmsis_header_file_name(mcu_name)
     txt = ''
     if fetch is True:
-        r = requests.get(compose_cmsis_header_file_url(hdr_file_name))
+        # Timeout keeps a dead network from hanging the generator forever.
+        r = requests.get(compose_cmsis_header_file_url(hdr_file_name), timeout=30)
         if r.ok:
             txt = r.text
             if save is True:

@@ -94,7 +94,7 @@ No predefined macros. Start from an empty macro set.
 
 ### `--strict`
 
-Strict matching only — fail if any peripheral/register is not found in the CMSIS header.
+Strict matching only — require exact peripheral/register names instead of substring matching.
 
 ---
 

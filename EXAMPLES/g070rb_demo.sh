@@ -355,10 +355,10 @@ generate_header "rcc.h" -l g070rb -p RCC -m rcc -f init_rcc\
        _ODR\(PIN\) "GPIO_ODR_OD ## PIN"\
        ODR\(PIN\) _ODR\(PIN\)\
        ""\
-       GPIOC_MODER "(GPIO_MODE ^ (GPIOC_MODE))"\
-       ""\
        GPIOC_AFR_0 "(GPIOC_AF & UINT32_MAX)"\
        GPIOC_AFR_1 "((GPIOC_AF >> 32) & UINT32_MAX)"\
+    \
+    -I MODER "(GPIO_MODE ^ (GPIOC_MODE))"\
     \
     -H ""\
     -H "#define CONFIGURE_PIN(GPIOx, PIN, MODE, OTYPE, SPEED, PUPD) do {                               \\"\

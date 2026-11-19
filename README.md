@@ -49,7 +49,7 @@ python stm32cgen.py stm32f103c8 -m usart -f init_usart -p USART
 ### Generate ADC configuration header
 
 ```
-python stm32cgen.py stm32f103c8 -m adc -o adc_config.h -p ADC
+python stm32cgen.py stm32f103c8 -m adc -p ADC > adc_config.h
 ```
 
 ### Generate GPIO setup for specific ports

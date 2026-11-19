@@ -57,7 +57,7 @@ class TestModerMode:
 
     @pytest.mark.parametrize("cpu,kept", [
         ("103C8", False),   # filtered
-        ("G031F8", False),  # filtered
+        ("G031F8", True),   # G0 uses the single-R MODEn names -> kept
         ("401CC", False),   # filtered
         ("L152RE", False),  # L1 -> filtered
         ("L052K8", True),   # L0 -> kept
@@ -65,9 +65,15 @@ class TestModerMode:
     ])
     def test_digit_at_index15(self, scm_globals, cpu, kept):
         """FOO_MODER_MODE00 has a digit at index 15 and matches '_MODER_MODE';
-        it is filtered everywhere except L0 and H7."""
+        it is filtered everywhere except G0, L0 and H7."""
         out = _regset(cpu, 'FOO_', ['FOO_MODER_MODE00'])
         assert ('FOO_MODER_MODE00' in out) == kept
+
+    def test_g0_real_moder_names_kept(self, scm_globals):
+        """G0 CMSIS headers use GPIO_MODER_MODE0 (no second R)."""
+        sc.args = make_mock_args(cpu='G031F8')
+        md = [['GPIO_MODER_MODE0', '(1 << 0)', 'Mode 0', '']]
+        assert [g[0] for g in sc.get_reg_set('GPIO_MODER_', md)] == ['GPIO_MODER_MODE0']
 
 
 class TestOtyper:
@@ -179,11 +185,12 @@ class TestTrailingUnderscoreDigits:
 
 
 class TestLegacyAliasDedupe:
-    """Legacy aliases (same bit defined under another name) must be dropped.
+    """Prefix-name aliases (same bit, same name root) are deduplicated.
 
     ST CMSIS headers keep the canonical name first and append legacy aliases
-    after it (e.g. ``RCC_APB2RSTR_SPI1RST`` then ``RCC_APB2RSTR_SPI1``), so a
-    per-register deduplication by resolved mask keeps the canonical name.
+    after it (e.g. ``RCC_APB2RSTR_SPI1RST`` then ``RCC_APB2RSTR_SPI1``), so the
+    per-register deduplication keeps the first name.  Same-mask names with
+    unrelated roots (``EXTI_IMR_MR0``/``EXTI_IMR_IM0``) are kept.
     """
 
     def _regset(self, cpu, reg_str, pairs):
@@ -243,13 +250,25 @@ class TestLegacyAliasDedupe:
         ])
         assert out == ['X_FOO', 'X_BAR']
 
-    def test_dedupe_is_per_register(self, scm_globals):
-        """The seen-set is scoped to a single get_reg_set call (one register),
-        so the same mask in different registers is not affected."""
+    def test_unrelated_same_mask_names_kept(self, scm_globals):
+        """Same-mask names that are not prefix variants (PADRSTF vs PINRSTF)
+        must survive: they are distinct CMSIS names."""
         out = self._regset('446RE', 'RCC_CSR_', [
             ['RCC_CSR_PINRSTF', '(1 << 26)'],
             ['RCC_CSR_IWDGRSTF', '(1 << 29)'],
             ['RCC_CSR_PADRSTF', '(1 << 26)'],
             ['RCC_CSR_WDGRSTF', '(1 << 29)'],
         ])
-        assert out == ['RCC_CSR_PINRSTF', 'RCC_CSR_IWDGRSTF']
+        assert out == [
+            'RCC_CSR_PINRSTF', 'RCC_CSR_IWDGRSTF',
+            'RCC_CSR_PADRSTF', 'RCC_CSR_WDGRSTF',
+        ]
+
+    def test_unrelated_names_with_same_mask_are_kept(self, scm_globals):
+        """EXTI_IMR_MR0 and EXTI_IMR_IM0 share a mask but are not name
+        variants; both must stay usable (e.g. via -b)."""
+        out = self._regset('411RE', 'EXTI_IMR_', [
+            ['EXTI_IMR_MR0', '(1 << 0)'],
+            ['EXTI_IMR_IM0', '(1 << 0)'],
+        ])
+        assert out == ['EXTI_IMR_MR0', 'EXTI_IMR_IM0']

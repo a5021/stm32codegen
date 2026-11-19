@@ -43,6 +43,18 @@ class TestHeaderFileName:
         # unknown prefixes are echoed back verbatim
         assert stm32cmsis.compose_cmsis_header_file_name("zz99zz") == "stm32zz99zz.h"
 
+    def test_f412_package_suffix(self):
+        # F412 has per-package headers (cx/rx/vx/zx), not stm32f412xx.h.
+        assert stm32cmsis.compose_cmsis_header_file_name("f412ceu") == "stm32f412cx.h"
+        assert stm32cmsis.compose_cmsis_header_file_name("f412zet") == "stm32f412zx.h"
+
+    def test_l162_vca(self):
+        assert stm32cmsis.compose_cmsis_header_file_name("l162vca") == "stm32l162xca.h"
+
+    def test_f429_and_f439_n_package(self):
+        assert stm32cmsis.compose_cmsis_header_file_name("f429ni") == "stm32f429xx.h"
+        assert stm32cmsis.compose_cmsis_header_file_name("f439ni") == "stm32f439xx.h"
+
 
 class TestHeaderFileUrl:
     def test_cmsis_device_url(self):
@@ -72,7 +84,7 @@ class TestReadCmsisHeaderFile:
         monkeypatch.chdir(tmp_path)
         monkeypatch.setattr(
             stm32cmsis.requests, "get",
-            lambda url: type("R", (), {"ok": True, "text": "int bar;\n"})(),
+            lambda url, **kwargs: type("R", (), {"ok": True, "text": "int bar;\n"})(),
         )
         assert stm32cmsis.read_cmsis_header_file("103c8", fetch=True) == "int bar;\n"
         assert not (tmp_path / "stm32f103xb.h").exists()
@@ -81,7 +93,7 @@ class TestReadCmsisHeaderFile:
         monkeypatch.chdir(tmp_path)
         monkeypatch.setattr(
             stm32cmsis.requests, "get",
-            lambda url: type("R", (), {"ok": True, "text": "int bar;\n"})(),
+            lambda url, **kwargs: type("R", (), {"ok": True, "text": "int bar;\n"})(),
         )
         assert stm32cmsis.read_cmsis_header_file("103c8", fetch=True, save=True) == "int bar;\n"
         saved = (tmp_path / "stm32f103xb.h").read_text()
@@ -91,7 +103,7 @@ class TestReadCmsisHeaderFile:
         monkeypatch.chdir(tmp_path)
         monkeypatch.setattr(
             stm32cmsis.requests, "get",
-            lambda url: type("R", (), {"ok": False, "text": ""})(),
+            lambda url, **kwargs: type("R", (), {"ok": False, "text": ""})(),
         )
         assert stm32cmsis.read_cmsis_header_file("103c8", fetch=True) == ""
 
@@ -100,7 +112,7 @@ class TestReadCmsisHeaderFile:
         monkeypatch.chdir(tmp_path)
         monkeypatch.setattr(
             stm32cmsis.requests, "get",
-            lambda url: (_ for _ in ()).throw(OSError("no network")),
+            lambda url, **kwargs: (_ for _ in ()).throw(OSError("no network")),
         )
         with pytest.raises(OSError):
             stm32cmsis.read_cmsis_header_file("103c8", fetch=True)

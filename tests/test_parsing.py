@@ -310,3 +310,16 @@ class TestExpandMacrodef:
         assert "C" in names
         assert "D" in names
         assert "E" in names
+
+    def test_self_referential_macro_terminates(self):
+        """#define A A must not hang expand_macrodef()."""
+        macros = sc.parse_macro_def("#define A A\n")
+        assert [m[0] for m in macros] == ["A"]
+
+    def test_anonymous_union_does_not_crash(self):
+        """Anonymous union members used by newer CMSIS headers are skipped."""
+        text = (
+            "typedef struct\n{\n  union\n  {\n    __IO uint32_t CR;\n  };\n"
+            "  __IO uint32_t SR;\n} TEST_TypeDef;\n"
+        )
+        list(sc.get_type_list(text))

@@ -360,10 +360,10 @@ generate_header "rcc.h" -l g031f8 -p RCC -m rcc -f init_rcc\
        _ODR\(PIN\) "GPIO_ODR_OD ## PIN"\
        ODR\(PIN\) _ODR\(PIN\)\
        ""\
-       GPIOA_MODER "(GPIO_MODE ^ (GPIOA_MODE))"\
-       ""\
        GPIOA_AFR_0 "(GPIOA_AF & UINT32_MAX)"\
        GPIOA_AFR_1 "((GPIOA_AF >> 32) & UINT32_MAX)"\
+    \
+    -I MODER "(GPIO_MODE ^ (GPIOA_MODE))"\
     \
     -H ""\
     -H "#define CONFIGURE_PIN(GPIOx, PIN, MODE, OTYPE, SPEED, PUPD) do {                               \\"\

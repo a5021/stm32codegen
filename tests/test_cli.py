@@ -247,6 +247,15 @@ class TestArgparseOptions:
         assert result.returncode == 0, result.stderr
         assert "init_tim" in result.stdout
 
+    def test_empty_register_filter_does_not_emit_empty_if(self):
+        """``-r`` matching no registers must not produce a bare ``#if``."""
+        result = subprocess.run(
+            [sys.executable, "stm32cgen.py", "103c8", "-l", "-p", "GPIOA", "-r", "NOPE"],
+            capture_output=True, text=True, cwd=REPO_ROOT, timeout=10,
+        )
+        assert result.returncode == 0, result.stderr
+        assert re.search(r'#if\s*$', result.stdout, re.MULTILINE) is None
+
     def test_light_flag(self):
         """``--light`` should be accepted."""
         result = self._run("--light")

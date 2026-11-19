@@ -34,8 +34,8 @@ class TestComposeCmsisHeaderFileName(unittest.TestCase):
         '103x6': 'stm32f103x6.h',
         'f103xe': 'stm32f103xe.h',
         '152re': 'stm32l152xe.h',
-        'f412zg': 'stm32f412xx.h',
-        'f412ve': 'stm32f412xx.h',
+        'f412zg': 'stm32f412zx.h',
+        'f412ve': 'stm32f412vx.h',
         'f479zi': 'stm32f479xx.h',
     }
 
