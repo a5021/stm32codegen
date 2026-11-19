@@ -327,12 +327,6 @@ generate_header "rcc.h" -l 401cc -p RCC -m rcc -f init_rcc\
        GPIOA_AFR_1 "((GPIOA_AF >> 32) & UINT32_MAX)"\
     \
     -H ""\
-    -H "#define CONFIGURE_PIN(GPIOx, PIN, MODE, OTYPE, SPEED, PUPD) do {                               \\"\
-    -H "  if (MODE)   MODIFY_REG((GPIOx)->MODER,   (0x03UL << ((PIN) * 2)), ((MODE)  << ((PIN) * 2))); \\"\
-    -H "  if (SPEED)  MODIFY_REG((GPIOx)->OSPEEDR, (0x03UL << ((PIN) * 2)), ((SPEED) << ((PIN) * 2))); \\"\
-    -H "  if (PUPD)   MODIFY_REG((GPIOx)->PUPDR,   (0x03UL << ((PIN) * 2)), ((PUPD)  << ((PIN) * 2))); \\"\
-    -H "  if (OTYPE)  MODIFY_REG((GPIOx)->OTYPER,  (0x01UL << (PIN)),       ((OTYPE) << (PIN)));       \\"\
-    -H }while\(0\)\
     -H ""\
     -H "#ifndef USART6_EN"\
     -H "  #define USART6_EN 0"\

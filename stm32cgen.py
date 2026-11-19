@@ -8,8 +8,9 @@ import textwrap
 
 try:
     from stm32cmsis import compose_cmsis_header_file_name, read_cmsis_header_file
-except ImportError:
-    print('Could not import STM32 CMSIS library')
+except ImportError as exc:
+    print(f'Could not import STM32 CMSIS library: {exc}', file=sys.stderr)
+    print('Install dependencies: python -m pip install -r requirements.txt', file=sys.stderr)
     sys.exit(1)
 
 max_field_len = [0, 0, 0]
